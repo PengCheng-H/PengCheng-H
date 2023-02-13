@@ -1,9 +1,10 @@
-import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Input, Table } from 'antd';
 import { Component, ReactNode } from "react";
 
 import utils from '../../../utils';
-import outbound_order_list from '../../../mocks/order_outbound.mock';
+import outbound_order_list from '../../../mocks/outbound_order.mock';
 import { IHCOutboundOrder } from '../../../types/interface';
 
 
@@ -135,6 +136,10 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
 
 export default class HCOutboundOrder extends Component {
     render(): ReactNode {
-        return <Table columns={outbound_order_headers} dataSource={outbound_order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} />;
+        return <div>
+            <Input type='search' id='txtSearchOutboundOrder' placeholder='请输入物料编码/名称/规格' className='search_input' />
+            <Button id='btnSearchOutboundOrder' type='primary' icon={<SearchOutlined />} className='search_button'>搜索出库单</Button>
+            <Table columns={outbound_order_headers} dataSource={outbound_order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />;
+        </div>
     }
 }

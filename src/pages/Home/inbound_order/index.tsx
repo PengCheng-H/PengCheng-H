@@ -1,9 +1,10 @@
-import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Input, Table } from 'antd';
 import { Component, ReactNode } from "react";
 
 import utils from '../../../utils';
-import inbound_order_list from '../../../mocks/order_inbound.mock';
+import inbound_order_list from '../../../mocks/inbound_order.mock';
 import { IHCInboundOrder } from '../../../types/interface';
 
 
@@ -129,13 +130,18 @@ const inbound_order_headers: ColumnsType<IHCInboundOrder> = [
         key: 'operations',
         title: '操作',
         dataIndex: 'operations',
-        width: "120px",
+        width: "100px",
         fixed: 'right',
+        // render: () => { return <div><Button id='modify'>修改</Button> <Button id='modify'>确认</Button></div>; },
     },
 ];
 
 export default class HCInboundOrder extends Component {
     render(): ReactNode {
-        return <Table columns={inbound_order_headers} dataSource={inbound_order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} />;
+        return <div>
+            <Input type='search' id='txtInboundOrder' placeholder='请输入物料编码/名称/规格' className='search_input' />
+            <Button id='btnSearchInboundOrder' type='primary' icon={<SearchOutlined />} className='search_button'>搜索入库单</Button>
+            <Table columns={inbound_order_headers} dataSource={inbound_order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />
+        </div>;
     }
 }
