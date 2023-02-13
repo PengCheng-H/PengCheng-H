@@ -26,13 +26,9 @@ export default class Home extends Component {
         return (
             <div className='content'>
                 <div className='row'>
-                    <h3>订单面板</h3>
-                    <hr />
                     <Tabs defaultActiveKey="1" type="card" items={items} />
                 </div>
                 <div className='row'>
-                    <h3>任务面板</h3>
-                    <hr />
                     <HCWcsTask />
                 </div>
             </div>

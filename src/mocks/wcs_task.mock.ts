@@ -1,6 +1,6 @@
 import { IHCWcsTask } from "../types/interface";
 
-const task_list: IHCWcsTask[] = [
+const wcs_task_list: IHCWcsTask[] = [
   {
     location_code: "C1-8-10-A",
     wcs_task_code: "TC20230213000001",
@@ -159,4 +159,4 @@ const task_list: IHCWcsTask[] = [
   },
 ];
 
-export default task_list;
+export default wcs_task_list;

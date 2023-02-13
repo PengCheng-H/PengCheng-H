@@ -1,9 +1,10 @@
-import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { SearchOutlined } from '@ant-design/icons';
 import { Component, ReactNode } from "react";
+import { Button, Input, Select, SelectProps, Table } from 'antd';
 
 import utils from '../../../utils';
-import wcs_task_list from '../../../mocks/task_wcs.mock';
+import wcs_task_list from '../../../mocks/wcs_task.mock';
 import { IHCWcsTask } from '../../../types/interface';
 
 
@@ -93,6 +94,29 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
 
 export default class HCWcsTask extends Component {
     render(): ReactNode {
-        return <Table columns={wcs_task_headers} dataSource={wcs_task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} />;
+        const options: SelectProps['options'] = [];
+
+        for (let i = 10; i < 36; i++) {
+            options.push({
+                label: i.toString(36) + i,
+                value: i.toString(36) + i,
+            });
+        }
+
+        return <div>
+            <Select
+                mode="multiple"
+                allowClear
+                style={{ width: '100%' }}
+                placeholder="Please select"
+                defaultValue={[]}
+                // onChange={handleChange}
+                options={options}
+                // className='search_input'
+                id='asdasdasd'
+            />
+            <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} className='search_button'>搜索任务</Button>
+            <Table columns={wcs_task_headers} dataSource={wcs_task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' />;
+        </div>
     }
 }
