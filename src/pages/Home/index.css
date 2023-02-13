@@ -1,0 +1,8 @@
+.content {
+    margin: 10px;
+}
+
+.content .row {
+    margin: 10px;
+    background-color: rgb(255, 255, 255);
+}
