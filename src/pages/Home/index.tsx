@@ -1,11 +1,10 @@
-import { Row } from 'antd';
-import { Tabs } from 'antd';
-import { TabsProps } from 'antd';
+import { Tabs, TabsProps } from 'antd';
 import { Component, ReactNode } from 'react';
 
-import Task from "./task_wcs";
-import OrderInbound from "./order_inbound";
-import HCOrderOutbound from "./order_outbound";
+import HCWcsTask from "./wcs_task";
+import HCInboundOrder from "./inbound_order";
+import HCOutboundOrder from "./outbound_order";
+
 import './index.css';
 
 
@@ -15,23 +14,27 @@ export default class Home extends Component {
         const items: TabsProps['items'] = [
             {
                 key: '1',
-                label: `分配入库订单`,
-                children: <OrderInbound />,
+                label: `入库`,
+                children: <HCInboundOrder />,
             },
             {
                 key: '2',
-                label: `分配出库订单`,
-                children: <HCOrderOutbound />,
+                label: `出库`,
+                children: <HCOutboundOrder />,
             }
         ];
         return (
             <div className='content'>
-                <Row className='row table'>
-                    <Tabs defaultActiveKey="1" items={items} />
-                </Row>
-                <Row className='row'>
-                    <Task />
-                </Row>
+                <div className='row'>
+                    <h3>订单面板</h3>
+                    <hr />
+                    <Tabs defaultActiveKey="1" type="card" items={items} />
+                </div>
+                <div className='row'>
+                    <h3>任务面板</h3>
+                    <hr />
+                    <HCWcsTask />
+                </div>
             </div>
         );
     }

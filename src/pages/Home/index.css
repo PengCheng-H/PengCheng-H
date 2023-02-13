@@ -3,6 +3,7 @@
 }
 
 .content .row {
-    margin: 10px;
+    margin: 20px 5px;
     background-color: rgb(255, 255, 255);
+    box-shadow: 1px 2px 3px 3px rgba(136, 136, 139, 0.623);
 }

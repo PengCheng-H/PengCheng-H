@@ -9,9 +9,10 @@ import { Component, ReactNode } from "react";
 export default class HCRouter extends Component {
     render(): ReactNode {
         const router = createBrowserRouter([
-            { path: "*", element: <HCHome />, },
+            { path: "home", element: <HCHome />, },
             { path: "user", element: <HCUser />, },
-            { path: "pda", element: <HCPDA />, }
+            { path: "pda", element: <HCPDA />, },
+            { path: "*", element: <HCHome />, },
         ], { basename: "" });
 
         return (
