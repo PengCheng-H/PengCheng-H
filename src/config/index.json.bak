@@ -1,0 +1,35 @@
+{
+    "wms_server": {
+        "protocol": "HTTP://",
+        "host": "127.0.0.1",
+        "port": "8088"
+    },
+    "api": {
+        "item_get_by_code": "/item/get", // 通过物品编码获取物品详细信息
+        "item_get_by_text": "/item/find_by_text", // 通过物品名称等字段获取物品详细信息
+        "item_add": "/item/add", // 向系统中添加一个物品
+        "item_update": "/item/update", // 向系统更新一个物品的信息
+        "supplier_get_by_code": "/location/get", // 通过供应商或批次编号获取一个供应商或批次的详细信息
+        "supplier_get_by_text": "/location/find_by_text", // 通过供应商名称或批次名称等字段获取一个供应商或批次的详细信息
+        "supplier_add": "/location/add", // 向系统内添加一个供应商
+        "supplier_update": "/location/update", // 向系统内更新一个供应商的信息
+        "location_get_by_code": "/location/get", // 通过货位编号获取一个货位的详细信息
+        "location_add": "/location/add", // 向系统内添加一个货位
+        "location_update": "/location/update", // 向系统内更新一个货位的信息
+        "box_get": "/box/get", // 通过料箱编号获取一个货位的基本信息
+        "box_add": "/box/add", // 向系统内添加一个料箱
+        "box_update": "/box/update", // 向系统内更新一个料箱的信息
+        "box_detail_get_by_code": "/workbench/box/detail", // 通过料箱号获取一个料箱的明细信息
+        "inbound_order_get": "/workbench/inbound_order/find", // 通过物品编码、供应商编码、订单状态等获取入库订单的数据
+        "inbound_order_allocate": "/workbench/inbound_orders/allocate", // 通过传入订单编号、要修改的明细编号和数量，来分配一个该订单中的该物品要入库的数量
+        "outbound_order_get": "/workbench/outbound_order/find", // 通过物品编码、供应商编码、订单状态等获取出库订单的数据
+        "outbound_order_allocate": "/workbench/outbound_order/allocate", // 通过传入订单编号、要修改的明细编号和数量，来分配一个该订单中的该物品要出库的数量
+        "outbound_order_activate": "/workbench/outbound_order/activate", // 通过传入订单编号，来激活一个出库订单
+        "wcs_task_get_by_states": "/workbench/wcs_tasks/find", // 通过任务状态来获取任务
+        "wcs_task_activate_single": "/wcs/task/activate", // 
+        "wcs_task_activate_auto": "/workbench/wcs_tasks/activate", // 通过传入一个wcs任务编号来激活一个wcs任务
+        "wcs_task_finish": "/workbench/tasks/finish", // 通过传入一个料箱编号、物品编号和数量，来完成一次物品入箱的操作
+        "wms_task_confirm": "/task/confirm", // 通过传入一个WMS任务编号，来执行一个WMS任务
+        "pick_station_detail_get_by_code": "/workbench/pick_station/detail" // 通过传入拣货台编号，来获取对应拣货台的详细信息
+    }
+}

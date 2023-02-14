@@ -1,0 +1,35 @@
+{
+    "wms_server": {
+        "protocol": "http://",
+        "host": "localhost",
+        "port": "3000"
+    },
+    "api": {
+        "item_get_by_code": "/item/get",
+        "item_get_by_text": "/item/find_by_text",
+        "item_add": "/item/add",
+        "item_update": "/item/update",
+        "supplier_get_by_code": "/location/get",
+        "supplier_get_by_text": "/location/find_by_text",
+        "supplier_add": "/location/add",
+        "supplier_update": "/location/update",
+        "location_get_by_code": "/location/get",
+        "location_add": "/location/add",
+        "location_update": "/location/update",
+        "box_get": "/box/get",
+        "box_add": "/box/add",
+        "box_update": "/box/update",
+        "box_detail_get_by_code": "/workbench/box/detail",
+        "inbound_order_get": "/workbench/inbound_order/find",
+        "inbound_order_allocate": "/workbench/inbound_orders/allocate",
+        "outbound_order_get": "/workbench/outbound_order/find",
+        "outbound_order_allocate": "/workbench/outbound_order/allocate",
+        "outbound_order_activate": "/workbench/outbound_order/activate",
+        "wcs_task_get_by_states": "/workbench/wcs_tasks/find",
+        "wcs_task_activate_single": "/wcs/task/activate",
+        "wcs_task_activate_auto": "/workbench/wcs_tasks/activate",
+        "wcs_task_finish": "/workbench/tasks/finish",
+        "wms_task_confirm": "/task/confirm",
+        "pick_station_detail_get_by_code": "/workbench/pick_station/detail"
+    }
+}
