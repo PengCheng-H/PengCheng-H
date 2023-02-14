@@ -1,13 +1,17 @@
 import { ColumnsType } from 'antd/es/table';
 import { SearchOutlined } from '@ant-design/icons';
 import { Component, ReactNode } from "react";
-import { Button, Input, Select, SelectProps, Table } from 'antd';
+import { Button, Select, SelectProps, Table } from 'antd';
 
 import utils from '../../../utils';
 import wcs_task_list from '../../../mocks/wcs_task.mock';
 import { IHCWcsTask } from '../../../types/interface';
 
 
+
+wcs_task_list.map((value, index, arr) => {
+    value.key = value.key | index + Date.now();
+});
 
 const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     {
@@ -93,30 +97,37 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
 ];
 
 export default class HCWcsTask extends Component {
-    render(): ReactNode {
-        const options: SelectProps['options'] = [];
+    state: { curWcsTaskStates: number[] } = { "curWcsTaskStates": [] };
 
-        for (let i = 10; i < 36; i++) {
-            options.push({
-                label: i.toString(36) + i,
-                value: i.toString(36) + i,
-            });
-        }
+    render(): ReactNode {
+        const options: SelectProps['options'] = [
+            { label: "已创建", value: 0 },
+            { label: "已激活", value: 1 },
+            { label: "已完成", value: 2 },
+            { label: "异常", value: 3 },
+        ];
 
         return <div>
             <Select
                 mode="multiple"
                 allowClear
-                style={{ width: '100%' }}
-                placeholder="Please select"
+                style={{ width: '30%' }}
+                placeholder="请选择任务状态(可多选)"
                 defaultValue={[]}
-                // onChange={handleChange}
+                onChange={this.onSelTaskStatesChange.bind(this)}
                 options={options}
-                // className='search_input'
-                id='asdasdasd'
+                className='search_input'
             />
-            <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} className='search_button'>搜索任务</Button>
+            <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索任务</Button>
             <Table columns={wcs_task_headers} dataSource={wcs_task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' />;
         </div>
+    }
+
+    onSelTaskStatesChange(value: number[], option: any) {
+        this.setState({ "curWcsTaskStates": value });;
+    }
+
+    onBtnSearchClick() {
+        console.log("on button click: ", this.state.curWcsTaskStates);
     }
 }

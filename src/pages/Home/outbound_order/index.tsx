@@ -9,6 +9,10 @@ import { IHCOutboundOrder } from '../../../types/interface';
 
 
 
+outbound_order_list.map((value, index, arr) => {
+    value.key = value.key | index + Date.now();
+});
+
 const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
     {
         key: 'order_code',
@@ -135,11 +139,21 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
 ];
 
 export default class HCOutboundOrder extends Component {
+    state: { curSearchText: string } = { curSearchText: "" }
+
     render(): ReactNode {
         return <div>
             <Input type='search' id='txtSearchOutboundOrder' placeholder='请输入物料编码/名称/规格' className='search_input' />
             <Button id='btnSearchOutboundOrder' type='primary' icon={<SearchOutlined />} className='search_button'>搜索出库单</Button>
             <Table columns={outbound_order_headers} dataSource={outbound_order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />;
         </div>
+    }
+
+    onInpSearchChange(event: { target: { value: any; }; }) {
+        this.setState({ curSearchText: event.target.value });
+    }
+
+    onBtnSearchClick() {
+        console.log(this.state.curSearchText);
     }
 }

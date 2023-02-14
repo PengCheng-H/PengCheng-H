@@ -108,6 +108,7 @@ export interface IHCOutboundOrder {
 }
 
 export interface IHCWcsTask {
+  [key: string]: any;
   wcs_task_code: string;
   task_type: string;
   wcs_task_status: string;
