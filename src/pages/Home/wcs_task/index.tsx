@@ -1,17 +1,13 @@
 import { ColumnsType } from 'antd/es/table';
 import { SearchOutlined } from '@ant-design/icons';
 import { Component, ReactNode } from "react";
-import { Button, Select, SelectProps, Table } from 'antd';
+import { Button, Select, SelectProps, Table, message } from 'antd';
 
 import utils from '../../../utils';
-import wcs_task_list from '../../../mocks/wcs_task.mock';
-import { IHCWcsTask } from '../../../types/interface';
+import { IHCHttpResponse, IHCWcsTask } from '../../../types/interface';
+import api from '../../../utils/api';
 
 
-
-wcs_task_list.map((value, index, arr) => {
-    value.key = value.key | index + Date.now();
-});
 
 const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     {
@@ -63,7 +59,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'created_time',
         width: "180px",
         sorter: (a, b) => a.created_time.localeCompare(b.created_time, "en"),
-        render: utils.formatTime
+        render: utils.FormatTime
     },
     {
         key: 'created_operator',
@@ -78,7 +74,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'last_updated_time',
         width: "180px",
         sorter: (a, b) => a.last_updated_time.localeCompare(b.last_updated_time, "en"),
-        render: utils.formatTime
+        render: utils.FormatTime
     },
     {
         key: 'last_updated_operator',
@@ -97,7 +93,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
 ];
 
 export default class HCWcsTask extends Component {
-    state: { curWcsTaskStates: number[] } = { "curWcsTaskStates": [] };
+    state: { wcs_task_statuses: number[], task_list: IHCWcsTask[] } = { "wcs_task_statuses": [], task_list: [] };
 
     render(): ReactNode {
         const options: SelectProps['options'] = [
@@ -119,15 +115,26 @@ export default class HCWcsTask extends Component {
                 className='search_input'
             />
             <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索任务</Button>
-            <Table columns={wcs_task_headers} dataSource={wcs_task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' />;
+            <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' />;
         </div>
     }
 
     onSelTaskStatesChange(value: number[], option: any) {
-        this.setState({ "curWcsTaskStates": value });;
+        this.setState({ "wcs_task_statuses": value });;
     }
 
-    onBtnSearchClick() {
-        console.log("on button click: ", this.state.curWcsTaskStates);
+    async onBtnSearchClick() {
+        const result: IHCHttpResponse = await api.GetWcsTask(this.state.wcs_task_statuses);
+        if (!result || result.result_code != 0) {
+            message.error(`查询失败，${result.result_msg}。`)
+            return;
+        }
+
+        // 对象没有key这个字段，ts会报错，所以要给个key字段
+        result.data.map((val: IHCWcsTask) => {
+            val.key = val.wcs_task_code
+        });
+        this.setState({ task_list: result.data });
+        message.success(`查询成功，共找到 ${result.data.length} 个任务。`)
     }
 }

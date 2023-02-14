@@ -1,17 +1,13 @@
 import { ColumnsType } from 'antd/es/table';
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Table } from 'antd';
 import { Component, ReactNode } from "react";
+import { Button, Input, Select, SelectProps, Table, message } from 'antd';
 
 import utils from '../../../utils';
-import outbound_order_list from '../../../mocks/outbound_order.mock';
-import { IHCOutboundOrder } from '../../../types/interface';
+import { IHCHttpResponse, IHCOutboundOrder } from '../../../types/interface';
+import api from '../../../utils/api';
 
 
-
-outbound_order_list.map((value, index, arr) => {
-    value.key = value.key | index + Date.now();
-});
 
 const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
     {
@@ -93,7 +89,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         dataIndex: 'order_time',
         width: "180px",
         sorter: (a, b) => Date.parse(a.order_time.toString()) - Date.parse(b.order_time.toString()),
-        render: utils.formatTime
+        render: utils.FormatTime
     },
     {
         key: 'created_time',
@@ -101,7 +97,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         dataIndex: 'created_time',
         width: "180px",
         sorter: (a, b) => Date.parse(a.order_time.toString()) - Date.parse(b.order_time.toString()),
-        render: utils.formatTime
+        render: utils.FormatTime
     },
     // {
     //     key: 'created_operator',
@@ -139,21 +135,60 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
 ];
 
 export default class HCOutboundOrder extends Component {
-    state: { curSearchText: string } = { curSearchText: "" }
+    state: { item_code: string, supplier_code: string, order_states: number[], order_list: IHCOutboundOrder[] } = { item_code: "", supplier_code: "", order_states: [], order_list: [] };
 
     render(): ReactNode {
+        const options: SelectProps['options'] = [
+            { label: "已创建", value: 0 },
+            { label: "已激活", value: 1 },
+            { label: "已暂停", value: 2 },
+            { label: "进行中", value: 3 },
+            { label: "已完成", value: 4 },
+            { label: "异常", value: 5 },
+        ];
+
         return <div>
-            <Input type='search' id='txtSearchOutboundOrder' placeholder='请输入物料编码/名称/规格' className='search_input' />
-            <Button id='btnSearchOutboundOrder' type='primary' icon={<SearchOutlined />} className='search_button'>搜索出库单</Button>
-            <Table columns={outbound_order_headers} dataSource={outbound_order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />;
+            <Input type='search' placeholder='请输入物料编码/名称/规格' onChange={this.onTxtItemCodeChange.bind(this)} className='search_input' />
+            <Input type='search' placeholder='请输入物料批次号/供应商名称' onChange={this.onTxtSupplierCodeChange.bind(this)} className='search_input' />
+            <Select
+                mode="multiple"
+                allowClear
+                style={{ width: '30%' }}
+                placeholder="请选择订单状态(可多选)"
+                defaultValue={[]}
+                onChange={this.onArrOrderStatesChange.bind(this)}
+                options={options}
+                className='search_input'
+            />
+            <Button type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索出库单</Button>
+            <Table columns={outbound_order_headers} dataSource={this.state.order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />
         </div>
     }
 
-    onInpSearchChange(event: { target: { value: any; }; }) {
-        this.setState({ curSearchText: event.target.value });
+    onTxtItemCodeChange(event: { target: { value: any; }; }) {
+        this.setState({ item_code: event.target.value });
     }
 
-    onBtnSearchClick() {
-        console.log(this.state.curSearchText);
+    onTxtSupplierCodeChange(event: { target: { value: any; }; }) {
+        this.setState({ supplier_code: event.target.value });
+    }
+
+    onArrOrderStatesChange(value: number[]) {
+        this.setState({ order_states: value });
+    }
+
+    async onBtnSearchClick() {
+        const result: IHCHttpResponse = await api.GetOutboundOrder(this.state.item_code, this.state.supplier_code, this.state.order_states);
+        if (!result || result.result_code != 0) {
+            message.error(`查询失败，${result.result_msg}。`)
+            return;
+        }
+
+        // 订单对象没有key这个字段，ts会报错，所以要给个key字段
+        result.data.map((val: IHCOutboundOrder) => {
+            val.key = val.order_code
+        });
+        this.setState({ order_list: result.data });
+        message.success(`查询成功，共找到 ${result.data.length} 个出库单。`)
     }
 }
