@@ -19,7 +19,7 @@
     border: 1px solid #dd9191;
 }
 
-.content .row .search_button {}
+/* .content .row .search_button {} */
 
 .table th,
 .table td {
@@ -28,8 +28,4 @@
 
 .ant-tabs-tab-btn {
     font-size: 18px;
-}
-
-#asdasdasd {
-    width: 100px;
 }

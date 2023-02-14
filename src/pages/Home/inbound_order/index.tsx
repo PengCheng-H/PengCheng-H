@@ -1,13 +1,15 @@
 import { ColumnsType } from 'antd/es/table';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Table } from 'antd';
-import { Component, ReactNode } from "react";
+import { Component, ReactNode, ChangeEvent } from "react";
 
 import utils from '../../../utils';
 import inbound_order_list from '../../../mocks/inbound_order.mock';
-import { IHCInboundOrder } from '../../../types/interface';
+import { IHCInboundOrder } from '../../../types/interface'
 
-
+inbound_order_list.map((value, index, arr) => {
+    value.key = value.key | index + Date.now();
+});
 
 const inbound_order_headers: ColumnsType<IHCInboundOrder> = [
     {
@@ -137,11 +139,21 @@ const inbound_order_headers: ColumnsType<IHCInboundOrder> = [
 ];
 
 export default class HCInboundOrder extends Component {
+    state: { curSearchText: string } = { curSearchText: "" };
+
     render(): ReactNode {
         return <div>
-            <Input type='search' id='txtInboundOrder' placeholder='请输入物料编码/名称/规格' className='search_input' />
-            <Button id='btnSearchInboundOrder' type='primary' icon={<SearchOutlined />} className='search_button'>搜索入库单</Button>
+            <Input type='search' id='inpInboundOrder' placeholder='请输入物料编码/名称/规格' onChange={this.onInpSearchChange.bind(this)} className='search_input' />
+            <Button id='btnSearchInboundOrder' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索入库单</Button>
             <Table columns={inbound_order_headers} dataSource={inbound_order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />
         </div>;
+    }
+
+    onInpSearchChange(event: { target: { value: any; }; }) {
+        this.setState({ curSearchText: event.target.value });
+    }
+
+    onBtnSearchClick() {
+        console.log(this.state.curSearchText);
     }
 }
