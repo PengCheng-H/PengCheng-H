@@ -1,11 +1,12 @@
+import React from "react";
 import { ColumnsType } from 'antd/es/table';
 import { SearchOutlined } from '@ant-design/icons';
-import { Component, ReactNode } from "react";
 import { Button, Select, SelectProps, Table, message } from 'antd';
 
+import api from '../../../utils/api';
 import utils from '../../../utils';
 import { IHCHttpResponse, IHCWcsTask } from '../../../types/interface';
-import api from '../../../utils/api';
+import './index.css';
 
 
 
@@ -14,7 +15,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         key: 'wcs_task_code',
         title: 'WCS任务号',
         dataIndex: 'wcs_task_code',
-        width: "160px",
+        width: "180px",
         fixed: 'left',
         sorter: (a, b) => a.wcs_task_code.localeCompare(b.wcs_task_code, "en"),
     },
@@ -22,14 +23,14 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         key: 'task_type',
         title: '任务类型',
         dataIndex: 'task_type',
-        width: "120px",
+        width: "110px",
         sorter: (a, b) => a.task_type.localeCompare(b.task_type, "en"),
     },
     {
         key: 'wcs_task_status',
         title: '任务状态',
         dataIndex: 'wcs_task_status',
-        width: "120px",
+        width: "110px",
         sorter: (a, b) => a.wcs_task_status.localeCompare(b.wcs_task_status, "en"),
     },
     {
@@ -63,9 +64,9 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     },
     {
         key: 'created_operator',
-        title: '创建操作员',
+        title: '创建人员',
         dataIndex: 'created_operator',
-        width: "150px",
+        width: "120px",
         sorter: (a, b) => a.created_operator.localeCompare(b.created_operator, "en"),
     },
     {
@@ -78,9 +79,9 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     },
     {
         key: 'last_updated_operator',
-        title: '更新操作员',
+        title: '更新人员',
         dataIndex: 'last_updated_operator',
-        width: "150px",
+        width: "120px",
         sorter: (a, b) => a.last_updated_operator.localeCompare(b.last_updated_operator, "en"),
     },
     // {
@@ -92,10 +93,10 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     // },
 ];
 
-export default class HCWcsTask extends Component {
+export default class HCWorkbenchTask extends React.Component {
     state: { wcs_task_statuses: number[], task_list: IHCWcsTask[] } = { "wcs_task_statuses": [], task_list: [] };
 
-    render(): ReactNode {
+    render(): React.ReactNode {
         const options: SelectProps['options'] = [
             { label: "已创建", value: 0 },
             { label: "已激活", value: 1 },
@@ -103,19 +104,19 @@ export default class HCWcsTask extends Component {
             { label: "异常", value: 3 },
         ];
 
-        return <div>
+        return <div className="hc_panel hc_task_panel">
             <Select
                 mode="multiple"
                 allowClear
-                style={{ width: '30%' }}
-                placeholder="请选择任务状态(可多选)"
+                style={{ width: '30%', border: "1px dashed", fontSize: "20px" }}
+                placeholder="请选择任务状态(可多选,非必选)"
                 defaultValue={[]}
                 onChange={this.onSelTaskStatesChange.bind(this)}
                 options={options}
-                className='search_input'
+                className='task_statuses'
             />
             <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索任务</Button>
-            <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' />;
+            <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' />
         </div>
     }
 
