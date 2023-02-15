@@ -1,4 +1,4 @@
-import { Tabs, TabsProps } from 'antd';
+import { StepProps, Steps, Tabs, TabsProps } from 'antd';
 import { Component, ReactNode } from 'react';
 
 import HCWcsTask from "./wcs_task";
@@ -23,6 +23,7 @@ export default class Home extends Component {
                 children: <HCOutboundOrder />,
             }
         ];
+
         return (
             <div className='content'>
                 <div className='row'>
