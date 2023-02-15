@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import HCRouter from './router';
+import './index.css';
 
 
-class HCApp extends Component {
-  run() {
-    const root = ReactDOM.createRoot(
-      document.getElementById('root') as HTMLElement
-    );
 
-    root.render(
-      <React.StrictMode>
-        <HCRouter />
-      </React.StrictMode>
-    );
-  }
+/**
+ * @description 慧仓穿云箭WMS Web前端项目入口
+ */
+class HCApp {
+    run(): void {
+        const root = ReactDOM.createRoot(
+            document.getElementById('root') as HTMLElement
+        );
+
+        root.render(
+            <React.StrictMode>
+                <HCRouter />
+            </React.StrictMode>
+        );
+    }
 }
 
-const app = new HCApp({});
+const app = new HCApp();
 app.run();

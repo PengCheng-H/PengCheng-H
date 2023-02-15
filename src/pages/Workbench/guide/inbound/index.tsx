@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Steps, message } from "antd";
+
 import '../index.css';
+import HCInboundTaskGuideSearch from "./step_search";
+
+
 
 export default class HCInboundTaskGuide extends React.Component {
     state = {
@@ -10,7 +14,7 @@ export default class HCInboundTaskGuide extends React.Component {
             {
                 title: '第一步',
                 description: '输入来货信息',
-                content: ""
+                content: <HCInboundTaskGuideSearch ref={child => this.child_search = child} />
             },
             {
                 title: '第二步',
@@ -23,10 +27,10 @@ export default class HCInboundTaskGuide extends React.Component {
                 content: ""
             }
         ],
-        inbound_items: {
-
-        }
+        item_code: "",
+        item_list: []
     };
+    child_search: HCInboundTaskGuideSearch | null | undefined;
 
     render() {
         return <div>
@@ -54,6 +58,19 @@ export default class HCInboundTaskGuide extends React.Component {
     }
 
     next() {
+        if (this.state.current === 0) {
+            if (!this.child_search?.confirm()) {
+                message.error("参数有误，请核对参数后再次重试！");
+                return
+            }
+            this.setState({
+                item_code: this.child_search.state.cur_item_code,
+                item_list: this.child_search.state.item_list
+            });
+        }
+        else if (this.state.current === 1) { }
+        else if (this.state.current === 2) { }
+
         this.setState({ current: this.state.current + 1 })
     }
 
