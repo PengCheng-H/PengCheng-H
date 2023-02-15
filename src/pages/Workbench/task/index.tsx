@@ -93,17 +93,17 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     // },
 ];
 
+const options: SelectProps['options'] = [
+    { label: "已创建", value: 0 },
+    { label: "已激活", value: 1 },
+    { label: "已完成", value: 2 },
+    { label: "异常", value: 3 },
+];
+
 export default class HCWorkbenchTask extends React.Component {
     state: { wcs_task_statuses: number[], task_list: IHCWcsTask[] } = { "wcs_task_statuses": [], task_list: [] };
 
     render(): React.ReactNode {
-        const options: SelectProps['options'] = [
-            { label: "已创建", value: 0 },
-            { label: "已激活", value: 1 },
-            { label: "已完成", value: 2 },
-            { label: "异常", value: 3 },
-        ];
-
         return <div className="hc_panel hc_task_panel">
             <Select
                 mode="multiple"

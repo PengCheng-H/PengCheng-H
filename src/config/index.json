@@ -1,8 +1,13 @@
 {
+    "debug": {
+        "enable": true,
+        "enable_mock": false,
+        "enable_proxy": true
+    },
     "wms_server": {
         "protocol": "http://",
         "host": "localhost",
-        "port": "3000"
+        "port": "8088"
     },
     "api": {
         "item_get_by_code": "/item/get",

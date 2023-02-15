@@ -9,6 +9,8 @@ import HCWorkbenchOutboundGuide from "../pages/Workbench/guide/outbound";
 import HCWorkbenchTask from "../pages/Workbench/task";
 import HCTestPage from "../pages/test";
 
+
+
 export default class HCRouter extends React.Component {
     render(): React.ReactNode {
         const router = createBrowserRouter([

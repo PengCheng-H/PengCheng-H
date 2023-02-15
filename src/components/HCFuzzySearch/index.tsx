@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import { Input, Select } from 'antd';
 
+
 interface Props {
-    dataSource: string[];
+    dataSource: any[];
     placeholder?: string;
     style?: React.CSSProperties;
+    className?: string;
     onChange?: (value: string) => void;
+    onSearch?: (value: string, cb: Function) => void;
 }
+
+interface DataSourceType { label: string, value: any }
 
 interface State {
     value: string;
-    dataSource: { label: string, value: any }[];
-    originDataSource: { label: string, value: any }[];
+    fruzzydataSource: DataSourceType[];
+    realDataSource: DataSourceType[];
 }
 
 export default class HCFuzzySearch extends Component<Props, State> {
@@ -19,11 +24,11 @@ export default class HCFuzzySearch extends Component<Props, State> {
         super(props);
         this.state = {
             value: "",
-            dataSource: props.dataSource.map(item => {
-                return { label: item, value: item };
+            fruzzydataSource: props.dataSource.map(item => {
+                return { label: item.toString(), value: item.toString() };
             }),
-            originDataSource: props.dataSource.map(item => {
-                return { label: item, value: item };
+            realDataSource: props.dataSource.map(item => {
+                return { label: item.toString(), value: item.toString() };
             }),
         };
     }
@@ -37,8 +42,12 @@ export default class HCFuzzySearch extends Component<Props, State> {
     };
 
     handleSearch = (value: string) => {
-        const newDataSource = this.state.originDataSource.filter(item => item.value.includes(value));
-        this.setState({ dataSource: newDataSource });
+        const { onSearch } = this.props;
+        if (onSearch) {
+            onSearch(value, (data_source: DataSourceType[]) => this.setState({ realDataSource: data_source }));
+        }
+        const newDataSource = this.state.realDataSource.filter(item => item.value.includes(value));
+        this.setState({ fruzzydataSource: newDataSource });
     };
 
     render() {
@@ -48,12 +57,13 @@ export default class HCFuzzySearch extends Component<Props, State> {
                 defaultActiveFirstOption={false}
                 showArrow={false}
                 filterOption={false}
-                onSearch={this.handleSearch}
-                onChange={this.handleChange}
+                onChange={this.handleChange.bind(this)}
+                onSearch={this.handleSearch.bind(this)}
                 notFoundContent={null}
                 style={this.props?.style}
-                options={this.state.dataSource}
+                options={this.state.fruzzydataSource}
                 placeholder={this.props?.placeholder}
+                className={this.props?.className}
             ></Select>
         );
     }
