@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button, Modal, Steps, message } from "antd";
 
 import api from "../../../../utils/api";
+import * as IHttpRes from "../../../../types/http_response.interface";
 import HCInboundTaskGuideSearch from "./step_search";
 import HCInboundTaskGuideAllocate from "./step_allocate";
 import { IHCGetInboundOrdersRes } from "../../../../types/http_response.interface";
@@ -63,7 +64,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
                     <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right" }}>确认建单</Button>
                 )}
             </div>
-            <Modal title="激活出库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
+            <Modal title="激活入库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
                 <p>{this.state.modal_msg}</p>
             </Modal>
         </div>;
@@ -124,16 +125,41 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
         this.activate_task();
     }
 
-    async allocate_orders() {
-        message.info(`入库物品: ${this.state.item_code}, 入库数量: ${this.state.item_quantity}`);
-        const get_result: IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3, 4, 5])
-        if (get_result.data.data_list) {
-            this.child_allocate.set_inbound_order_list(get_result.data.data_list, this.state.item_code, this.state.item_quantity);
+    async quick_add_orders() {
+        const result = await api.QuickAddInboundOrder(this.state.supplier_code, [
+            {
+                item_code: this.state.item_code,
+                quantity: this.state.item_quantity
+            }
+        ]);
+
+        if (!result || result.result_code != 0) {
+            message.error(`快速建单失败！供应商: ${this.state.supplier_code}, 物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
+            return;
         }
+
+        await this.allocate_orders(true);
+    }
+
+    async allocate_orders(from_quikc_add_order: boolean = false) {
+        // message.info(`入库物品: ${this.state.item_code}, 入库数量: ${this.state.item_quantity}`);
+        const get_result: IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3, 4, 5])
+
+        if (!get_result || get_result.result_code != 0) {
+            message.error(`分配物品数量到订单失败！物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
+            return;
+        }
+
+        if (!from_quikc_add_order && (!get_result.data.data_list || get_result.data.data_list.length <= 0)) {
+            this.quick_add_orders();
+            return;
+        }
+
+        this.child_allocate.set_inbound_order_list(get_result.data.data_list, this.state.item_code, this.state.item_quantity);
     }
 
     async activate_task() {
-        const activate_result = await api.ActivateWorkbenchWcsTask();
+        const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
         if (!activate_result || activate_result.result_code != 0) {
             this.setState({
                 modal_msg: `activate wcs task fail! ${activate_result.result_code}: ${activate_result.result_msg}`,

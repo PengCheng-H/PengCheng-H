@@ -197,6 +197,13 @@ export interface IHCBox {
     last_updated_operator: string
 }
 
+export interface IHCBoxDetail {
+    box_region_id: number
+    item_code: string
+    quantity: number
+    orders: { order_code: string, quantity: number }[]
+}
+
 export interface IHCOrderType {
     order_type_name: string
     work_type: string
@@ -207,4 +214,15 @@ export interface IHCOrderType {
     created_operator: string
 }
 
+export interface IHCPickStation {
+    [key: string]: string
+    pick_station_code: string
+    pick_station_status: string
+    box_code: string
+    wcs_task_code: string
+    created_time: string
+    created_operator: string
+    last_updated_time: string
+    last_updated_operator: string
+}
 
