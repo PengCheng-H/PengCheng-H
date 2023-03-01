@@ -1,9 +1,3 @@
-export interface IHCHttpResponse {
-    result_code: number
-    result_msg: string
-    data: any
-}
-
 export interface IHCInboundOrderDetailLotProps {
     production_date: string;
     supplier_code: string;
@@ -39,22 +33,22 @@ export interface IHCInboundOrderDetail {
 
 export interface IHCInboundOrder {
     [key: string]: any;
-    external_order_code: string;
-    related_code1: string;
-    order_time: string;
-    order_status: string;
-    order_allocated_qty: number;
-    created_time: string;
-    created_operator: string;
     created_from: string;
-    related_code2: string;
-    order_code: string;
-    order_type_code: string;
-    order_qty: number;
-    order_finished_qty: number;
-    last_updated_time: string;
+    created_operator: string;
+    created_time: string;
+    external_order_code: string;
     last_updated_operator: string;
+    last_updated_time: string;
+    order_allocated_qty: number;
+    order_code: string;
+    order_finished_qty: number;
+    order_qty: number;
+    order_status: string;
+    order_time: string;
+    order_type_code: string;
     order_details: IHCInboundOrderDetail[];
+    related_code1: string;
+    related_code2: string;
 }
 
 export interface IHCOutboundOrderDetailLotProps {
@@ -92,25 +86,25 @@ export interface IHCOutboundOrderDetail {
 
 export interface IHCOutboundOrder {
     [key: string]: any;
-    external_order_code: string;
-    related_code1: string;
-    order_time: string;
-    order_status: string;
-    order_allocated_qty: number;
-    created_time: string;
-    created_operator: string;
     created_from: string;
-    related_code2: string;
+    created_operator: string;
+    created_time: string;
+    last_updated_operator: string;
+    last_updated_time: string;
+    external_order_code: string;
+    order_allocated_qty: number;
+    order_time: string;
+    order_finished_qty: number;
+    order_qty: number;
+    order_status: string;
     order_code: string;
     order_type_code: string;
-    order_qty: number;
-    order_finished_qty: number;
+    order_details: IHCOutboundOrderDetail[];
     receiver_name: string;
     receiver_contact_tel: string;
     receiver_contact_name: string;
-    last_updated_time: string;
-    last_updated_operator: string;
-    order_details: IHCOutboundOrderDetail[];
+    related_code1: string;
+    related_code2: string;
 }
 
 export interface IHCWcsTask {
@@ -162,3 +156,55 @@ export interface IHCItem {
     expiry_date_as_lot: boolean
     abc_type: string
 }
+
+export interface IHCSupplier {
+    created_time: string
+    supplier_code: string
+    supplier_name: string
+    created_operator: string
+    created_from: string
+    supplier_status: string
+    last_updated_time: string
+    last_updated_operator: string
+}
+
+export interface IHCLocation {
+    location_code: string
+    location_layer: number
+    abc_type: string
+    created_time: string
+    created_operator: string
+    location_row: number
+    location_column: number
+    location_depth: number
+    location_status: string
+    last_updated_time: string
+    last_updated_operator: string
+}
+
+export interface IHCBox {
+    box_length: number
+    location_code: string
+    box_height: number
+    box_region_count: number
+    created_time: string
+    created_operator: string
+    box_code: string
+    box_width: number
+    box_rated_capacity: number
+    box_status: string
+    last_updated_time: string
+    last_updated_operator: string
+}
+
+export interface IHCOrderType {
+    order_type_name: string
+    work_type: string
+    last_updated_time: string
+    last_updated_operator: string
+    created_time: string
+    order_type_code: string
+    created_operator: string
+}
+
+

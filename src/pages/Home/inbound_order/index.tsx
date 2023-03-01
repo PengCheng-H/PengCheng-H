@@ -5,7 +5,8 @@ import { Button, Input, Select, SelectProps, Table, message } from 'antd';
 
 import api from '../../../utils/api';
 import utils from '../../../utils';
-import { IHCHttpResponse, IHCInboundOrder } from '../../../types/interface'
+import { HttpResponse } from '../../../types/http_response.interface';
+import { IHCInboundOrder } from '../../../types/interface';
 
 
 
@@ -181,7 +182,7 @@ export default class HCInboundOrder extends Component {
     }
 
     async onBtnSearchClick() {
-        const result: IHCHttpResponse = await api.GetInboundOrder(this.state.item_code, this.state.supplier_code, this.state.order_states);
+        const result: HttpResponse = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, this.state.order_states);
         if (!result || result.result_code != 0) {
             message.error(`查询失败，${result.result_msg}。`)
             return;

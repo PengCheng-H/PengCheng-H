@@ -7,6 +7,7 @@ interface Props {
     placeholder?: string;
     style?: React.CSSProperties;
     className?: string;
+    autoFocus?: boolean;
     onChange?: (value: string) => void;
     onSearch?: (value: string, cb: Function) => void;
 }
@@ -15,8 +16,8 @@ interface DataSourceType { label: string, value: any }
 
 interface State {
     value: string;
-    fruzzydataSource: DataSourceType[];
     realDataSource: DataSourceType[];
+    fruzzydataSource: DataSourceType[];
 }
 
 export default class HCFuzzySearch extends Component<Props, State> {
@@ -64,6 +65,7 @@ export default class HCFuzzySearch extends Component<Props, State> {
                 options={this.state.fruzzydataSource}
                 placeholder={this.props?.placeholder}
                 className={this.props?.className}
+                autoFocus={this.props?.autoFocus}
             ></Select>
         );
     }

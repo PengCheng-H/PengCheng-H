@@ -4,7 +4,8 @@ import { Component, ReactNode } from "react";
 import { Button, Input, Select, SelectProps, Table, message } from 'antd';
 
 import utils from '../../../utils';
-import { IHCHttpResponse, IHCOutboundOrder } from '../../../types/interface';
+import { IHCOutboundOrder } from '../../../types/interface';
+import { HttpResponse } from '../../../types/http_response.interface';
 import api from '../../../utils/api';
 
 
@@ -178,7 +179,7 @@ export default class HCOutboundOrder extends Component {
     }
 
     async onBtnSearchClick() {
-        const result: IHCHttpResponse = await api.GetOutboundOrder(this.state.item_code, this.state.supplier_code, this.state.order_states);
+        const result: HttpResponse = await api.GetOutboundOrders(this.state.item_code, this.state.supplier_code, this.state.order_states);
         if (!result || result.result_code != 0) {
             message.error(`查询失败，${result.result_msg}。`)
             return;
