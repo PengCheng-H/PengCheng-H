@@ -1,4 +1,4 @@
-import { IHCBox, IHCInboundOrder, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCSupplier, IHCWcsTask } from "./interface"
+import { IHCBox, IHCBoxDetail, IHCInboundOrder, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
 
 export interface HttpResponse {
     result_code: number
@@ -46,11 +46,22 @@ export interface IHCGetLocationDetailRes extends HttpResponse {
 }
 
 export interface IHCGetBoxDetailRes extends HttpResponse {
-    data: IHCBox
+    data: {
+        task_type: string
+        box_code: string
+        region_task_details: IHCBoxDetail[]
+    }
 }
 
 export interface IHCGetOderTypeDetailRes extends HttpResponse {
     data: IHCOrderType
+}
+
+export interface IHCGetPickStationRes extends HttpResponse {
+    data: IHCPickStation
+}
+export interface IHCGetPickStationsRes extends HttpResponse {
+    data: IHCPickStation[]
 }
 
 export interface IHCGetInboundOrdersRes extends IHCResPagination {

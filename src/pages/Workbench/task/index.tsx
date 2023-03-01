@@ -10,6 +10,61 @@ import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interfa
 import './index.css';
 
 
+export default class HCWorkbenchTask extends React.Component {
+    state: { wcs_task_statuses: number[], task_list: IHCWcsTask[] } = { "wcs_task_statuses": [], task_list: [] };
+
+    render(): React.ReactNode {
+        return <div className="hc_panel hc_task_panel">
+            <Select
+                mode="multiple"
+                allowClear
+                style={{ width: '30%', border: "1px dashed", fontSize: "20px" }}
+                placeholder="请选择任务状态(可多选,非必选)"
+                defaultValue={[]}
+                onChange={this.onSelTaskStatesChange.bind(this)}
+                options={options}
+                className='task_statuses'
+            />
+            <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索任务</Button>
+            <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} className='table' />
+            {/* <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' /> */}
+        </div>
+    }
+
+    onSelTaskStatesChange(value: number[], option: any) {
+        this.setState({ "wcs_task_statuses": value });;
+    }
+
+    componentDidMount(): void {
+        this.onBtnSearchClick()
+    }
+
+    async onBtnSearchClick() {
+        const result: IHCGetWorkbenchWcsTasksRes = await api.GetWorkbenchWcsTasks(this.state.wcs_task_statuses);
+
+        if (!result || result.result_code != 0) {
+            message.error(`查询失败，${result.result_msg}。`)
+            return;
+        }
+
+        // 对象没有key这个字段，ts会报错，所以要给个key字段
+        result.data.data_list.map((wcs_task: IHCWcsTask) => {
+            wcs_task.key = wcs_task.wcs_task_code
+        });
+
+        this.setState({ task_list: result.data.data_list });
+        message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
+    }
+}
+
+
+
+const options: SelectProps['options'] = [
+    { label: "已创建", value: 0 },
+    { label: "已激活", value: 1 },
+    { label: "已完成", value: 2 },
+    { label: "异常", value: 3 },
+];
 
 const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     {
@@ -26,6 +81,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'task_type',
         width: "110px",
         sorter: (a, b) => a.task_type.localeCompare(b.task_type, "en"),
+        render: (value) => value == "0" ? "已创建" : (value == "1" ? "已激活" : (value == "2" ? "已完成" : "异常中"))
     },
     {
         key: 'wcs_task_status',
@@ -93,57 +149,3 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
     //     fixed: 'right',
     // },
 ];
-
-const options: SelectProps['options'] = [
-    { label: "已创建", value: 0 },
-    { label: "已激活", value: 1 },
-    { label: "已完成", value: 2 },
-    { label: "异常", value: 3 },
-];
-
-export default class HCWorkbenchTask extends React.Component {
-    state: { wcs_task_statuses: number[], task_list: IHCWcsTask[] } = { "wcs_task_statuses": [], task_list: [] };
-
-    render(): React.ReactNode {
-        return <div className="hc_panel hc_task_panel">
-            <Select
-                mode="multiple"
-                allowClear
-                style={{ width: '30%', border: "1px dashed", fontSize: "20px" }}
-                placeholder="请选择任务状态(可多选,非必选)"
-                defaultValue={[]}
-                onChange={this.onSelTaskStatesChange.bind(this)}
-                options={options}
-                className='task_statuses'
-            />
-            <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索任务</Button>
-            <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} className='table' />
-            {/* <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' /> */}
-        </div>
-    }
-
-    onSelTaskStatesChange(value: number[], option: any) {
-        this.setState({ "wcs_task_statuses": value });;
-    }
-
-    componentDidMount(): void {
-        this.onBtnSearchClick()
-    }
-
-    async onBtnSearchClick() {
-        const result: IHCGetWorkbenchWcsTasksRes = await api.GetWorkbenchWcsTasks(this.state.wcs_task_statuses);
-
-        if (!result || result.result_code != 0) {
-            message.error(`查询失败，${result.result_msg}。`)
-            return;
-        }
-
-        // 对象没有key这个字段，ts会报错，所以要给个key字段
-        result.data.data_list.map((wcs_task: IHCWcsTask) => {
-            wcs_task.key = wcs_task.wcs_task_code
-        });
-
-        this.setState({ task_list: result.data.data_list });
-        message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
-    }
-}

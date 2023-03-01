@@ -2,8 +2,8 @@ import React from "react"
 import { Button, Input, InputNumber, message } from "antd";
 
 import api from "../../../../utils/api";
-import { IHCItem, IHCSupplier } from "../../../../types/interface";
 import HCFuzzySearch from "../../../../components/HCFuzzySearch";
+import { IHCItem, IHCSupplier } from "../../../../types/interface";
 import './index.css';
 
 

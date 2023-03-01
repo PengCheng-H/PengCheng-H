@@ -1,5 +1,5 @@
-import HCHttpClient from "./http_client";
 import config from "../config/index.json";
+import HCHttpClient from "./http_client";
 import * as IBase from "../types/interface";
 import * as IHttpRes from "../types/http_response.interface";
 import utils from ".";
@@ -98,8 +98,27 @@ class HCApi {
 
 
 
-    public async QuickAddInboundOrder(supplier_code: string, item_details: { item_code: string, quantity: number }[]): Promise<IHttpRes.HttpResponse> {
-        return await this.SendPostRequest(config.api.inbound_order_quick_add, { supplier_code, item_details });
+    public async AddPickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.HttpResponse> {
+        return await this.SendPostRequest(config.api.pick_station_add, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
+    }
+
+    public async UpdatePickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.HttpResponse> {
+        return await this.SendPostRequest(config.api.pick_station_update, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
+    }
+
+    public async GetPickStation(pick_station_code: string): Promise<IHttpRes.IHCGetPickStationRes> {
+        if (!pick_station_code) { return utils.CreateErrorRes(); }
+        return await this.SendGetRequest(config.api.pick_station_get, { pick_station_code });
+    }
+
+    public async GetPickAllStation(): Promise<IHttpRes.IHCGetPickStationsRes> {
+        return await this.SendGetRequest(config.api.pick_station_get_all, {});
+    }
+
+
+
+    public async QuickAddInboundOrder(supplier_code: string, details: { item_code: string, quantity: number }[]): Promise<IHttpRes.HttpResponse> {
+        return await this.SendPostRequest(config.api.inbound_order_quick_add, { supplier_code, details });
     }
 
     public async AllocateInboundOrder(order_code: string): Promise<IHttpRes.HttpResponse> {
