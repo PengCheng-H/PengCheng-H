@@ -1,15 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Steps, message } from "antd";
+import { Button, Modal, Steps, message } from "antd";
 
-import '../index.css';
+import api from "../../../../utils/api";
 import HCInboundTaskGuideSearch from "./step_search";
+import HCInboundTaskGuideAllocate from "./step_allocate";
+import { IHCGetInboundOrdersRes } from "../../../../types/http_response.interface";
+import '../index.css';
 
 
 
-export default class HCInboundTaskGuide extends React.Component {
+export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     state = {
         current: 0,
+        item_code: "",
+        item_list: [],
+        supplier_code: "",
+        supplier_list: [],
+        item_quantity: 0,
+        modal_msg: "",
+        modal_is_open: false,
         steps: [
             {
                 title: '第一步',
@@ -19,18 +29,21 @@ export default class HCInboundTaskGuide extends React.Component {
             {
                 title: '第二步',
                 description: '分配物品数量',
-                content: ""
+                content: <HCInboundTaskGuideAllocate ref={child => this.child_allocate = child} />
             },
-            {
-                title: '第三步',
-                description: '确认分配结果',
-                content: ""
-            }
+            // {
+            //     title: '第三步',
+            //     description: '确认分配结果',
+            //     content: ""
+            // }
         ],
-        item_code: "",
-        item_list: []
     };
     child_search: HCInboundTaskGuideSearch | null | undefined;
+    child_allocate: HCInboundTaskGuideAllocate | any;
+
+    constructor(props: {}) {
+        super(props);
+    }
 
     render() {
         return <div>
@@ -50,7 +63,24 @@ export default class HCInboundTaskGuide extends React.Component {
                     <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right" }}>确认建单</Button>
                 )}
             </div>
+            <Modal title="激活出库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
+                <p>{this.state.modal_msg}</p>
+            </Modal>
         </div>;
+    }
+
+    handleOk() {
+        this.setState({
+            modal_is_open: false
+        }, () => {
+            window.location.href = "/workbench";
+        });
+    }
+
+    handleCancel() {
+        this.setState({
+            modal_is_open: false
+        });
     }
 
     prev() {
@@ -59,22 +89,61 @@ export default class HCInboundTaskGuide extends React.Component {
 
     next() {
         if (this.state.current === 0) {
-            if (!this.child_search?.confirm()) {
-                message.error("参数有误，请核对参数后再次重试！");
+            if (!this.child_search?.confirm_item_code()) {
+                message.error("物品码不能为空！");
                 return
             }
+
+            if (!this.child_search?.confirm_item_quantity()) {
+                message.error("物品数量不能为空！");
+                return
+            }
+
             this.setState({
                 item_code: this.child_search.state.cur_item_code,
-                item_list: this.child_search.state.item_list
-            });
+                item_list: this.child_search.state.cur_item_list,
+                item_quantity: this.child_search.state.cur_item_quantity,
+                supplier_code: this.child_search.state.cur_supplier_code,
+                supplier_list: this.child_search.state.cur_supplier_list,
+            }, this.allocate_orders);
         }
-        else if (this.state.current === 1) { }
+        else if (this.state.current === 1) {
+
+        }
         else if (this.state.current === 2) { }
 
         this.setState({ current: this.state.current + 1 })
     }
 
-    done() {
-        message.success("建单成功!");
+    async done() {
+        for (let [order_code, order_details] of Object.entries(this.child_allocate.child_table.state.allocated_item_details as [])) {
+            const allocate_result = await api.AllocateWorkbenchInboundOrder([{ order_code, order_details: [...order_details] }]);
+            console.log(allocate_result);
+        }
+
+        this.activate_task();
+    }
+
+    async allocate_orders() {
+        message.info(`入库物品: ${this.state.item_code}, 入库数量: ${this.state.item_quantity}`);
+        const get_result: IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3, 4, 5])
+        if (get_result.data.data_list) {
+            this.child_allocate.set_inbound_order_list(get_result.data.data_list, this.state.item_code, this.state.item_quantity);
+        }
+    }
+
+    async activate_task() {
+        const activate_result = await api.ActivateWorkbenchWcsTask();
+        if (!activate_result || activate_result.result_code != 0) {
+            this.setState({
+                modal_msg: `activate wcs task fail! ${activate_result.result_code}: ${activate_result.result_msg}`,
+                modal_is_open: true,
+            }, () => { });
+        } else {
+            this.setState({
+                modal_msg: `activate wcs task success. result_code: ${activate_result.result_code}`,
+                modal_is_open: true,
+            }, () => { });
+        }
     }
 }

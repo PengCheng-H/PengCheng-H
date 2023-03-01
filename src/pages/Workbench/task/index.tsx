@@ -5,7 +5,8 @@ import { Button, Select, SelectProps, Table, message } from 'antd';
 
 import api from '../../../utils/api';
 import utils from '../../../utils';
-import { IHCHttpResponse, IHCWcsTask } from '../../../types/interface';
+import { IHCWcsTask } from '../../../types/interface';
+import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
 
 
@@ -116,7 +117,8 @@ export default class HCWorkbenchTask extends React.Component {
                 className='task_statuses'
             />
             <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索任务</Button>
-            <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' />
+            <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} className='table' />
+            {/* <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' /> */}
         </div>
     }
 
@@ -129,17 +131,19 @@ export default class HCWorkbenchTask extends React.Component {
     }
 
     async onBtnSearchClick() {
-        const result: IHCHttpResponse = await api.GetWcsTask(this.state.wcs_task_statuses);
+        const result: IHCGetWorkbenchWcsTasksRes = await api.GetWorkbenchWcsTasks(this.state.wcs_task_statuses);
+
         if (!result || result.result_code != 0) {
             message.error(`查询失败，${result.result_msg}。`)
             return;
         }
 
         // 对象没有key这个字段，ts会报错，所以要给个key字段
-        result.data.map((val: IHCWcsTask) => {
-            val.key = val.wcs_task_code
+        result.data.data_list.map((wcs_task: IHCWcsTask) => {
+            wcs_task.key = wcs_task.wcs_task_code
         });
-        this.setState({ task_list: result.data });
-        message.success(`查询成功，共找到 ${result.data.length} 个任务。`)
+
+        this.setState({ task_list: result.data.data_list });
+        message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
     }
 }

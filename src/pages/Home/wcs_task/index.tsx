@@ -4,7 +4,8 @@ import { Component, ReactNode } from "react";
 import { Button, Select, SelectProps, Table, message } from 'antd';
 
 import utils from '../../../utils';
-import { IHCHttpResponse, IHCWcsTask } from '../../../types/interface';
+import { IHCWcsTask } from '../../../types/interface';
+import { HttpResponse } from '../../../types/http_response.interface';
 import api from '../../../utils/api';
 
 
@@ -128,7 +129,7 @@ export default class HCWcsTask extends Component {
     }
 
     async onBtnSearchClick() {
-        const result: IHCHttpResponse = await api.GetWcsTask(this.state.wcs_task_statuses);
+        const result: HttpResponse = await api.GetWorkbenchWcsTasks(this.state.wcs_task_statuses);
         if (!result || result.result_code != 0) {
             message.error(`查询失败，${result.result_msg}。`)
             return;
