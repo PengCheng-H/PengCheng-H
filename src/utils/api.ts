@@ -266,10 +266,10 @@ class HCApi {
         let url = `${config.wms_server.protocol}${config.wms_server.host}:${config.wms_server.port}${path}`;
 
         if (config.debug.enable && config.debug.enable_proxy) {
-            url = `${path}`;
+            url = path;
         }
 
-        return await this.hc_http_client.SendPostRequest(path, params);
+        return await this.hc_http_client.SendPostRequest(url, params);
     }
 }
 
