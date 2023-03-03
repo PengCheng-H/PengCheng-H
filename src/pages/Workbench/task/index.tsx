@@ -6,7 +6,7 @@ import { Button, Select, SelectProps, Table, message } from 'antd';
 import api from '../../../utils/api';
 import utils from '../../../utils';
 import { IHCWcsTask } from '../../../types/interface';
-import { emWcsTaskStatus } from "../../../types/enum";
+import { emWcsTaskStatus, emWcsTaskType } from "../../../types/enum";
 import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
 
@@ -63,8 +63,10 @@ export default class HCWorkbenchTask extends React.Component {
 const options: SelectProps['options'] = [
     { label: "已创建", value: 0 },
     { label: "已激活", value: 1 },
-    { label: "已完成", value: 2 },
-    { label: "异常", value: 3 },
+    { label: "料箱到达拣货台", value: 2 },
+    { label: "料箱离开拣货台", value: 3 },
+    { label: "已完成", value: 4 },
+    { label: "已终止", value: 5 },
 ];
 
 const wcs_task_headers: ColumnsType<IHCWcsTask> = [
@@ -82,7 +84,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'task_type',
         width: "110px",
         sorter: (a, b) => a.task_type.localeCompare(b.task_type, "en"),
-        render: (value) => emWcsTaskStatus[`${value}`]
+        render: (value) => emWcsTaskType[`${value}`]
     },
     {
         key: 'wcs_task_status',
@@ -90,6 +92,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'wcs_task_status',
         width: "110px",
         sorter: (a, b) => a.wcs_task_status.localeCompare(b.wcs_task_status, "en"),
+        render: (value) => emWcsTaskStatus[`${value}`]
     },
     {
         key: 'box_code',
