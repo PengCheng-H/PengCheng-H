@@ -49,12 +49,14 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         title: '拣货台编号',
         dataIndex: 'pick_station_code',
         fixed: 'left',
+        align: "center",
         sorter: (a, b) => a.pick_station_code.localeCompare(b.pick_station_code, "en"),
     },
     {
         key: 'pick_station_status',
         title: '拣货台当前状态',
         dataIndex: 'pick_station_status',
+        align: "center",
         sorter: (a, b) => a.pick_station_status.localeCompare(b.pick_station_status, "en"),
         render: (value) => emWPickStationStatus[`${value}`]
     },
@@ -62,6 +64,7 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         key: 'box_code',
         title: '当前占用料箱',
         dataIndex: 'box_code',
+        align: "center",
         sorter: (a, b) => a.box_code.localeCompare(b.box_code, "en"),
         render: (value) => value || "无"
     },
@@ -69,8 +72,9 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         key: 'wcs_task_code',
         title: '当前WCS任务',
         dataIndex: 'wcs_task_code',
+        align: "center",
         sorter: (a, b) => a.wcs_task_code.localeCompare(b.wcs_task_code, "en"),
-        // render: (value) => emWPickStationStatus[`${value}`]
+        render: (value) => value || "无"
     },
     // {
     //     key: 'last_updated_time',
@@ -92,6 +96,7 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         dataIndex: 'operations',
         // width: "120px",
         fixed: 'right',
+        align: "center",
         render: (value, record, index) => {
             return <div>
                 <WorkConfirmModal pick_station={record} />

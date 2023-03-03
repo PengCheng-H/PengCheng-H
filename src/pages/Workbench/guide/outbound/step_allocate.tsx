@@ -102,22 +102,25 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         key: 'order_code',
         title: 'WMS订单号',
         dataIndex: 'order_code',
-        width: "150px",
+        width: "160px",
         fixed: 'left',
+        align: "center",
         sorter: (a, b) => a.order_code.localeCompare(b.order_code, "en"),
     },
     {
         key: 'external_order_code',
         title: 'ERP订单号',
         dataIndex: 'external_order_code',
-        width: "150px",
+        width: "160px",
+        align: "center",
         sorter: (a, b) => a.external_order_code.localeCompare(b.external_order_code, "en"),
     },
     {
         key: 'related_code1',
         title: '关联编号1',
         dataIndex: 'related_code1',
-        width: "150px",
+        width: "160px",
+        align: "center",
         sorter: (a, b) => a.related_code1.localeCompare(b.related_code1, "en"),
     },
     // {
@@ -137,6 +140,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         title: '状态',
         dataIndex: 'order_status',
         width: "80px",
+        align: "center",
         sorter: (a, b) => a.order_status.localeCompare(b.order_status, "en"),
         render: (value: string) => { return emOrderStatus[`${value}`]; }
     },
@@ -145,6 +149,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         title: '订单数量',
         dataIndex: 'order_qty',
         width: "120px",
+        align: "center",
         sorter: (a, b) => a.order_qty - b.order_qty,
         render: value => { return Number(value); }
     },
@@ -153,6 +158,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         title: '已分配数量',
         dataIndex: 'order_allocated_qty',
         width: "120px",
+        align: "center",
         sorter: (a, b) => a.order_allocated_qty - b.order_allocated_qty,
         render: value => { return Number(value); }
     },
@@ -161,6 +167,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         title: '已出库数量',
         dataIndex: 'order_finished_qty',
         width: "120px",
+        align: "center",
         sorter: (a, b) => a.order_finished_qty - b.order_finished_qty,
         render: value => { return Number(value); }
     },
@@ -169,6 +176,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         title: '本次分配数量',
         dataIndex: 'order_cur_allocate_qty',
         width: "150px",
+        align: "center",
         sorter: (a, b) => a.order_cur_allocate_qty - b.order_cur_allocate_qty,
         render: value => { value = value || 0; return Number(value); },
     },
@@ -177,6 +185,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         title: '订单时间',
         dataIndex: 'order_time',
         width: "180px",
+        align: "center",
         sorter: (a, b) => Date.parse(a.order_time.toString()) - Date.parse(b.order_time.toString()),
         render: utils.FormatTime
     },
@@ -185,6 +194,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         title: '创建时间',
         dataIndex: 'created_time',
         width: "180px",
+        align: "center",
         sorter: (a, b) => Date.parse(a.order_time.toString()) - Date.parse(b.order_time.toString()),
         render: utils.FormatTime
     },
