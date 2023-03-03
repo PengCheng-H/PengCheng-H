@@ -143,8 +143,8 @@ class HCApi {
 
 
 
-    public async QuickAddOutboundOrder(supplier_code: string, item_details: { item_code: string, quantity: number }[]): Promise<IHttpRes.HttpResponse> {
-        return await this.SendPostRequest(config.api.outbound_order_quick_add, { supplier_code, item_details });
+    public async QuickAddOutboundOrder(details: { supplier_code: string, item_code: string, quantity: number }[]): Promise<IHttpRes.HttpResponse> {
+        return await this.SendPostRequest(config.api.outbound_order_quick_add, { details });
     }
 
     public async AllocateOutboundOrder(order_code: string): Promise<IHttpRes.HttpResponse> {
@@ -156,6 +156,7 @@ class HCApi {
     }
 
     public async ActivateOutboundOrder(outbound_order_code: string): Promise<IHttpRes.HttpResponse> {
+        // return await this.SendPostRequest(config.api.outbound_order_activate, outbound_order_code);
         return await this.SendPostRequest(config.api.outbound_order_activate, { outbound_order_code });
     }
 
@@ -272,5 +273,7 @@ class HCApi {
         return await this.hc_http_client.SendPostRequest(url, params);
     }
 }
+
+
 
 export default new HCApi();

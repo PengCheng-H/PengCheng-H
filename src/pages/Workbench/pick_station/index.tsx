@@ -24,7 +24,7 @@ export default class HCPickStation extends React.Component {
     async GetPickStations() {
         const result: IHCGetPickStationsRes = await api.GetPickAllStation();
         if (!result || result.result_code !== 0) {
-            message.error(`查询失败，${result.result_msg}。`)
+            message.error(`获取拣货台信息失败，${result.result_msg}。`)
             return;
         }
 
@@ -35,7 +35,7 @@ export default class HCPickStation extends React.Component {
         this.setState({
             pick_station_list: result.data
         }, () => {
-            message.success(`获取拣货台状态成功，共获取 ${result.data.length} 个拣货台数据。`);
+            message.success(`获取拣货台信息成功，共获取 ${result.data.length} 个拣货台数据。`);
         });
     }
 }
