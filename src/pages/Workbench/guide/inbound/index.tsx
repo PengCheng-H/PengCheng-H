@@ -15,21 +15,21 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     state = {
         current: 0,
         item_code: "",
+        item_quantity: 0,
         item_list: [],
         supplier_code: "",
         supplier_list: [],
-        item_quantity: 0,
         modal_msg: "",
         modal_is_open: false,
         steps: [
             {
                 title: '第一步',
-                description: '输入来货信息',
+                description: '输入入库订单信息',
                 content: <HCInboundTaskGuideSearch ref={child => this.child_search = child} />
             },
             {
                 title: '第二步',
-                description: '分配物品数量',
+                description: '分配入库物品数量',
                 content: <HCInboundTaskGuideAllocate ref={child => this.child_allocate = child} />
             },
             // {
@@ -39,7 +39,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
             // }
         ],
     };
-    child_search: HCInboundTaskGuideSearch | null | undefined;
+    child_search: HCInboundTaskGuideSearch | any;
     child_allocate: HCInboundTaskGuideAllocate | any;
 
     constructor(props: {}) {
@@ -108,9 +108,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
                 supplier_list: this.child_search.state.cur_supplier_list,
             }, this.allocate_orders);
         }
-        else if (this.state.current === 1) {
-
-        }
+        else if (this.state.current === 1) { }
         else if (this.state.current === 2) { }
 
         this.setState({ current: this.state.current + 1 })
@@ -142,8 +140,8 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async allocate_orders(from_quikc_add_order: boolean = false) {
-        // message.info(`入库物品: ${this.state.item_code}, 入库数量: ${this.state.item_quantity}`);
-        const get_result: IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3, 4, 5])
+        message.info(`入库物品: ${this.state.item_code}, 入库数量: ${this.state.item_quantity}`);
+        const get_result: IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
 
         if (!get_result || get_result.result_code != 0) {
             message.error(`分配物品数量到订单失败！物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
@@ -173,3 +171,5 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
         }
     }
 }
+
+

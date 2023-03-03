@@ -11,10 +11,11 @@ export default class HCWorkbench extends React.Component {
     render(): React.ReactNode {
         return <div>
             <HCWorkbenchGuide />
-            <hr />
+            <hr style={{ marginBottom: 35 }} />
             <HCPickStation />
-            <hr />
+            <hr style={{ marginBottom: 35 }} />
             <HCWorkbenchTask />
+            <hr style={{ marginBottom: 35 }} />
         </div>;
     }
 }

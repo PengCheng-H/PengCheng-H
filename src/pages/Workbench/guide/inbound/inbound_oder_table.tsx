@@ -76,9 +76,9 @@ export default class HCIboundOrderTable extends React.Component<IHCIboundOrderTa
         this.setState({
             item_code: item_code,
             item_quantity: item_quantity,
-            allocated_item_quantity: total_allocate_quantity,
             inbound_order_list: inbound_order_list,
             allocated_item_details: allocated_item_details,
+            allocated_item_quantity: total_allocate_quantity,
         })
     }
 }

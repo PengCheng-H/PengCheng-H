@@ -10,6 +10,67 @@ import api from '../../../utils/api';
 
 
 
+
+export default class HCOutboundOrder extends Component {
+    state: { item_code: string, supplier_code: string, order_states: number[], order_list: IHCOutboundOrder[] } = { item_code: "", supplier_code: "", order_states: [], order_list: [] };
+
+    render(): ReactNode {
+        const options: SelectProps['options'] = [
+            { label: "已创建", value: 0 },
+            { label: "已激活", value: 1 },
+            { label: "已暂停", value: 2 },
+            { label: "进行中", value: 3 },
+            { label: "已完成", value: 4 },
+            { label: "异常", value: 5 },
+        ];
+
+        return <div>
+            <Input type='search' placeholder='请输入物料编码/名称/规格' onChange={this.onTxtItemCodeChange.bind(this)} className='search_input' />
+            <Input type='search' placeholder='请输入物料批次号/供应商名称' onChange={this.onTxtSupplierCodeChange.bind(this)} className='search_input' />
+            <Select
+                mode="multiple"
+                allowClear
+                style={{ width: '30%' }}
+                placeholder="请选择订单状态(可多选)"
+                defaultValue={[]}
+                onChange={this.onArrOrderStatesChange.bind(this)}
+                options={options}
+                className='search_input'
+            />
+            <Button type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索出库单</Button>
+            <Table columns={outbound_order_headers} dataSource={this.state.order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />
+        </div>
+    }
+
+    onTxtItemCodeChange(event: { target: { value: any; }; }) {
+        this.setState({ item_code: event.target.value });
+    }
+
+    onTxtSupplierCodeChange(event: { target: { value: any; }; }) {
+        this.setState({ supplier_code: event.target.value });
+    }
+
+    onArrOrderStatesChange(value: number[]) {
+        this.setState({ order_states: value });
+    }
+
+    async onBtnSearchClick() {
+        const result: HttpResponse = await api.GetOutboundOrders(this.state.item_code, this.state.supplier_code, this.state.order_states);
+        if (!result || result.result_code != 0) {
+            message.error(`查询失败，${result.result_msg}。`)
+            return;
+        }
+
+        // 订单对象没有key这个字段，ts会报错，所以要给个key字段
+        result.data.map((val: IHCOutboundOrder) => {
+            val.key = val.order_code
+        });
+        this.setState({ order_list: result.data });
+        message.success(`查询成功，共找到 ${result.data.length} 个出库单。`)
+    }
+}
+
+
 const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
     {
         key: 'order_code',
@@ -134,62 +195,3 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         fixed: 'right',
     },
 ];
-
-export default class HCOutboundOrder extends Component {
-    state: { item_code: string, supplier_code: string, order_states: number[], order_list: IHCOutboundOrder[] } = { item_code: "", supplier_code: "", order_states: [], order_list: [] };
-
-    render(): ReactNode {
-        const options: SelectProps['options'] = [
-            { label: "已创建", value: 0 },
-            { label: "已激活", value: 1 },
-            { label: "已暂停", value: 2 },
-            { label: "进行中", value: 3 },
-            { label: "已完成", value: 4 },
-            { label: "异常", value: 5 },
-        ];
-
-        return <div>
-            <Input type='search' placeholder='请输入物料编码/名称/规格' onChange={this.onTxtItemCodeChange.bind(this)} className='search_input' />
-            <Input type='search' placeholder='请输入物料批次号/供应商名称' onChange={this.onTxtSupplierCodeChange.bind(this)} className='search_input' />
-            <Select
-                mode="multiple"
-                allowClear
-                style={{ width: '30%' }}
-                placeholder="请选择订单状态(可多选)"
-                defaultValue={[]}
-                onChange={this.onArrOrderStatesChange.bind(this)}
-                options={options}
-                className='search_input'
-            />
-            <Button type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索出库单</Button>
-            <Table columns={outbound_order_headers} dataSource={this.state.order_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200, scrollToFirstRowOnChange: true }} className='table' />
-        </div>
-    }
-
-    onTxtItemCodeChange(event: { target: { value: any; }; }) {
-        this.setState({ item_code: event.target.value });
-    }
-
-    onTxtSupplierCodeChange(event: { target: { value: any; }; }) {
-        this.setState({ supplier_code: event.target.value });
-    }
-
-    onArrOrderStatesChange(value: number[]) {
-        this.setState({ order_states: value });
-    }
-
-    async onBtnSearchClick() {
-        const result: HttpResponse = await api.GetOutboundOrders(this.state.item_code, this.state.supplier_code, this.state.order_states);
-        if (!result || result.result_code != 0) {
-            message.error(`查询失败，${result.result_msg}。`)
-            return;
-        }
-
-        // 订单对象没有key这个字段，ts会报错，所以要给个key字段
-        result.data.map((val: IHCOutboundOrder) => {
-            val.key = val.order_code
-        });
-        this.setState({ order_list: result.data });
-        message.success(`查询成功，共找到 ${result.data.length} 个出库单。`)
-    }
-}
