@@ -1,6 +1,6 @@
 import React from "react"
-import { IHCInboundOrder } from "../../../../types/interface";
 import HCInboundOrderTable from "./inbound_oder_table";
+import { IHCInboundOrder } from "../../../../types/interface";
 
 interface IHCInboundTaskGuideAllocateProps {
     item_code?: string
