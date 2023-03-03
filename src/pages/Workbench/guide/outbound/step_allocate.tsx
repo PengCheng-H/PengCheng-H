@@ -5,6 +5,7 @@ import utils from "../../../../utils";
 import { IHCOutboundOrder } from "../../../../types/interface";
 import { IHCOutboundOrderDetail } from "../../../../types/interface";
 import { message } from "antd";
+import { emOrderStatus } from "../../../../types/enum";
 
 
 
@@ -137,6 +138,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         dataIndex: 'order_status',
         width: "80px",
         sorter: (a, b) => a.order_status.localeCompare(b.order_status, "en"),
+        render: (value: string) => { return emOrderStatus[`${value}`]; }
     },
     {
         key: 'order_qty',
