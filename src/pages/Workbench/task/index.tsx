@@ -8,6 +8,7 @@ import utils from '../../../utils';
 import { IHCWcsTask } from '../../../types/interface';
 import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
+import { emWcsTaskStatus } from "../../../types/enum";
 
 
 export default class HCWorkbenchTask extends React.Component {
@@ -81,7 +82,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'task_type',
         width: "110px",
         sorter: (a, b) => a.task_type.localeCompare(b.task_type, "en"),
-        render: (value) => value == "0" ? "已创建" : (value == "1" ? "已激活" : (value == "2" ? "已完成" : "异常中"))
+        render: (value) => emWcsTaskStatus[`${value}`]
     },
     {
         key: 'wcs_task_status',

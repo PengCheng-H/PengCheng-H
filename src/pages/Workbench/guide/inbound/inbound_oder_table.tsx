@@ -124,8 +124,7 @@ const inbound_order_headers: ColumnsType<IHCInboundOrder> = [
         title: '状态',
         dataIndex: 'order_status',
         width: "110px",
-        sorter: (a, b) => a.order_qty - b.order_qty,
-        // render: value => { return value; }
+        sorter: (a, b) => a.order_status.localeCompare(b.order_status, "en"),
         render: (value: string) => { return emOrderStatus[`${value}`]; }
     },
     // {
