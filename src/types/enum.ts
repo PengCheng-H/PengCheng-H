@@ -8,16 +8,21 @@ export let emOrderStatus: { [s: string]: string } = {
 }
 
 export let emWcsTaskStatus: { [s: string]: string } = {
-    "0": "任务已创建",
-    "1": "任务已激活",
-    "2": "料箱已到达拣货台",
-    "3": "料箱已离开拣货台",
-    "4": "任务已完成",
-    "5": "任务已终止",
+    "0": "已创建",
+    "1": "已激活",
+    "2": "料箱到达拣货台",
+    "3": "料箱离开拣货台",
+    "4": "已完成",
+    "5": "已终止",
 }
 
 export let emWPickStationStatus: { [s: string]: string } = {
-    "0": "拣货台已被禁用",
-    "1": "拣货台空闲中",
-    "2": "拣货台已被占用",
+    "0": "已禁用",
+    "1": "空闲中",
+    "2": "已分配任务",
+}
+
+export let emWcsTaskType: { [s: string]: string } = {
+    "0": "入库",
+    "1": "出库",
 }
