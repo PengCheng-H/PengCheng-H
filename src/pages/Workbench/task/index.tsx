@@ -6,9 +6,9 @@ import { Button, Select, SelectProps, Table, message } from 'antd';
 import api from '../../../utils/api';
 import utils from '../../../utils';
 import { IHCWcsTask } from '../../../types/interface';
+import { emWcsTaskStatus } from "../../../types/enum";
 import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
-import { emWcsTaskStatus } from "../../../types/enum";
 
 
 export default class HCWorkbenchTask extends React.Component {

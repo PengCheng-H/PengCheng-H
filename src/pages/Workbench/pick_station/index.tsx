@@ -5,6 +5,7 @@ import Table, { ColumnsType } from "antd/es/table";
 import api from "../../../utils/api";
 import WorkConfirmModal from "./work_confirm_modal";
 import { IHCPickStation } from "../../../types/interface";
+import { emWPickStationStatus } from "../../../types/enum";
 import { IHCGetPickStationsRes } from "../../../types/http_response.interface";
 
 export default class HCPickStation extends React.Component {
@@ -55,7 +56,7 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         title: '拣货台当前状态',
         dataIndex: 'pick_station_status',
         sorter: (a, b) => a.pick_station_status.localeCompare(b.pick_station_status, "en"),
-        render: (value) => value == "0" ? "不可用" : (value == "1" ? "空闲中" : "已分配")
+        render: (value) => emWPickStationStatus[`${value}`]
     },
     {
         key: 'box_code',
@@ -69,7 +70,7 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         title: '当前WCS任务',
         dataIndex: 'wcs_task_code',
         sorter: (a, b) => a.wcs_task_code.localeCompare(b.wcs_task_code, "en"),
-        render: (value) => value || "无"
+        // render: (value) => emWPickStationStatus[`${value}`]
     },
     // {
     //     key: 'last_updated_time',

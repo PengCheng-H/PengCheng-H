@@ -1,12 +1,3 @@
-// export enum emOrderStatus {
-//     CREATED = '0',
-//     ACTIVATED = '1',
-//     PAUSED = '2',
-//     WORKING = '3',
-//     DONE = '4',
-//     ABORT = '5',
-// }
-
 export let emOrderStatus: { [s: string]: string } = {
     "0": "订单已创建",
     "1": "订单已激活",
@@ -23,4 +14,10 @@ export let emWcsTaskStatus: { [s: string]: string } = {
     "3": "料箱已离开拣货台",
     "4": "任务已完成",
     "5": "任务已终止",
+}
+
+export let emWPickStationStatus: { [s: string]: string } = {
+    "0": "拣货台已被禁用",
+    "1": "拣货台空闲中",
+    "2": "拣货台已被占用",
 }
