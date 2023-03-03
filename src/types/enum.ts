@@ -23,6 +23,6 @@ export let emWPickStationStatus: { [s: string]: string } = {
 }
 
 export let emWcsTaskType: { [s: string]: string } = {
-    "0": "入库",
-    "1": "出库",
+    "0": "入库单任务",
+    "1": "出库单任务",
 }
