@@ -55,6 +55,21 @@ export default class HCWorkbenchTask extends React.Component {
 
         this.setState({ task_list: result.data.data_list });
         message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
+
+        this.activate_sub_wcs_task()
+    }
+
+    // 2023-03-04 临时代码，获取任务列表时，激活刚创建的任务
+    async activate_sub_wcs_task() {
+        if (!this.state.task_list || !this.state.task_list.length) {
+            return;
+        }
+
+        this.state.task_list.map(task => {
+            if (task.wcs_task_status == '0') {
+                api.ActivateWcsTask(`${task.wcs_task_code}-1`)
+            }
+        });
     }
 }
 
