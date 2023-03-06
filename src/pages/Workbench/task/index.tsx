@@ -49,27 +49,14 @@ export default class HCWorkbenchTask extends React.Component {
         }
 
         // 对象没有key这个字段，ts会报错，所以要给个key字段
-        result.data.data_list.map((wcs_task: IHCWcsTask) => {
-            wcs_task.key = wcs_task.wcs_task_code
-        });
-
-        this.setState({ task_list: result.data.data_list });
-        message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
-
-        this.activate_sub_wcs_task()
-    }
-
-    // 2023-03-04 临时代码，获取任务列表时，激活刚创建的任务
-    async activate_sub_wcs_task() {
-        if (!this.state.task_list || !this.state.task_list.length) {
-            return;
+        if (result.data && result.data.data_list && result.data.data_list.length) {
+            result.data.data_list.map((wcs_task: IHCWcsTask) => {
+                wcs_task.key = wcs_task.wcs_task_code
+            });
         }
 
-        this.state.task_list.map(task => {
-            if (task.wcs_task_status == '0') {
-                api.ActivateWcsTask(`${task.wcs_task_code}-1`)
-            }
-        });
+        this.setState({ task_list: result.data.data_list || [] });
+        message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
     }
 }
 
