@@ -105,20 +105,12 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async done() {
-        console.log(this.child_allocate);
-        if (!this.child_allocate || !this.child_allocate.state || !this.child_allocate.state.item_allocated_details) {
-            message.error(`未找到任何订单！`);
-            return;
+        for (let [order_code, order_details] of Object.entries(this.child_allocate.child_table.state.allocated_item_details as [])) {
+            const allocate_result = await api.AllocateWorkbenchInboundOrder([{ order_code, order_details: [...order_details] }]);
+            console.log(allocate_result);
         }
 
         this.activate_task();
-
-        // for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
-        //     const allocate_result = await api.AllocateWorkbenchOutboundOrder(order_code, order_details);
-        //     if (allocate_result && allocate_result.result_code == 0) {
-        //         this.activate_task(order_code);
-        //     }
-        // }
     }
 
     async quick_add_orders() {
