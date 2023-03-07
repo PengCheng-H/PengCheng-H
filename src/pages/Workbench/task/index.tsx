@@ -48,6 +48,8 @@ export default class HCWorkbenchTask extends React.Component {
             return;
         }
 
+        result.data.data_list = result.data.data_list || [];
+
         // 对象没有key这个字段，ts会报错，所以要给个key字段
         if (result.data && result.data.data_list && result.data.data_list.length) {
             result.data.data_list.map((wcs_task: IHCWcsTask) => {

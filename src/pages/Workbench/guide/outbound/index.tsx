@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Modal, StepProps, Steps, message } from "antd";
 
+import api from "../../../../utils/api";
+import * as IHttpRes from "../../../../types/http_response.interface";
 import HCOutboundOrderInfo from "./step_info";
 import HCOutboundOrderAllocate from "./step_allocate";
-import { IHCGetOutboundOrdersRes } from "../../../../types/http_response.interface";
-import api from "../../../../utils/api";
 import '../index.css';
 
 
@@ -54,7 +54,7 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
                     <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right", marginRight: "10px" }}>确认建单</Button>
                 )}
             </div>
-            <Modal title="激活入库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
+            <Modal title="激活出库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
                 <p>{this.state.modal_msg}</p>
             </Modal>
         </div>;
@@ -111,12 +111,14 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
             return;
         }
 
-        for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
-            const allocate_result = await api.AllocateWorkbenchOutboundOrder(order_code, order_details);
-            if (allocate_result && allocate_result.result_code == 0) {
-                this.activate_task(order_code);
-            }
-        }
+        this.activate_task();
+
+        // for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
+        //     const allocate_result = await api.AllocateWorkbenchOutboundOrder(order_code, order_details);
+        //     if (allocate_result && allocate_result.result_code == 0) {
+        //         this.activate_task(order_code);
+        //     }
+        // }
     }
 
     async quick_add_orders() {
@@ -137,7 +139,7 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async allocate_orders(from_quikc_add_order: boolean = false) {
-        const get_result: IHCGetOutboundOrdersRes = await api.GetOutboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
+        const get_result: IHttpRes.IHCGetOutboundOrdersRes = await api.GetOutboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
 
         if (!get_result || get_result.result_code != 0) {
             message.warning(`分配物品数量到出库单失败！物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
@@ -156,20 +158,35 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
         this.child_allocate.set_outbound_order_list(get_result.data.data_list, this.state.item_code, this.state.item_quantity);
     }
 
-    async activate_task(outbound_order_code: string) {
-        const result = await api.ActivateOutboundOrder(outbound_order_code);
-        if (result && result.result_code == 0) {
+    async activate_task() {
+        const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
+        if (!activate_result || activate_result.result_code != 0) {
             this.setState({
-                modal_msg: `activate outbound order fail! ${result.result_code}: ${result.result_msg}`,
+                modal_msg: `activate wcs task fail! ${activate_result.result_code}: ${activate_result.result_msg}`,
                 modal_is_open: true,
-            });
+            }, () => { });
         } else {
             this.setState({
-                modal_msg: `activate outbound order success. result_code: ${result.result_code}`,
+                modal_msg: `activate wcs task success. result_code: ${activate_result.result_code}`,
                 modal_is_open: true,
-            });
+            }, () => { });
         }
     }
+
+    // async activate_task(outbound_order_code: string) {
+    //     const result = await api.ActivateOutboundOrder(outbound_order_code);
+    //     if (result && result.result_code == 0) {
+    //         this.setState({
+    //             modal_msg: `activate outbound order fail! ${result.result_code}: ${result.result_msg}`,
+    //             modal_is_open: true,
+    //         });
+    //     } else {
+    //         this.setState({
+    //             modal_msg: `activate outbound order success. result_code: ${result.result_code}`,
+    //             modal_is_open: true,
+    //         });
+    //     }
+    // }
 }
 
 
