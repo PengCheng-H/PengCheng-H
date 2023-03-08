@@ -54,7 +54,7 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
                     <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right", marginRight: "10px" }}>确认建单</Button>
                 )}
             </div>
-            <Modal title="激活出库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
+            <Modal title="激活入库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
                 <p>{this.state.modal_msg}</p>
             </Modal>
         </div>;
@@ -105,12 +105,18 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async done() {
-        for (let [order_code, order_details] of Object.entries(this.child_allocate.child_table.state.allocated_item_details as [])) {
-            const allocate_result = await api.AllocateWorkbenchInboundOrder([{ order_code, order_details: [...order_details] }]);
-            console.log(allocate_result);
+        console.log(this.child_allocate);
+        if (!this.child_allocate || !this.child_allocate.state || !this.child_allocate.state.item_allocated_details) {
+            message.error(`未找到任何订单！`);
+            return;
         }
 
-        this.activate_task();
+        for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
+            const allocate_result = await api.AllocateWorkbenchOutboundOrder(order_code, order_details);
+            if (allocate_result && allocate_result.result_code == 0) {
+                this.activate_task();
+            }
+        }
     }
 
     async quick_add_orders() {
@@ -164,21 +170,6 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
             }, () => { });
         }
     }
-
-    // async activate_task(outbound_order_code: string) {
-    //     const result = await api.ActivateOutboundOrder(outbound_order_code);
-    //     if (result && result.result_code == 0) {
-    //         this.setState({
-    //             modal_msg: `activate outbound order fail! ${result.result_code}: ${result.result_msg}`,
-    //             modal_is_open: true,
-    //         });
-    //     } else {
-    //         this.setState({
-    //             modal_msg: `activate outbound order success. result_code: ${result.result_code}`,
-    //             modal_is_open: true,
-    //         });
-    //     }
-    // }
 }
 
 
