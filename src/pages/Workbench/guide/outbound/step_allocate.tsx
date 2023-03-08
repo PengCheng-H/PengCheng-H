@@ -46,7 +46,6 @@ export default class HCOutboundOrderAllocate extends React.Component<HCOutboundO
     }
 
     set_outbound_order_list(outbound_order_list: IHCOutboundOrder[], item_code: string = "", item_quantity: number = 0) {
-        message.info("sadsa");
         let total_allocate_quantity: number = 0;
         let allocated_item_details: { [order_code: string]: { order_detail_id: number, allocate_quantity: number }[] } = {};
 
