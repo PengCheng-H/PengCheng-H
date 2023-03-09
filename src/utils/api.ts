@@ -25,7 +25,7 @@ class HCApi {
 
     public async GetItems(text: string): Promise<IHttpRes.IHCGetItemsRes> {
         if (!text) { return utils.CreateErrorRes(); }
-        return await this.SendGetRequest(config.api.item_list_get, { text });
+        return await this.SendGetRequest(config.api.item_list_get, { text, page_no: 1, page_size: 200 });
     }
 
     public async GetItemDetail(item_code: string): Promise<IHttpRes.IHCGetItemDetailRes> {

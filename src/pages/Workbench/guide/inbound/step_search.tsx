@@ -60,7 +60,7 @@ export default class HCInboundTaskGuideSearch extends React.Component {
 
         if (result.result_code.toString() === "0" && Array.isArray(result.data.data_list)) {
             const dataSource = result.data.data_list.map((item: IHCItem) => {
-                return { label: `${item.item_code}-${item.item_name}`, value: item.item_code };
+                return { label: `${item.item_code}-${item.item_external_code1}-${item.item_name}`, value: item.item_code };
             });
             this.setState({ cur_item_list: result.data.data_list }, cb(dataSource));
             return;
