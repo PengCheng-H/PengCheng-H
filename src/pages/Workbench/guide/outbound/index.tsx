@@ -20,6 +20,8 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
         sipplier_list: [],
         modal_msg: "",
         modal_is_open: false,
+        btn_done_disable: false,
+        btn_done_loading: false,
         items: [
             {
                 title: '第一步',
@@ -51,7 +53,7 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
                     <Button type="primary" onClick={this.next.bind(this)} style={{ float: "right", marginRight: "10px" }}>下一步</Button>
                 )}
                 {this.state.current === this.state.items.length - 1 && (
-                    <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right", marginRight: "10px" }}>确认建单</Button>
+                    <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right", marginRight: "10px" }} disabled={this.state.btn_done_disable} loading={this.state.btn_done_loading}>确认建单</Button>
                 )}
             </div>
             <Modal title="激活入库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
@@ -70,7 +72,8 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
 
     handleCancel() {
         this.setState({
-            modal_is_open: false
+            modal_is_open: false,
+            btn_done_loading: false
         });
     }
 
@@ -157,6 +160,12 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async activate_task() {
+        message.info("正在激活订单，请稍后~");
+
+        this.setState({
+            btn_done_loading: true
+        });
+
         const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
         if (!activate_result || activate_result.result_code != 0) {
             this.setState({

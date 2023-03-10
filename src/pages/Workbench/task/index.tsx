@@ -6,7 +6,7 @@ import { Button, Select, SelectProps, Table, message } from 'antd';
 import api from '../../../utils/api';
 import utils from '../../../utils';
 import { IHCWcsTask } from '../../../types/interface';
-import { emWcsTaskStatus, emWcsTaskType } from "../../../types/enum";
+import { em_wcs_task_status, em_wcs_task_types } from "../../../types/enum";
 import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
 
@@ -88,7 +88,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'task_type',
         width: "110px",
         sorter: (a, b) => a.task_type.localeCompare(b.task_type, "en"),
-        render: (value) => emWcsTaskType[`${value}`]
+        render: (value) => em_wcs_task_types[`${value}`]
     },
     {
         key: 'wcs_task_status',
@@ -96,7 +96,7 @@ const wcs_task_headers: ColumnsType<IHCWcsTask> = [
         dataIndex: 'wcs_task_status',
         width: "110px",
         sorter: (a, b) => a.wcs_task_status.localeCompare(b.wcs_task_status, "en"),
-        render: (value) => emWcsTaskStatus[`${value}`]
+        render: (value) => em_wcs_task_status[`${value}`]
     },
     {
         key: 'box_code',

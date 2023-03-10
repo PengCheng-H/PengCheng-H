@@ -6,7 +6,6 @@ import api from "../../../../utils/api";
 import * as IHttpRes from "../../../../types/http_response.interface";
 import HCInboundTaskGuideSearch from "./step_search";
 import HCInboundTaskGuideAllocate from "./step_allocate";
-import { IHCGetInboundOrdersRes } from "../../../../types/http_response.interface";
 import '../index.css';
 
 
@@ -21,6 +20,8 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
         supplier_list: [],
         modal_msg: "",
         modal_is_open: false,
+        btn_done_disable: false,
+        btn_done_loading: false,
         steps: [
             {
                 title: '第一步',
@@ -61,7 +62,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
                     <Button type="primary" onClick={this.next.bind(this)} style={{ float: "right" }}>下一步</Button>
                 )}
                 {this.state.current === this.state.steps.length - 1 && (
-                    <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right" }}>确认建单</Button>
+                    <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right" }} disabled={this.state.btn_done_disable} loading={this.state.btn_done_loading}>确认建单</Button>
                 )}
             </div>
             <Modal title="激活入库单结果" open={this.state.modal_is_open} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
@@ -80,7 +81,8 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
 
     handleCancel() {
         this.setState({
-            modal_is_open: false
+            modal_is_open: false,
+            btn_done_loading: false
         });
     }
 
@@ -117,7 +119,6 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     async done() {
         for (let [order_code, order_details] of Object.entries(this.child_allocate.child_table.state.allocated_item_details as [])) {
             const allocate_result = await api.AllocateWorkbenchInboundOrder([{ order_code, order_details: [...order_details] }]);
-            console.log(allocate_result);
         }
 
         this.activate_task();
@@ -141,7 +142,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
 
     async allocate_orders(from_quikc_add_order: boolean = false) {
         message.info(`入库物品: ${this.state.item_code}, 入库数量: ${this.state.item_quantity}`);
-        const get_result: IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
+        const get_result: IHttpRes.IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
 
         if (!get_result || get_result.result_code != 0) {
             message.error(`分配物品数量到订单失败！物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
@@ -157,6 +158,13 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async activate_task() {
+        message.info("正在激活订单，请稍后~");
+
+        this.setState({
+            btn_done_disable: true,
+            btn_done_loading: true
+        });
+
         const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
         if (!activate_result || activate_result.result_code != 0) {
             this.setState({
