@@ -2,7 +2,7 @@ import React from "react";
 import Table, { ColumnsType } from "antd/es/table";
 
 import utils from "../../../../utils";
-import { emOrderStatus } from '../../../../types/enum';
+import { em_order_status } from '../../../../types/enum';
 import { IHCInboundOrder, IHCInboundOrderDetail } from "../../../../types/interface";
 
 interface IHCIboundOrderTableProps {
@@ -129,7 +129,7 @@ const inbound_order_headers: ColumnsType<IHCInboundOrder> = [
         width: "110px",
         align: "center",
         sorter: (a, b) => a.order_status.localeCompare(b.order_status, "en"),
-        render: (value: string) => { return emOrderStatus[`${value}`]; }
+        render: (value: string) => { return em_order_status[`${value}`]; }
     },
     // {
     //     key: 'created_operator',

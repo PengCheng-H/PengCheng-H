@@ -5,7 +5,7 @@ import Table, { ColumnsType } from "antd/es/table";
 import api from "../../../utils/api";
 import WorkConfirmModal from "./work_confirm_modal";
 import { IHCPickStation } from "../../../types/interface";
-import { emWPickStationStatus } from "../../../types/enum";
+import { em_pick_station_status } from "../../../types/enum";
 import { IHCGetPickStationsRes } from "../../../types/http_response.interface";
 
 export default class HCPickStation extends React.Component {
@@ -58,7 +58,7 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         dataIndex: 'pick_station_status',
         align: "center",
         sorter: (a, b) => a.pick_station_status.localeCompare(b.pick_station_status, "en"),
-        render: (value) => emWPickStationStatus[`${value}`]
+        render: (value) => em_pick_station_status[`${value}`]
     },
     {
         key: 'box_code',

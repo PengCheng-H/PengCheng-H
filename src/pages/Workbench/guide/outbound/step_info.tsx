@@ -15,7 +15,7 @@ interface HCOutboundOrderInfoState {
     cur_item_list: IHCItem[]
     cur_supplier_code: string
     cur_supplier_list: IHCSupplier[]
-    cur_item_quantity: number
+    cur_item_quantity: any
 }
 
 export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrderInfoProps, HCOutboundOrderInfoState> {
@@ -28,6 +28,7 @@ export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrder
     };
     child_item_code: HCFuzzySearch | null | undefined;
     child_supplier_code: HCFuzzySearch | null | undefined;
+    child_item_qty: any
 
     constructor(props: HCOutboundOrderInfoProps) {
         super(props);
@@ -46,7 +47,7 @@ export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrder
                 ref={child => this.child_item_code = child}
             />
             <label style={{ marginLeft: "30px" }}>*请输入物品数量(必填)：</label>
-            <InputNumber value={this.state.cur_item_quantity} onChange={this.onChange_item_quantity.bind(this)} placeholder="物品数量(必填)" style={{ width: "100px" }} />
+            <InputNumber value={this.state.cur_item_quantity} onChange={this.onChange_item_quantity.bind(this)} placeholder="物品数量(必填)" style={{ width: "100px" }} ref={child => this.child_item_qty = child} />
             <label style={{ marginLeft: "30px" }}>请输入供应商编码(可选)：</label>
             <HCFuzzySearch
                 placeholder="请输入供应商编码 (允许为空)"
@@ -60,8 +61,12 @@ export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrder
     }
 
     onChange_item_code(value: string): void {
-        this.setState({ cur_item_code: value }, () => {
+        this.setState({
+            cur_item_code: value,
+            cur_item_quantity: ""
+        }, () => {
             message.info(`录入物品码: ${this.state.cur_item_code}`);
+            this.child_item_qty.focus();
         });
     }
 

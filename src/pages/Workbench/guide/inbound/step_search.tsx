@@ -17,12 +17,13 @@ export default class HCInboundTaskGuideSearch extends React.Component {
         cur_item_quantity: 0,
     }
     child: HCFuzzySearch | null | undefined;
+    child_item_qty: any;
 
     render(): React.ReactNode {
         return <div className="search_box">
             <label>*请输入物品编码(必填)：</label>
             <HCFuzzySearch
-                placeholder="*请输入物品编码(必填)"
+                placeholder="*请输入物品编码（必填）"
                 dataSource={[]}
                 onChange={this.onChange_item_code.bind(this)}
                 onSearch={this.onSearch_item_code.bind(this)}
@@ -31,7 +32,7 @@ export default class HCInboundTaskGuideSearch extends React.Component {
                 ref={child => this.child = child}
             />
             <label style={{ marginLeft: "30px" }}>*请输入物品数量(必填)：</label>
-            <InputNumber value={this.state.cur_item_quantity} onChange={this.onChange_item_quantity.bind(this)} placeholder="物品数量(必填)" style={{ width: "100px" }} />
+            <InputNumber value={this.state.cur_item_quantity} onChange={this.onChange_item_quantity.bind(this)} placeholder="物品数量(必填)" style={{ width: "200px" }} ref={child => this.child_item_qty = child} />
             <label style={{ marginLeft: "30px" }}>请输入供应商编码(可选)：</label>
             <HCFuzzySearch
                 placeholder="请输入供应商编码 (允许为空)"
@@ -46,8 +47,12 @@ export default class HCInboundTaskGuideSearch extends React.Component {
 
 
     onChange_item_code(value: string): void {
-        this.setState({ cur_item_code: value }, () => {
+        this.setState({
+            cur_item_code: value,
+            cur_item_quantity: ""
+        }, () => {
             message.info(`录入物品码: ${this.state.cur_item_code}`);
+            this.child_item_qty.focus();
         });
     }
 
