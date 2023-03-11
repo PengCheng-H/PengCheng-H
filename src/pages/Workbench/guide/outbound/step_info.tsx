@@ -27,8 +27,8 @@ export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrder
         cur_item_quantity: 0,
     };
     child_item_code: HCFuzzySearch | null | undefined;
-    child_supplier_code: HCFuzzySearch | null | undefined;
     child_item_qty: any
+    child_supplier_code: HCFuzzySearch | null | undefined;
 
     constructor(props: HCOutboundOrderInfoProps) {
         super(props);
