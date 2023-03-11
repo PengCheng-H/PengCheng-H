@@ -2,10 +2,8 @@ import React from "react";
 import Table, { ColumnsType } from "antd/es/table";
 
 import utils from "../../../../utils";
-import { IHCOutboundOrder } from "../../../../types/interface";
-import { IHCOutboundOrderDetail } from "../../../../types/interface";
-import { message } from "antd";
 import { em_order_status } from "../../../../types/enum";
+import { IHCOutboundOrder, IHCOutboundOrderDetail } from "../../../../types/interface";
 
 
 
@@ -90,8 +88,6 @@ export default class HCOutboundOrderAllocate extends React.Component<HCOutboundO
             item_allocated_quantity: total_allocate_quantity,
         })
     }
-
-
 }
 
 
@@ -150,7 +146,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         width: "120px",
         align: "center",
         sorter: (a, b) => a.order_qty - b.order_qty,
-        render: value => { return Number(value); }
+        render: value => { return <span style={{ color: '#3284cd', fontSize: '18px', fontWeight: 'bold' }}>{Number(value)}</span>; }
     },
     {
         key: 'order_allocated_qty',
@@ -159,7 +155,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         width: "120px",
         align: "center",
         sorter: (a, b) => a.order_allocated_qty - b.order_allocated_qty,
-        render: value => { return Number(value); }
+        render: value => { return <span style={{ color: '#3284cd', fontSize: '18px', fontWeight: 'bold' }}>{Number(value)}</span>; }
     },
     {
         key: 'order_finished_qty',
@@ -168,7 +164,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         width: "120px",
         align: "center",
         sorter: (a, b) => a.order_finished_qty - b.order_finished_qty,
-        render: value => { return Number(value); }
+        render: value => { return <span style={{ color: '#3284cd', fontSize: '18px', fontWeight: 'bold' }}>{Number(value)}</span>; }
     },
     {
         key: 'order_cur_allocate_qty',
@@ -177,7 +173,7 @@ const outbound_order_headers: ColumnsType<IHCOutboundOrder> = [
         width: "150px",
         align: "center",
         sorter: (a, b) => a.order_cur_allocate_qty - b.order_cur_allocate_qty,
-        render: value => { value = value || 0; return Number(value); },
+        render: value => { value = value || 0; return <span style={{ color: '#f1b334', fontSize: '18px', fontWeight: 'bold' }}>{Number(value)}</span>; },
     },
     {
         key: 'order_time',

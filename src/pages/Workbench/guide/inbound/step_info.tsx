@@ -8,7 +8,7 @@ import '../index.css';
 
 
 
-export default class HCInboundTaskGuideSearch extends React.Component {
+export default class HCInboundOrderInfo extends React.Component {
     state = {
         cur_item_code: "",
         cur_item_list: [],
