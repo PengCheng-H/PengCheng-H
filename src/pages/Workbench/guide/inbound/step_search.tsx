@@ -16,8 +16,9 @@ export default class HCInboundTaskGuideSearch extends React.Component {
         cur_supplier_list: [],
         cur_item_quantity: 0,
     }
-    child: HCFuzzySearch | null | undefined;
+    child_item_code: HCFuzzySearch | null | undefined;
     child_item_qty: any;
+    child_supplier_code: HCFuzzySearch | null | undefined;
 
     render(): React.ReactNode {
         return <div className="search_box">
@@ -29,7 +30,7 @@ export default class HCInboundTaskGuideSearch extends React.Component {
                 onSearch={this.onSearch_item_code.bind(this)}
                 className="search_text"
                 autoFocus={true}
-                ref={child => this.child = child}
+                ref={child => this.child_item_code = child}
             />
             <label style={{ marginLeft: "30px" }}>*请输入物品数量(必填)：</label>
             <InputNumber value={this.state.cur_item_quantity} onChange={this.onChange_item_quantity.bind(this)} placeholder="物品数量(必填)" style={{ width: "200px" }} ref={child => this.child_item_qty = child} />
@@ -40,7 +41,7 @@ export default class HCInboundTaskGuideSearch extends React.Component {
                 onChange={this.onChange_supplier_code.bind(this)}
                 onSearch={this.onSearch_supplier_code.bind(this)}
                 className="search_text"
-                ref={child => this.child = child}
+                ref={child => this.child_supplier_code = child}
             />
         </div>;
     }

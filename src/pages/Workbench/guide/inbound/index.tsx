@@ -117,6 +117,13 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async done() {
+        message.info("正在分配并激活订单，请稍后~");
+
+        this.setState({
+            btn_done_disable: true,
+            btn_done_loading: true
+        });
+
         for (let [order_code, order_details] of Object.entries(this.child_allocate.child_table.state.allocated_item_details as [])) {
             const allocate_result = await api.AllocateWorkbenchInboundOrder([{ order_code, order_details: [...order_details] }]);
         }
@@ -158,13 +165,6 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async activate_task() {
-        message.info("正在激活订单，请稍后~");
-
-        this.setState({
-            btn_done_disable: true,
-            btn_done_loading: true
-        });
-
         const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
         if (!activate_result || activate_result.result_code != 0) {
             this.setState({
