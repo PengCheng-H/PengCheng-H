@@ -1,11 +1,12 @@
 import React from "react";
 import { ColumnsType } from 'antd/es/table';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, FireOutlined } from '@ant-design/icons';
 import { Button, Select, SelectProps, Table, message } from 'antd';
 
 import api from '../../../utils/api';
 import utils from '../../../utils';
 import { IHCWcsTask } from '../../../types/interface';
+import * as IHttpRes from "../../../types/http_response.interface";
 import { em_wcs_task_status, em_wcs_task_types } from "../../../types/enum";
 import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
@@ -26,9 +27,9 @@ export default class HCWorkbenchTask extends React.Component {
                 options={options}
                 className='task_statuses'
             />
-            <Button id='btnSearchWcsTask' type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_button'>搜索任务</Button>
+            <Button type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_task'>搜索任务</Button>
+            <Button type='primary' icon={<FireOutlined />} onClick={this.onBtnActivateClick.bind(this)} className='activate_task'>激活任务</Button>
             <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} className='table' />
-            {/* <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} scroll={{ x: 1250, y: 200 }} className='table' /> */}
         </div>
     }
 
@@ -59,6 +60,21 @@ export default class HCWorkbenchTask extends React.Component {
 
         this.setState({ task_list: result.data.data_list || [] });
         message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
+    }
+
+    async onBtnActivateClick() {
+        const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
+        if (activate_result && activate_result.result_code == 0) {
+            this.setState({
+                modal_msg: `激活入库任务成功。`,
+                modal_is_open: true,
+            });
+        } else {
+            this.setState({
+                modal_msg: `激活入库任务失败! ${activate_result.result_code}: ${activate_result.result_msg}`,
+                modal_is_open: true,
+            });
+        }
     }
 }
 
