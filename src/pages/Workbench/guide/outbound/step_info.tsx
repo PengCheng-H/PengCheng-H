@@ -6,11 +6,11 @@ import api from "../../../../utils/api";
 import { IHCItem, IHCSupplier } from "../../../../types/interface";
 import '../index.css';
 
-interface HCOutboundOrderInfoProps {
+interface IHCOutboundOrderInfoProps {
 
 }
 
-interface HCOutboundOrderInfoState {
+interface IHCOutboundOrderInfoState {
     cur_item_code: string
     cur_item_list: IHCItem[]
     cur_supplier_code: string
@@ -18,19 +18,19 @@ interface HCOutboundOrderInfoState {
     cur_item_quantity: any
 }
 
-export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrderInfoProps, HCOutboundOrderInfoState> {
-    state: HCOutboundOrderInfoState = {
+export default class HCOutboundOrderInfo extends React.Component<IHCOutboundOrderInfoProps, IHCOutboundOrderInfoState> {
+    state: IHCOutboundOrderInfoState = {
         cur_item_code: "",
         cur_item_list: [],
         cur_supplier_code: "",
         cur_supplier_list: [],
         cur_item_quantity: 0,
     };
-    child_item_code: HCFuzzySearch | null | undefined;
-    child_item_qty: any
-    child_supplier_code: HCFuzzySearch | null | undefined;
+    child_item_code: HCFuzzySearch | any;
+    child_item_qty: React.ReactNode | any;
+    child_supplier_code: HCFuzzySearch | any;
 
-    constructor(props: HCOutboundOrderInfoProps) {
+    constructor(props: IHCOutboundOrderInfoProps) {
         super(props);
     }
 
@@ -55,6 +55,7 @@ export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrder
                 onChange={this.onChange_supplier_code.bind(this)}
                 onSearch={this.onSearch_supplier_code.bind(this)}
                 className="search_text"
+                autoFocus={false}
                 ref={child => this.child_supplier_code = child}
             />
         </div>;
@@ -66,6 +67,7 @@ export default class HCOutboundOrderInfo extends React.Component<HCOutboundOrder
             cur_item_quantity: ""
         }, () => {
             message.info(`录入物品码: ${this.state.cur_item_code}`);
+            this.child_item_code.blur();
             this.child_item_qty.focus();
         });
     }

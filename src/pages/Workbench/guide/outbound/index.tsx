@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Modal, StepProps, Steps, message } from "antd";
+import { Button, Modal, Steps, message } from "antd";
 
 import api from "../../../../utils/api";
 import * as IHttpRes from "../../../../types/http_response.interface";
@@ -22,7 +22,7 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
         modal_is_open: false,
         btn_done_disable: false,
         btn_done_loading: false,
-        items: [
+        steps: [
             {
                 title: '第一步',
                 description: '输入出库订单信息',
@@ -43,16 +43,16 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
             <Link to={{ pathname: "/workbench/" }}>
                 <Button type="primary" style={{ width: "200px", height: "50px", margin: "10px", fontSize: "1.5em" }}>返回工作台</Button>
             </Link>
-            <Steps current={this.state.current} items={this.state.items} className="hc_panel steps" />
-            <div className="hc_panel">{this.state.items[this.state.current].content}</div>
+            <Steps current={this.state.current} items={this.state.steps} className="hc_panel steps" />
+            <div className="hc_panel">{this.state.steps[this.state.current].content}</div>
             <div className="hc_panel">
                 {this.state.current > 0 && (
                     <Button type="default" onClick={this.prev.bind(this)} style={{ float: "left", marginLeft: "10px" }}>上一步</Button>
                 )}
-                {this.state.current < this.state.items.length - 1 && (
+                {this.state.current < this.state.steps.length - 1 && (
                     <Button type="primary" onClick={this.next.bind(this)} style={{ float: "right", marginRight: "10px" }}>下一步</Button>
                 )}
-                {this.state.current === this.state.items.length - 1 && (
+                {this.state.current === this.state.steps.length - 1 && (
                     <Button type="primary" onClick={this.done.bind(this)} style={{ float: "right", marginRight: "10px" }} disabled={this.state.btn_done_disable} loading={this.state.btn_done_loading}>确认建单</Button>
                 )}
             </div>
@@ -123,9 +123,14 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
         for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
             const allocate_result = await api.AllocateWorkbenchOutboundOrder(order_code, order_details);
             if (allocate_result && allocate_result.result_code == 0) {
-                this.activate_task();
+                message.success(`分配订单数量成功。订单编号: ${order_code}。`);
+                continue;
             }
+
+            message.error(`分配订单数量失败！订单编号: ${order_code}。`);
         }
+
+        this.activate_task();
     }
 
     async quick_add_orders() {
@@ -133,7 +138,7 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
             {
                 supplier_code: this.state.supplier_code,
                 item_code: this.state.item_code,
-                quantity: this.state.item_quantity
+                quantity: this.state.item_quantity,
             }
         ]);
 
@@ -146,6 +151,7 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async allocate_orders(from_quikc_add_order: boolean = false) {
+        message.info(`出库物品: ${this.state.item_code}, 出库数量: ${this.state.item_quantity}`);
         const get_result: IHttpRes.IHCGetOutboundOrdersRes = await api.GetOutboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
 
         if (!get_result || get_result.result_code != 0) {
@@ -167,18 +173,16 @@ export default class HCOutboundTaskGuide extends React.Component<{}, {}> {
 
     async activate_task() {
         const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
-        if (!activate_result || activate_result.result_code != 0) {
+        if (activate_result && activate_result.result_code == 0) {
             this.setState({
-                modal_msg: `activate wcs task fail! ${activate_result.result_code}: ${activate_result.result_msg}`,
+                modal_msg: `激活出库任务成功。`,
                 modal_is_open: true,
-            }, () => { });
+            });
         } else {
             this.setState({
-                modal_msg: `activate wcs task success. result_code: ${activate_result.result_code}`,
+                modal_msg: `激活出库任务失败! ${activate_result.result_code}: ${activate_result.result_msg}`,
                 modal_is_open: true,
-            }, () => { });
+            });
         }
     }
 }
-
-

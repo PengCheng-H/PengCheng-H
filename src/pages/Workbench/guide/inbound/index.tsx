@@ -4,8 +4,8 @@ import { Button, Modal, Steps, message } from "antd";
 
 import api from "../../../../utils/api";
 import * as IHttpRes from "../../../../types/http_response.interface";
-import HCInboundTaskGuideSearch from "./step_search";
-import HCInboundTaskGuideAllocate from "./step_allocate";
+import HCInboundOrderInfo from "./step_info";
+import HCInboundOrderAllocate from "./step_allocate";
 import '../index.css';
 
 
@@ -26,26 +26,17 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
             {
                 title: '第一步',
                 description: '输入入库订单信息',
-                content: <HCInboundTaskGuideSearch ref={child => this.child_search = child} />
+                content: <HCInboundOrderInfo ref={child => this.child_info = child} />
             },
             {
                 title: '第二步',
                 description: '分配入库物品数量',
-                content: <HCInboundTaskGuideAllocate ref={child => this.child_allocate = child} />
-            },
-            // {
-            //     title: '第三步',
-            //     description: '确认分配结果',
-            //     content: ""
-            // }
+                content: <HCInboundOrderAllocate ref={child => this.child_allocate = child} />
+            }
         ],
     };
-    child_search: HCInboundTaskGuideSearch | any;
-    child_allocate: HCInboundTaskGuideAllocate | any;
-
-    constructor(props: {}) {
-        super(props);
-    }
+    child_info: HCInboundOrderInfo | any;
+    child_allocate: HCInboundOrderAllocate | any;
 
     render() {
         return <div>
@@ -92,22 +83,22 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
 
     next() {
         if (this.state.current === 0) {
-            if (!this.child_search?.confirm_item_code()) {
+            if (!this.child_info?.confirm_item_code()) {
                 message.error("物品码不能为空！");
                 return
             }
 
-            if (!this.child_search?.confirm_item_quantity()) {
+            if (!this.child_info?.confirm_item_quantity()) {
                 message.error("物品数量不能为空！");
                 return
             }
 
             this.setState({
-                item_code: this.child_search.state.cur_item_code,
-                item_list: this.child_search.state.cur_item_list,
-                item_quantity: this.child_search.state.cur_item_quantity,
-                supplier_code: this.child_search.state.cur_supplier_code,
-                supplier_list: this.child_search.state.cur_supplier_list,
+                item_code: this.child_info.state.cur_item_code,
+                item_list: this.child_info.state.cur_item_list,
+                item_quantity: this.child_info.state.cur_item_quantity,
+                supplier_code: this.child_info.state.cur_supplier_code,
+                supplier_list: this.child_info.state.cur_supplier_list,
             }, this.allocate_orders);
         }
         else if (this.state.current === 1) { }
@@ -117,22 +108,34 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async done() {
-        message.info("正在分配并激活订单，请稍后~");
-
         this.setState({
             btn_done_disable: true,
             btn_done_loading: true
         });
 
-        for (let [order_code, order_details] of Object.entries(this.child_allocate.child_table.state.allocated_item_details as [])) {
+        if (!this.child_allocate || !this.child_allocate.state || !this.child_allocate.state.item_allocated_details) {
+            message.error(`未找到任何订单！`);
+            return;
+        }
+
+        message.info("正在分配并激活订单，请稍后~");
+
+        for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
             const allocate_result = await api.AllocateWorkbenchInboundOrder([{ order_code, order_details: [...order_details] }]);
+            if (allocate_result && allocate_result.result_code == 0) {
+                message.success(`分配订单数量成功。订单编号: ${order_code}。`);
+                continue;
+            }
+
+            message.error(`分配订单数量失败！订单编号: ${order_code}。`);
         }
 
         this.activate_task();
     }
 
     async quick_add_orders() {
-        const result = await api.QuickAddInboundOrder(this.state.supplier_code, [
+        const result = await api.QuickAddInboundOrder(
+            this.state.supplier_code, [
             {
                 item_code: this.state.item_code,
                 quantity: this.state.item_quantity
@@ -152,12 +155,16 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
         const get_result: IHttpRes.IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
 
         if (!get_result || get_result.result_code != 0) {
-            message.error(`分配物品数量到订单失败！物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
+            message.warning(`分配物品数量到订单失败！物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
+            message.error(`错误代码：${get_result.result_code}，错误消息：${get_result.result_msg}。`);
             return;
         }
 
         if (!from_quikc_add_order && (!get_result.data.data_list || get_result.data.data_list.length <= 0)) {
             this.quick_add_orders();
+            return;
+        } else if (!get_result.data || !get_result.data.data_list || get_result.data.data_list.length <= 0) {
+            message.error(`未找到入库单！ err_code: ${get_result.result_code}, err_msg: ${get_result.result_msg}`);
             return;
         }
 
@@ -166,18 +173,16 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
 
     async activate_task() {
         const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
-        if (!activate_result || activate_result.result_code != 0) {
+        if (activate_result && activate_result.result_code == 0) {
             this.setState({
-                modal_msg: `activate wcs task fail! ${activate_result.result_code}: ${activate_result.result_msg}`,
+                modal_msg: `激活入库任务成功。`,
                 modal_is_open: true,
-            }, () => { });
+            });
         } else {
             this.setState({
-                modal_msg: `activate wcs task success. result_code: ${activate_result.result_code}`,
+                modal_msg: `激活入库任务失败! ${activate_result.result_code}: ${activate_result.result_msg}`,
                 modal_is_open: true,
-            }, () => { });
+            });
         }
     }
 }
-
-

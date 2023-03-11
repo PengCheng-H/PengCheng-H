@@ -21,6 +21,8 @@ interface State {
 }
 
 export default class HCFuzzySearch extends Component<Props, State> {
+    child_select: React.ReactNode | any;
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -66,7 +68,18 @@ export default class HCFuzzySearch extends Component<Props, State> {
                 placeholder={this.props?.placeholder}
                 className={this.props?.className}
                 autoFocus={this.props?.autoFocus}
+                ref={child => this.child_select = child}
             ></Select>
         );
     }
+
+    focus() {
+        this.child_select.focus()
+    }
+
+    blur() {
+        this.child_select.blur()
+    }
+
+
 }
