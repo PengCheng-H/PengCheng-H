@@ -16,9 +16,9 @@ export default class HCInboundOrderInfo extends React.Component {
         cur_supplier_list: [],
         cur_item_quantity: 0,
     }
-    child_item_code: HCFuzzySearch | null | undefined;
-    child_item_qty: any;
-    child_supplier_code: HCFuzzySearch | null | undefined;
+    child_item_code: HCFuzzySearch | any;
+    child_item_qty: React.ReactNode | any;
+    child_supplier_code: HCFuzzySearch | any;
 
     render(): React.ReactNode {
         return <div className="search_box">
@@ -53,6 +53,7 @@ export default class HCInboundOrderInfo extends React.Component {
             cur_item_quantity: ""
         }, () => {
             message.info(`录入物品码: ${this.state.cur_item_code}`);
+            this.child_item_code.blur();
             this.child_item_qty.focus();
         });
     }
