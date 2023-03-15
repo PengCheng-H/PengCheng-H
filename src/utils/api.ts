@@ -15,11 +15,11 @@ class HCApi {
 
 
 
-    public async AddItem(item: IBase.IHCItem): Promise<IHttpRes.HttpResponse> {
+    public async AddItem(item: IBase.IHCItem): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.item_add, { ...item });
     }
 
-    public async UodateItem(item: IBase.IHCItem): Promise<IHttpRes.HttpResponse> {
+    public async UodateItem(item: IBase.IHCItem): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.item_update, { ...item });
     }
 
@@ -34,11 +34,11 @@ class HCApi {
 
 
 
-    public async AddSupplier(supplier: IBase.IHCSupplier): Promise<IHttpRes.HttpResponse> {
+    public async AddSupplier(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.supplier_add, { ...supplier });
     }
 
-    public async UodateSupplier(supplier: IBase.IHCSupplier): Promise<IHttpRes.HttpResponse> {
+    public async UodateSupplier(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.supplier_update, { ...supplier });
     }
 
@@ -53,11 +53,11 @@ class HCApi {
 
 
 
-    public async AddLocation(location: IBase.IHCLocation): Promise<IHttpRes.HttpResponse> {
+    public async AddLocation(location: IBase.IHCLocation): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.location_add, { ...location });
     }
 
-    public async UodateLocation(location: IBase.IHCSupplier): Promise<IHttpRes.HttpResponse> {
+    public async UodateLocation(location: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.location_update, { ...location });
     }
 
@@ -68,11 +68,11 @@ class HCApi {
 
 
 
-    public async AddBox(box: IBase.IHCBox): Promise<IHttpRes.HttpResponse> {
+    public async AddBox(box: IBase.IHCBox): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.box_add, { ...box });
     }
 
-    public async UodateBox(box: IBase.IHCBox): Promise<IHttpRes.HttpResponse> {
+    public async UodateBox(box: IBase.IHCBox): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.box_update, { ...box });
     }
 
@@ -83,11 +83,11 @@ class HCApi {
 
 
 
-    public async AddOderType(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.HttpResponse> {
+    public async AddOderType(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.order_type_add, { order_type_code, order_type_name, work_type });
     }
 
-    public async UpdateOrderType(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.HttpResponse> {
+    public async UpdateOrderType(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.order_type_update, { order_type_code, order_type_name, work_type });
     }
 
@@ -98,11 +98,11 @@ class HCApi {
 
 
 
-    public async AddPickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.HttpResponse> {
+    public async AddPickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.pick_station_add, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
     }
 
-    public async UpdatePickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.HttpResponse> {
+    public async UpdatePickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.pick_station_update, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
     }
 
@@ -117,15 +117,15 @@ class HCApi {
 
 
 
-    public async QuickAddInboundOrder(supplier_code: string, details: { item_code: string, quantity: number }[]): Promise<IHttpRes.HttpResponse> {
+    public async QuickAddInboundOrder(supplier_code: string, details: { item_code: string, quantity: number }[]): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.inbound_order_quick_add, { supplier_code, details });
     }
 
-    public async AllocateInboundOrder(order_code: string): Promise<IHttpRes.HttpResponse> {
+    public async AllocateInboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.inbound_order_allocate, { order_code });
     }
 
-    public async AllocateWorkbenchInboundOrder(order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[]): Promise<IHttpRes.HttpResponse> {
+    public async AllocateWorkbenchInboundOrder(order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[]): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.inbound_order_workbench_allocate, order_list);
     }
 
@@ -143,19 +143,19 @@ class HCApi {
 
 
 
-    public async QuickAddOutboundOrder(details: { supplier_code: string, item_code: string, quantity: number }[]): Promise<IHttpRes.HttpResponse> {
+    public async QuickAddOutboundOrder(details: { supplier_code: string, item_code: string, quantity: number }[]): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.outbound_order_quick_add, { details });
     }
 
-    public async AllocateOutboundOrder(order_code: string): Promise<IHttpRes.HttpResponse> {
+    public async AllocateOutboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.outbound_order_allocate, { order_code });
     }
 
-    public async AllocateWorkbenchOutboundOrder(order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[]): Promise<IHttpRes.HttpResponse> {
+    public async AllocateWorkbenchOutboundOrder(order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.outbound_order_workbench_allocate, { order_code, order_details });
     }
 
-    public async ActivateOutboundOrder(outbound_order_code: string): Promise<IHttpRes.HttpResponse> {
+    public async ActivateOutboundOrder(outbound_order_code: string): Promise<IHttpRes.IHCResponse> {
         // return await this.SendPostRequest(config.api.outbound_order_activate, outbound_order_code);
         return await this.SendPostRequest(hc_config.api.outbound_order_activate, { outbound_order_code });
     }
@@ -191,21 +191,21 @@ class HCApi {
         return await this.SendGetRequest(hc_config.api.wcs_workbench_task_get, params);
     }
 
-    public async ActivateWcsTask(sub_task_code: string): Promise<IHttpRes.HttpResponse> {
+    public async ActivateWcsTask(sub_task_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.wcs_task_activate, { sub_task_code });
     }
 
-    public async ActivateWorkbenchWcsTask(): Promise<IHttpRes.HttpResponse> {
+    public async ActivateWorkbenchWcsTask(): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.wcs_workbench_task_activate, {});
     }
 
-    public async FinishWorkbenchWcsTask(box_code: string, details: { item_code: string, box_region_id: number, actual_quantity: number }[]): Promise<IHttpRes.HttpResponse> {
+    public async FinishWorkbenchWcsTask(box_code: string, details: { item_code: string, box_region_id: number, actual_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.wcs_workbench_task_finish, { box_code, details });
     }
 
 
 
-    public async GetPickStationDetail(pick_station_code: string): Promise<IHttpRes.HttpResponse> {
+    public async GetPickStationDetail(pick_station_code: string): Promise<IHttpRes.IHCResponse> {
         if (!pick_station_code) { return hc_utils.CreateErrorRes(); }
         return await this.SendGetRequest(hc_config.api.pick_station_detail_get, { pick_station_code });
     }
@@ -218,7 +218,7 @@ class HCApi {
      * @param params 请求参数
      * @returns 
      */
-    private async SendGetRequest(path: string, params: {} | [] = {}): Promise<IHttpRes.HttpResponse> {
+    private async SendGetRequest(path: string, params: {} | [] = {}): Promise<IHttpRes.IHCResponse> {
         let url = `${hc_config.wms_server.protocol}${hc_config.wms_server.host}:${hc_config.wms_server.port}${path}`;
 
         if (Boolean(hc_config.debug.enable) && Boolean(hc_config.debug.enable_proxy)) {
@@ -263,7 +263,7 @@ class HCApi {
      * @param params 请求参数
      * @returns 
      */
-    private async SendPostRequest(path: string, params: { [key: string]: any } = {}): Promise<IHttpRes.HttpResponse> {
+    private async SendPostRequest(path: string, params: { [key: string]: any } = {}): Promise<IHttpRes.IHCResponse> {
         let url = `${hc_config.wms_server.protocol}${hc_config.wms_server.host}:${hc_config.wms_server.port}${path}`;
 
         if (hc_config.debug.enable && hc_config.debug.enable_proxy) {

@@ -5,8 +5,8 @@ import Table, { ColumnsType } from "antd/es/table";
 import api from "../../../utils/api";
 import WorkConfirmModal from "./work_confirm_modal";
 import { IHCPickStation } from "../../../types/interface";
-import { em_pick_station_status } from "../../../types/enum";
 import { IHCGetPickStationsRes } from "../../../types/http_response.interface";
+import { em_pick_station_status } from "../../../types/enum";
 
 export default class HCPickStation extends React.Component {
     state: { pick_station_list: IHCPickStation[] } = { pick_station_list: [] }
@@ -104,5 +104,3 @@ const pick_station_headers: ColumnsType<IHCPickStation> = [
         }
     },
 ];
-
-

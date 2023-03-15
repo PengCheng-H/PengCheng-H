@@ -1,47 +1,51 @@
 import React from "react";
-import { Button, Input, InputNumber, Modal, message } from "antd";
+import { Button, Input, InputNumber, Modal, Row, message } from "antd";
 
 import api from "../../../utils/api";
-import { IHCBoxDetail, IHCPickStation } from "../../../types/interface";
+import { IHCBoxDetail, IHCItem, IHCPickStation } from "../../../types/interface";
 
 
 interface WorkConfirmModalProps {
-    pick_station: IHCPickStation
+    pick_station: IHCPickStation;
 }
 
 interface WorkConfirmModalState {
-    box_code: string
-    task_type: string
-    modal_open: boolean
-    pick_station: IHCPickStation
-    region_task_details: IHCBoxDetail[]
+    box_code: string;
+    task_type: string;
+    modal_open: boolean;
+    pick_station: IHCPickStation;
+    box_details: IHCBoxDetail[];
 }
 
 export default class WorkConfirmModal extends React.Component<WorkConfirmModalProps, WorkConfirmModalState> {
-    state: WorkConfirmModalState = {
-        box_code: this.props.pick_station.box_code,
-        task_type: "",
-        modal_open: false,
-        pick_station: this.props.pick_station,
-        region_task_details: [] as IHCBoxDetail[],
-    };
 
-    constructor(props: { pick_station: IHCPickStation }) {
+    constructor(props: WorkConfirmModalProps) {
         super(props);
+        this.state = {
+            box_code: this.props.pick_station.box_code,
+            task_type: "",
+            modal_open: false,
+            pick_station: this.props.pick_station,
+            box_details: [],
+        };
     }
 
     render(): React.ReactNode {
         return <div>
             <Button type="primary" onClick={this.showModal.bind(this)}>作业详情确认</Button>
             <Modal title="作业详情" open={this.state.modal_open} okText="作业完成确认" cancelText="取消" onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
-                <p><span>料箱编号：</span>{this.state.box_code}</p>
-                <p><span>任务类型：</span>{this.state.task_type == "0" ? "入库" : "出库"}</p>
-                {this.state.region_task_details.map(item => {
-                    return <div>
-                        <p><label>物品编码：</label><span>{item.item_code}</span></p>
-                        <p><label>拣选数量：</label><InputNumber defaultValue={item.quantity} onInput={this.handleItemQuantityChanged.bind(this)}></InputNumber></p>
-                    </div>;
-                })}
+                <Row><span>料箱编号：</span>{this.state.box_code}</Row>
+                <Row><span>任务类型：</span>{this.state.task_type == "0" ? "入库" : "出库"}</Row>
+                {this.state.box_details.length ? this.state.box_details.map(box_detail => {
+                    return <div key={box_detail.key}>
+                        <hr />
+                        <Row><label>料箱分区：</label><span>{box_detail.box_region_id}</span></Row>
+                        <Row><label>物料编码：</label><span>{box_detail.item_code}</span></Row>
+                        <Row><label>物料存货码：</label><span>{box_detail.item_detail?.item_external_code1}</span></Row>
+                        <Row><label>物料名称：</label><span>{box_detail.item_detail?.item_name}</span></Row>
+                        <Row><label>物料数量：</label><InputNumber defaultValue={box_detail.quantity} onInput={this.handleItemQuantityChanged.bind(this)}></InputNumber></Row>
+                    </div>
+                }) : null}
             </Modal>
         </div >
     }
@@ -53,10 +57,22 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
             return;
         }
 
+        const box_details = result.data.region_task_details;
+
+        for (let box_detail of box_details) {
+            box_detail.key = box_detail.item_code;
+            box_detail.item_detail = {} as IHCItem;
+            box_detail.item_detail.key = box_detail.item_detail.item_code;
+            const get_item_detail_result = await api.GetItemDetail(box_detail.item_code);
+            if (get_item_detail_result && get_item_detail_result.result_code == 0) {
+                box_detail.item_detail = get_item_detail_result.data;
+            }
+        }
+
         this.setState({
             box_code: result.data.box_code,
             task_type: result.data.task_type,
-            region_task_details: result.data.region_task_details,
+            box_details: box_details,
             modal_open: true
         });
     }
@@ -70,7 +86,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
     async handleOk() {
         let details: { item_code: string, box_region_id: number, actual_quantity: number }[] = [];
 
-        this.state.region_task_details.map(item => {
+        this.state.box_details.map(item => {
             details.push({
                 item_code: item.item_code,
                 box_region_id: item.box_region_id,
@@ -81,14 +97,14 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
         const result = await api.FinishWorkbenchWcsTask(this.state.box_code, details);
 
         if (!result || result.result_code != 0) {
-            message.error(`作业失败！err_msg: ${result.result_msg}.`);
+            message.error(`作业失败! err_msg: ${result.result_msg}.`);
             return;
         }
 
         this.setState({
             modal_open: false
         }, () => {
-            message.success(`作业成功。料箱编码：${this.state.box_code}, 物品数量: ${this.state.region_task_details[0].quantity}。`);
+            message.success(`作业成功。料箱编码：${this.state.box_code}, 物品数量: ${this.state.box_details[0].quantity}。`);
         });
     }
 

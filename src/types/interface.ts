@@ -9,6 +9,7 @@ export interface IHCInboundOrderDetailLotProps {
 }
 
 export interface IHCInboundOrderDetail {
+    key?: string | number;
     order_qty: number;
     expiry_date: string;
     order_allocated_qty: number;
@@ -62,6 +63,7 @@ export interface IHCOutboundOrderDetailLotProps {
 }
 
 export interface IHCOutboundOrderDetail {
+    key?: string | number;
     order_qty: number;
     expiry_date: string;
     order_allocated_qty: number;
@@ -108,7 +110,7 @@ export interface IHCOutboundOrder {
 }
 
 export interface IHCWcsTask {
-    [key: string]: any;
+    key?: string | number;
     wcs_task_code: string;
     task_type: string;
     wcs_task_status: string;
@@ -122,7 +124,8 @@ export interface IHCWcsTask {
 }
 
 export interface IHCItem {
-    item_width: number
+    key?: string;
+    item_width: number;
     lot_prop1_as_lot: boolean
     has_serial_no: boolean
     last_updated_time: string
@@ -198,8 +201,10 @@ export interface IHCBox {
 }
 
 export interface IHCBoxDetail {
+    key?: string | number
     box_region_id: number
     item_code: string
+    item_detail?: IHCItem
     quantity: number
     orders: { order_code: string, quantity: number }[]
 }
@@ -215,7 +220,7 @@ export interface IHCOrderType {
 }
 
 export interface IHCPickStation {
-    [key: string]: string
+    key?: string | number
     pick_station_code: string
     pick_station_status: string
     box_code: string

@@ -1,5 +1,5 @@
 import moment from "moment";
-import { HttpResponse } from "../types/http_response.interface";
+import { IHCResponse } from "../types/http_response.interface";
 
 
 
@@ -8,7 +8,7 @@ class HCUtils {
         return original_time ? moment(original_time).format("YYYY-MM-DD HH:mm:ss") : original_time;
     }
 
-    CreateErrorRes(result: HttpResponse = { result_code: -1, result_msg: "参数不正确!", data: {} }): HttpResponse {
+    CreateErrorRes(result: IHCResponse = { result_code: -1, result_msg: "参数不正确!", data: {} }): IHCResponse {
         return result;
     }
 }
