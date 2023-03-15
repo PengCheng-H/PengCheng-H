@@ -172,7 +172,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async activate_task() {
-        const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
+        const activate_result: IHttpRes.IHCResponse = await api.ActivateWorkbenchWcsTask();
         if (activate_result && activate_result.result_code == 0) {
             this.setState({
                 modal_msg: `激活入库任务成功。`,

@@ -5,8 +5,8 @@ import { Button, Select, SelectProps, Table, message } from 'antd';
 
 import api from '../../../utils/api';
 import utils from '../../../utils';
-import { IHCWcsTask } from '../../../types/interface';
 import * as IHttpRes from "../../../types/http_response.interface";
+import { IHCWcsTask } from '../../../types/interface';
 import { em_wcs_task_status, em_wcs_task_types } from "../../../types/enum";
 import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
@@ -63,17 +63,11 @@ export default class HCWorkbenchTask extends React.Component {
     }
 
     async onBtnActivateClick() {
-        const activate_result: IHttpRes.HttpResponse = await api.ActivateWorkbenchWcsTask();
+        const activate_result: IHttpRes.IHCResponse = await api.ActivateWorkbenchWcsTask();
         if (activate_result && activate_result.result_code == 0) {
-            this.setState({
-                modal_msg: `激活入库任务成功。`,
-                modal_is_open: true,
-            });
+            message.success("激活任务成功。");
         } else {
-            this.setState({
-                modal_msg: `激活入库任务失败! ${activate_result.result_code}: ${activate_result.result_msg}`,
-                modal_is_open: true,
-            });
+            message.error("激活任务失败！");
         }
     }
 }

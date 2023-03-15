@@ -1,12 +1,12 @@
 import { IHCBox, IHCBoxDetail, IHCInboundOrder, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
 
-export interface HttpResponse {
+export interface IHCResponse {
     result_code: number
     result_msg: string
     data: any
 }
 
-export interface IHCResPagination extends HttpResponse {
+export interface IHCResPagination extends IHCResponse {
     data: {
         total_count: number
         page_no: number
@@ -24,7 +24,7 @@ export interface IHCGetItemsRes extends IHCResPagination {
     }
 }
 
-export interface IHCGetItemDetailRes extends HttpResponse {
+export interface IHCGetItemDetailRes extends IHCResponse {
     data: IHCItem
 }
 
@@ -37,15 +37,15 @@ export interface IHCGetSupplierRes extends IHCResPagination {
     }
 }
 
-export interface IHCGetSupplierDetailRes extends HttpResponse {
+export interface IHCGetSupplierDetailRes extends IHCResponse {
     data: IHCSupplier
 }
 
-export interface IHCGetLocationDetailRes extends HttpResponse {
+export interface IHCGetLocationDetailRes extends IHCResponse {
     data: IHCLocation
 }
 
-export interface IHCGetBoxDetailRes extends HttpResponse {
+export interface IHCGetBoxDetailRes extends IHCResponse {
     data: {
         task_type: string
         box_code: string
@@ -53,14 +53,14 @@ export interface IHCGetBoxDetailRes extends HttpResponse {
     }
 }
 
-export interface IHCGetOderTypeDetailRes extends HttpResponse {
+export interface IHCGetOderTypeDetailRes extends IHCResponse {
     data: IHCOrderType
 }
 
-export interface IHCGetPickStationRes extends HttpResponse {
+export interface IHCGetPickStationRes extends IHCResponse {
     data: IHCPickStation
 }
-export interface IHCGetPickStationsRes extends HttpResponse {
+export interface IHCGetPickStationsRes extends IHCResponse {
     data: IHCPickStation[]
 }
 
@@ -82,7 +82,7 @@ export interface IHCGetOutboundOrdersRes extends IHCResPagination {
     }
 }
 
-export interface IHCGetWorkbenchWcsTasksRes extends HttpResponse {
+export interface IHCGetWorkbenchWcsTasksRes extends IHCResponse {
     data: {
         total_count: number
         page_no: number
