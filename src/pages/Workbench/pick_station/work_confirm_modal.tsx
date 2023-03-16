@@ -43,7 +43,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
                         <Row><label>物料编码：</label><span>{box_detail.item_code}</span></Row>
                         <Row><label>物料存货码：</label><span>{box_detail.item_detail?.item_external_code1}</span></Row>
                         <Row><label>物料名称：</label><span>{box_detail.item_detail?.item_name}</span></Row>
-                        <Row><label>物料数量：</label><InputNumber defaultValue={box_detail.quantity} onInput={this.handleItemQuantityChanged.bind(this)}></InputNumber></Row>
+                        <Row><label>物料数量：</label><InputNumber defaultValue={box_detail.quantity} onInput={this.handleItemQuantityChanged.bind(this, box_detail.key)}></InputNumber></Row>
                     </div>
                 }) : null}
             </Modal>
@@ -77,9 +77,16 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
         });
     }
 
-    handleItemQuantityChanged(value: any) {
-        if (typeof (value) != "number") { return; }
+    handleItemQuantityChanged(key: any, value: any) {
+        const box_details: IHCBoxDetail[] = [...this.state.box_details];
+        box_details.map(box_detail => {
+            if (box_detail.key == key) {
+                box_detail.quantity = parseInt(value);
+            }
+        });
+
         this.setState({
+            box_details: box_details
         });
     }
 
@@ -101,10 +108,11 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
             return;
         }
 
+
         this.setState({
-            modal_open: false
+            modal_open: false,
         }, () => {
-            message.success(`作业成功。料箱编码：${this.state.box_code}, 物品数量: ${this.state.box_details[0].quantity}。`);
+            window.location.href = ""
         });
     }
 
