@@ -99,7 +99,7 @@ const inbound_order_headers: ColumnsType<IHCInboundOrder> = [
         width: "160px",
         fixed: 'left',
         align: "center",
-        sorter: (a, b) => a.order_code.localeCompare(b.order_code, "en"),
+        sorter: (a, b) => a.order_code?.localeCompare(b.order_code, "en"),
     },
     {
         key: 'external_order_code',
