@@ -4,7 +4,7 @@ import { Button, Col, Row } from "antd";
 
 
 
-export default class HCOrderIndex extends React.Component {
+export default class HCOrder extends React.Component {
     render(): React.ReactNode {
         return <div className="hc_panel">
             <Row>

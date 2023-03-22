@@ -8,7 +8,7 @@ import HCWorkbenchTask from "../pages/Workbench/task";
 import HCWorkbenchGuide from "../pages/Workbench/guide";
 import HCWorkbenchInboundGuide from "../pages/Workbench/guide/inbound";
 import HCWorkbenchOutboundGuide from "../pages/Workbench/guide/outbound";
-import HCOrderIndex from "../pages/Workbench/order";
+import HCOrder from "../pages/Workbench/order";
 import HCOrderInbound from "../pages/Workbench/order/inbound";
 import HCOrderOutbound from "../pages/Workbench/order/outbound";
 
@@ -24,7 +24,7 @@ export default class HCRouter extends React.Component {
             { path: "workbench/order/outbound", element: <HCOrderOutbound /> },
             { path: "workbench/guide/inbound", element: <HCWorkbenchInboundGuide /> },
             { path: "workbench/guide/outbound", element: <HCWorkbenchOutboundGuide /> },
-            { path: "workbench/order", element: <HCOrderIndex /> },
+            { path: "workbench/order", element: <HCOrder /> },
             { path: "*", element: <HCWorkbench /> }
         ], { basename: "" });
 

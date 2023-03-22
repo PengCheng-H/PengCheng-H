@@ -130,6 +130,8 @@ export interface IHCItem {
     has_serial_no: boolean
     last_updated_time: string
     item_external_code1: string
+    item_extend_code1: string
+    item_extend_code2: string
     item_height: number
     lot_prop2_as_lot: boolean
     count_cycle_days: number

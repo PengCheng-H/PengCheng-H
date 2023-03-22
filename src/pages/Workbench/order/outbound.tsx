@@ -2,9 +2,10 @@ import React from "react";
 import Cascader, { DefaultOptionType } from "antd/es/cascader";
 import { Button, Table, TableColumnType, message } from "antd";
 
+import api from "../../../utils/api";
 import hc_config from "../../../config/index.json";
 import order_list from '../../../mocks/outbound_order.20230321.mock';
-import { IHCOutboundOrder, IHCOutboundOrderDetail } from "../../../types/interface";
+import { IHCItem, IHCSupplier, IHCOutboundOrder, IHCOutboundOrderDetail } from "../../../types/interface";
 import "../index.css";
 
 
@@ -26,8 +27,10 @@ interface HCTableState {
     columns: TableColumnType<any>[];
     dataSource: IHCOutboundOrder[];
     child_columns: TableColumnType<any>[];
-    item_code: string
-    supplier_code: string
+    item_code: string;
+    supplier_code: string;
+    items: IHCItem[];
+    suppliers: IHCSupplier[];
 }
 
 export default class HCOrderOutbound extends React.Component<HCTableProps, HCTableState>{
@@ -40,34 +43,10 @@ export default class HCOrderOutbound extends React.Component<HCTableProps, HCTab
             maxLength: this.props.maxLength || 20,
             item_code: "",
             supplier_code: "",
-            item_options: [
-                {
-                    label: "I001-物品1",
-                    value: "I001",
-                },
-                {
-                    label: "I002-物品2",
-                    value: "I002",
-                },
-                {
-                    label: "I003-物品3",
-                    value: "I003",
-                }
-            ],
-            supplier_options: [
-                {
-                    label: "S001-供应商1",
-                    value: "S001",
-                },
-                {
-                    label: "S002-供应商2",
-                    value: "S002",
-                },
-                {
-                    label: "S003-供应商3",
-                    value: "S003",
-                }
-            ],
+            item_options: [],
+            supplier_options: [],
+            items: [],
+            suppliers: [],
             columns: [
                 { title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "70px", fixed: 'left' },
                 // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: "150px", fixed: 'left' },
@@ -119,7 +98,7 @@ export default class HCOrderOutbound extends React.Component<HCTableProps, HCTab
 
     render(): React.ReactNode {
         return <div>
-            <Button type="primary" style={{ margin: "10px" }} onClick={() => { window.location.href = "/workbench/order" }}>返回主页</Button>
+            <Button type="primary" style={{ margin: "10px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
             <h1>{this.state.title}</h1>
             <div className="hc_panel">
                 <div className="search_box">
@@ -142,7 +121,7 @@ export default class HCOrderOutbound extends React.Component<HCTableProps, HCTab
                         onSearch={this.onSupplierOptionSearch.bind(this)}
                     />
                     <Button type="primary" onClick={this.queryOrderList.bind(this)} style={{ marginLeft: "30px" }}>查询订单</Button>
-                    <Button type="primary" onClick={this.confirmInboundOrders.bind(this)} style={{ marginLeft: "30px" }}>确认出库</Button>
+                    <Button type="primary" onClick={this.confirmOutboundOrders.bind(this)} style={{ marginLeft: "30px" }}>确认出库</Button>
                 </div>
             </div>
             <div>
@@ -158,7 +137,9 @@ export default class HCOrderOutbound extends React.Component<HCTableProps, HCTab
     }
 
     componentDidMount(): void {
-        this.setState({ dataSource: order_list })
+        if (hc_config.debug.enable && hc_config.debug.enable_mock) {
+            this.setState({ dataSource: order_list })
+        }
     }
 
     expandedRowRender(record: IHCOutboundOrder, index: any, indent: any, expanded: any): React.ReactNode {
@@ -175,17 +156,33 @@ export default class HCOrderOutbound extends React.Component<HCTableProps, HCTab
     }
 
     onItemOptionChange(item_codes: any) {
-        this.setState({ item_code: item_codes[0] });
+        const item_code = item_codes ? item_codes[0] : "";
+        this.setState({ item_code });
     }
 
-    onItemOptionSearch(item_code: string) {
-        if (!item_code) { return; }
+    async onItemOptionSearch(item_code: string) {
+        if (!item_code) {
+            this.setState({ items: [], item_options: [] });
+            return;
+        }
 
-        message.info(`search item. ${item_code}`);
-
-        if (hc_config.debug.enable) {
+        if (hc_config.debug.enable && hc_config.debug.enable_mock) {
             this.onItemOptionSearchTest(item_code);
             return;
+        }
+
+        const get_items_result = await api.GetItems(item_code);
+        if (get_items_result && get_items_result.result_code === 0) {
+            const item_options: DefaultOptionType[] = [];
+            for (let item of get_items_result.data.data_list) {
+                const item_label = `[${item.item_code}]-[${item.item_extend_code1}]-[${item.item_name}]`;
+                item_options.push({
+                    label: item_label,
+                    value: item.item_code
+                });
+            }
+
+            this.setState({ items: get_items_result.data.data_list, item_options });
         }
     }
 
@@ -203,17 +200,34 @@ export default class HCOrderOutbound extends React.Component<HCTableProps, HCTab
     }
 
     onSupplierOptionChange(supplier_codes: any) {
-        this.setState({ supplier_code: supplier_codes[0] });
+        const supplier_code = supplier_codes ? supplier_codes[0] : "";
+        this.setState({ supplier_code });
     }
 
-    onSupplierOptionSearch(supplier_code: string) {
-        if (!supplier_code) { return; }
 
-        message.info(`search supplier_code. ${supplier_code}`);
+    async onSupplierOptionSearch(supplier_code: string) {
+        if (!supplier_code) {
+            this.setState({ suppliers: [], supplier_options: [] });
+            return;
+        }
 
-        if (hc_config.debug.enable) {
+        if (hc_config.debug.enable && hc_config.debug.enable_mock) {
             this.onSupplierOptionSearchTest(supplier_code);
             return;
+        }
+
+        const get_suppliers_result = await api.GetSuppliers(supplier_code);
+        if (get_suppliers_result && get_suppliers_result.result_code === 0) {
+            const supplier_options: DefaultOptionType[] = [];
+            for (let supplier of get_suppliers_result.data.data_list) {
+                const supplier_label = `[${supplier.supplier_code}]-[${supplier.supplier_name}]`;
+                supplier_options.push({
+                    label: supplier_label,
+                    value: supplier.supplier_code
+                });
+            }
+
+            this.setState({ suppliers: get_suppliers_result.data.data_list, supplier_options: supplier_options });
         }
     }
 
@@ -231,11 +245,22 @@ export default class HCOrderOutbound extends React.Component<HCTableProps, HCTab
     }
 
 
-    queryOrderList() {
-        message.info(`query inbound orders.`);
+    async queryOrderList() {
+        const get_order_result = await api.GetOutboundOrders(this.state.item_code, this.state.supplier_code)
+        if (get_order_result && get_order_result.result_code === 0) {
+            let order_key = 0;
+            get_order_result.data.data_list.map(order => {
+                order.key = (order_key += 1);
+                let detail_key = 0;
+                order.order_details.map(detail => {
+                    detail.key = (detail_key += 1);
+                });
+            });
+            this.setState({ dataSource: get_order_result.data.data_list });
+        }
     }
 
-    confirmInboundOrders() {
+    confirmOutboundOrders() {
         message.info(`confirm inbound orders.`);
     }
 

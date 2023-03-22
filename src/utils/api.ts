@@ -23,9 +23,9 @@ class HCApi {
         return await this.SendPostRequest(hc_config.api.item_update, { ...item });
     }
 
-    public async GetItems(text: string): Promise<IHttpRes.IHCGetItemsRes> {
+    public async GetItems(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetItemsRes> {
         if (!text) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.item_list_get, { text, page_no: 1, page_size: 200 });
+        return await this.SendGetRequest(hc_config.api.item_list_get, { text, page_no, page_size });
     }
 
     public async GetItemDetail(item_code: string): Promise<IHttpRes.IHCGetItemDetailRes> {
@@ -42,9 +42,9 @@ class HCApi {
         return await this.SendPostRequest(hc_config.api.supplier_update, { ...supplier });
     }
 
-    public async GetSuppliers(text: string): Promise<IHttpRes.IHCGetSupplierRes> {
+    public async GetSuppliers(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetSupplierRes> {
         if (!text) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.supplier_list_get, { text });
+        return await this.SendGetRequest(hc_config.api.supplier_list_get, { text, page_no, page_size });
     }
 
     public async GetSupplierDetail(supplier_code: string): Promise<IHttpRes.IHCGetSupplierDetailRes> {
@@ -78,7 +78,7 @@ class HCApi {
 
     public async GetBoxDetail(box_code: string): Promise<IHttpRes.IHCGetBoxDetailRes> {
         if (!box_code) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.box_detail_get, { box_code });
+        return await this.SendGetRequest(hc_config.api.workbench_task_detail_view, { box_code });
     }
 
 
@@ -156,7 +156,6 @@ class HCApi {
     }
 
     public async ActivateOutboundOrder(outbound_order_code: string): Promise<IHttpRes.IHCResponse> {
-        // return await this.SendPostRequest(config.api.outbound_order_activate, outbound_order_code);
         return await this.SendPostRequest(hc_config.api.outbound_order_activate, { outbound_order_code });
     }
 
@@ -188,7 +187,7 @@ class HCApi {
             params.push({ wcs_task_statuses: value });
         });
 
-        return await this.SendGetRequest(hc_config.api.wcs_workbench_task_get, params);
+        return await this.SendGetRequest(hc_config.api.wcs_task_find, params);
     }
 
     public async ActivateWcsTask(sub_task_code: string): Promise<IHttpRes.IHCResponse> {
@@ -196,18 +195,11 @@ class HCApi {
     }
 
     public async ActivateWorkbenchWcsTask(): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.wcs_workbench_task_activate, {});
+        return await this.SendPostRequest(hc_config.api.workbench_work_start, {});
     }
 
     public async FinishWorkbenchWcsTask(box_code: string, details: { item_code: string, box_region_id: number, actual_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.wcs_workbench_task_finish, { box_code, details });
-    }
-
-
-
-    public async GetPickStationDetail(pick_station_code: string): Promise<IHttpRes.IHCResponse> {
-        if (!pick_station_code) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.pick_station_detail_get, { pick_station_code });
+        return await this.SendPostRequest(hc_config.api.workbench_task_confirm, { box_code, details });
     }
 
 
