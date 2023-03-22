@@ -46,8 +46,8 @@
         "wms_task_outbound_finish": "/api/wms/tsask/move-out/finish",
         "wms_box_out_roller_finish": "/api/wms/wcs/box-out-roller/finish",
         "wcs_task_activate": "/wcs/task/activate",
-        "wcs_workbench_task_get": "/workbench/wcs_tasks/find",
-        "wcs_workbench_task_activate": "/workbench/wcs_tasks/activate",
+        "wcs_task_find": "/workbench/wcs_tasks/find",
+        "workbench_task_activate": "/workbench/wcs_tasks/activate",
         "wcs_workbench_task_finish": "/workbench/tasks/finish",
         "wms_task_confirm": "/task/confirm",
         "pick_station_detail_get": "/workbench/pick_station/detail"
