@@ -3,9 +3,9 @@ import { Button, message } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 
 import api from "../../../utils/api";
+import * as IHttpRes from "../../../types/http_response.interface";
 import WorkConfirmModal from "./work_confirm_modal";
 import { IHCPickStation } from "../../../types/interface";
-import { IHCGetPickStationsRes } from "../../../types/http_response.interface";
 import { em_pick_station_status } from "../../../types/enum";
 
 export default class HCPickStation extends React.Component {
@@ -13,7 +13,9 @@ export default class HCPickStation extends React.Component {
 
     render(): React.ReactNode {
         return <div className="hc_panel">
-            <Button type="primary" onClick={this.GetPickStations.bind(this)} style={{ margin: "5px" }}>更新拣货台状态</Button>
+            <Button type="default" onClick={this.GetPickStations.bind(this)} style={{ margin: "5px" }}>更新拣货台状态</Button>
+            <Button type="primary" onClick={this.StartWork.bind(this)} style={{ margin: "5px" }}>开始作业</Button>
+            <Button type="primary" onClick={this.StopWork.bind(this)} style={{ margin: "5px" }}>停止作业</Button>
             <Table columns={pick_station_headers} dataSource={this.state.pick_station_list} pagination={{ pageSize: 10 }} className='table' />
         </div>;
     }
@@ -23,7 +25,7 @@ export default class HCPickStation extends React.Component {
     }
 
     async GetPickStations() {
-        const result: IHCGetPickStationsRes = await api.GetPickAllStation();
+        const result: IHttpRes.IHCGetPickStationsRes = await api.GetPickAllStation();
         if (!result || result.result_code !== 0) {
             message.error(`获取拣货台信息失败，${result.result_msg}。`)
             return;
@@ -38,6 +40,25 @@ export default class HCPickStation extends React.Component {
         }, () => {
             message.success(`获取拣货台信息成功，共获取 ${result.data.length} 个拣货台数据。`);
         });
+    }
+
+    async StartWork() {
+        const activate_result: IHttpRes.IHCResponse = await api.WorkbenchStartWork();
+        if (!activate_result || activate_result.result_code == 0) {
+            message.error("开始作业失败！");
+            return;
+        }
+        message.success("开始作业成功。");
+    }
+
+    async StopWork() {
+        const activate_result: IHttpRes.IHCResponse = await api.WorkbenchStartWork();
+        if (!activate_result || activate_result.result_code == 0) {
+            message.error("停止作业失败！");
+            return;
+        }
+        message.success("停止作业成功。");
+
     }
 }
 

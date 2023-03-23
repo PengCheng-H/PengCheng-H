@@ -51,7 +51,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
     }
 
     async showModal() {
-        const result = await api.GetBoxDetail(this.state.pick_station.box_code);
+        const result = await api.WorbenchTaskDetailView(this.state.pick_station.box_code);
         if (!result || result.result_code != 0) {
             message.error(`获取料箱详情失败！料箱编号: ${this.state.box_code}`);
             return;
@@ -101,7 +101,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
             });
         });
 
-        const result = await api.FinishWorkbenchWcsTask(this.state.box_code, details);
+        const result = await api.WorkbenchTaskDetailConfirm(this.state.box_code, details);
 
         if (!result || result.result_code != 0) {
             message.error(`作业失败! err_msg: ${result.result_msg}.`);

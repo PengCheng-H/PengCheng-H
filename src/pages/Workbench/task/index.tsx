@@ -63,7 +63,7 @@ export default class HCWorkbenchTask extends React.Component {
     }
 
     async onBtnActivateClick() {
-        const activate_result: IHttpRes.IHCResponse = await api.ActivateWorkbenchWcsTask();
+        const activate_result: IHttpRes.IHCResponse = await api.WorkbenchStartWork();
         if (activate_result && activate_result.result_code == 0) {
             message.success("激活任务成功。");
         } else {
