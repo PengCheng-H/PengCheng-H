@@ -172,7 +172,7 @@ class HCApi {
         return await this.SendPostRequest(hc_config.api.outbound_order_close, { order_code });
     }
 
-    public async CloseOutboundOrderDetail(order_code: string, order_detail_id: string): Promise<IHttpRes.IHCResponse> {
+    public async CloseOutboundOrderDetail(order_code: string, order_detail_id: number): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.outbound_order_detail_close, { order_code, order_detail_id });
     }
 
