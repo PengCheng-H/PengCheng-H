@@ -70,7 +70,7 @@ export default class HCInboundOrderAllocate extends React.Component<IHCInboundOr
 
                     item_quantity -= inbound_order_detail.order_allocated_qty;
                     total_allocate_quantity += inbound_order_detail.order_allocated_qty;
-                    inbound_order.order_cur_allocate_qty += inbound_order_detail.order_allocated_qty;
+                    inbound_order.order_cur_allocate_qty += inbound_order_detail.order_allocated_qty as number;
                     allocated_item_details[inbound_order.order_code] = allocated_item_details[inbound_order.order_code] || [];
                     allocated_item_details[inbound_order.order_code].push({
                         order_detail_id: inbound_order_detail.order_detail_id,
