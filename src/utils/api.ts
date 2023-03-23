@@ -116,12 +116,12 @@ class HCApi {
         return await this.SendPostRequest(hc_config.api.inbound_order_quick_add, { supplier_code, details });
     }
 
-    public async AllocateInboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.inbound_order_allocate, { order_code });
+    public async InboundOrderAutoAllocateFull(order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.inbound_order_auto_allocate_full, { order_code });
     }
 
-    public async AllocateWorkbenchInboundOrder(order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.inbound_order_workbench_allocate, order_list);
+    public async InboundOrderAutoAllocateList(order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[]): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.inbound_order_auto_allocate_list, order_list);
     }
 
     public async CloseInboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {

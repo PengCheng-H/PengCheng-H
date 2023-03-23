@@ -18,6 +18,7 @@ export interface IHCInboundOrderDetail {
     order_finished_qty: number;
     order_allocated_qty: number;
     order_cur_allocate_qty: number;
+    allocate_box_code?: string;
     order_status: string;
     order_detail_id: number;
     created_operator: string;
@@ -45,6 +46,7 @@ export interface IHCInboundOrder {
     order_finished_qty: number;
     order_allocated_qty: number;
     order_cur_allocate_qty: number;
+    allocate_box_code?: string;
     order_time: string;
     order_details: IHCInboundOrderDetail[];
     created_from: string;
