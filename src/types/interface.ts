@@ -73,8 +73,9 @@ export interface IHCOutboundOrderDetail {
     supplier_code: string;
     item_code: string;
     order_qty: number;
-    order_allocated_qty: number;
     order_finished_qty: number;
+    order_allocated_qty: number;
+    order_cur_allocate_qty: number;
     storage_date: string;
     production_date: string;
     created_time: string;
@@ -99,6 +100,7 @@ export interface IHCOutboundOrder {
     order_qty: number;
     order_finished_qty: number;
     order_allocated_qty: number;
+    order_cur_allocate_qty: number;
     order_details: IHCOutboundOrderDetail[];
     order_time: string;
     receiver_name: string;

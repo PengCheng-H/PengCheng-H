@@ -215,6 +215,10 @@ const App: React.FC = () => {
     };
 
     function handleSaveOrderDetail(row: IHCInboundOrderDetail) {
+        if (row.order_cur_allocate_qty < 0) {
+            message.warning("不允许输入负数！");
+            return;
+        }
         const new_orders = [...inbound_orders];
         const new_order_index = new_orders.findIndex(item => row.order_code === item.order_code);
         const new_order = new_orders[new_order_index];
@@ -459,8 +463,8 @@ const App: React.FC = () => {
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
                             <Button type='primary'>关闭</Button>
                         </Popconfirm>
-                        <Popconfirm title="确定删除吗?" onConfirm={() => handleOrderDelete(record.key)}>
-                            <Button style={{ marginTop: "10px" }}>删除</Button>
+                        <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
+                            <Button style={{ marginTop: "10px" }}>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -516,8 +520,8 @@ const App: React.FC = () => {
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderDetailClose(record)}>
                             <Button type='primary'>关闭</Button>
                         </Popconfirm>
-                        <Popconfirm title="确定删除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
-                            <Button style={{ marginTop: "10px" }}>删除</Button>
+                        <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
+                            <Button style={{ marginTop: "10px" }}>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -578,7 +582,9 @@ const App: React.FC = () => {
                         onSearch={onSupplierOptionSearch}
                     />
                     <Button type="primary" onClick={queryOrderList} style={{ marginLeft: "30px" }}>查询订单</Button>
-                    <Button type="primary" onClick={confirmInboundOrders} style={{ marginLeft: "30px" }}>确认分配</Button>
+                    <Popconfirm title="确定分配吗?" onConfirm={() => confirmInboundOrders()}>
+                        <Button type="primary" style={{ marginLeft: "30px" }}>确认分配</Button>
+                    </Popconfirm>
                 </div>
             </div>
             <Table
