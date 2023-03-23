@@ -11,6 +11,7 @@ import HCWorkbenchOutboundGuide from "../pages/Workbench/guide/outbound";
 import HCOrder from "../pages/Workbench/order";
 import HCOrderInbound from "../pages/Workbench/order/inbound";
 import HCOrderOutbound from "../pages/Workbench/order/outbound";
+import HCTestIndex from "../components/HCTest";
 
 
 export default class HCRouter extends React.Component {
@@ -25,6 +26,7 @@ export default class HCRouter extends React.Component {
             { path: "workbench/guide/inbound", element: <HCWorkbenchInboundGuide /> },
             { path: "workbench/guide/outbound", element: <HCWorkbenchOutboundGuide /> },
             { path: "workbench/order", element: <HCOrder /> },
+            { path: "test", element: <HCTestIndex /> },
             { path: "*", element: <HCWorkbench /> }
         ], { basename: "" });
 
