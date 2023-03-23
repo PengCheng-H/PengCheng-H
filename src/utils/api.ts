@@ -199,7 +199,7 @@ class HCApi {
     }
 
     public async FinishWorkbenchWcsTask(box_code: string, details: { item_code: string, box_region_id: number, actual_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.workbench_task_confirm, { box_code, details });
+        return await this.SendPostRequest(hc_config.api.workbench_task_detail_confirm, { box_code, details });
     }
 
 
