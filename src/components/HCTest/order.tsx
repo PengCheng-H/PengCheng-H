@@ -180,8 +180,6 @@ const SecondEditableCell: React.FC<SecondEditableCellProps> = ({
     return <td {...restProps}>{childNode}</td>;
 };
 
-type EditableTableProps = Parameters<typeof Table>[0];
-
 const components = {
     body: {
         row: EditableRow,
@@ -196,16 +194,8 @@ const second_components = {
     },
 };
 
-interface DataType extends IHCInboundOrder { }
-
-interface SecondDataType extends IHCInboundOrderDetail { }
-
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
-
-type SecondColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
-
 const App: React.FC = () => {
-    const [inbound_orders, setInboundOrders] = useState<DataType[]>(order_list);
+    const [inbound_orders, setInboundOrders] = useState<IHCInboundOrder[]>([]);
     const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
     const [supplier_options, setSupplierOptions] = useState<DefaultOptionType[]>([]);
     const [item_code, setItemCode] = useState<string>("");
@@ -213,7 +203,7 @@ const App: React.FC = () => {
     const [items, setItems] = useState<IHCItem[]>([]);
     const [suppliers, setSuppliers] = useState<IHCSupplier[]>([]);
 
-    function handleSaveOrder(row: DataType) {
+    function handleSaveOrder(row: IHCInboundOrder) {
         const new_orders = [...inbound_orders];
         const new_order_index = new_orders.findIndex(item => row.key === item.key);
         const new_order = new_orders[new_order_index];
@@ -224,9 +214,9 @@ const App: React.FC = () => {
         setInboundOrders(new_orders);
     };
 
-    function handleSaveOrderDetail(row: SecondDataType) {
+    function handleSaveOrderDetail(row: IHCInboundOrderDetail) {
         const new_orders = [...inbound_orders];
-        const new_order_index = new_orders.findIndex(item => row.key === item.key);
+        const new_order_index = new_orders.findIndex(item => row.order_code === item.order_code);
         const new_order = new_orders[new_order_index];
         const new_order_details = [...new_order.order_details];
         const new_order_detail_index = new_order_details.findIndex(item => item.key === row.key);
@@ -335,20 +325,24 @@ const App: React.FC = () => {
 
     async function queryOrderList() {
         const get_order_result = await api.GetInboundOrders(item_code, supplier_code)
-        if (get_order_result && get_order_result.result_code === 0) {
-            let order_key = 0;
-            get_order_result.data.data_list.map(order => {
-                order.key = (order_key += 1);
-                order.order_cur_allocate_qty = order.order_qty - order.order_finished_qty - order.order_allocated_qty;
-                let detail_key = 0;
-                order.order_details.map(detail => {
-                    detail.key = (detail_key += 1);
-                    detail.order_cur_allocate_qty = detail.order_qty - detail.order_finished_qty - detail.order_allocated_qty;
-                });
-            });
-
-            setInboundOrders(get_order_result.data.data_list);
+        if (!get_order_result || get_order_result.result_code !== 0) {
+            message.error(`查询订单失败！err_msg: ${get_order_result.result_msg}`);
+            return
         }
+
+        let order_key = 0;
+        get_order_result.data.data_list.map(order => {
+            order.key = (order_key += 1);
+            order.order_cur_allocate_qty = order.order_qty - order.order_finished_qty - order.order_allocated_qty;
+            let detail_key = 0;
+            order.order_details.map(detail => {
+                detail.key = (detail_key += 1);
+                detail.order_cur_allocate_qty = detail.order_qty - detail.order_finished_qty - detail.order_allocated_qty;
+            });
+        });
+
+        message.success(`查询订单成功。订单总数 ${get_order_result.data.total_count}, 当前数量：${get_order_result.data.data_list.length}`);
+        setInboundOrders(get_order_result.data.data_list);
     }
 
     function confirmInboundOrders() {
@@ -364,19 +358,23 @@ const App: React.FC = () => {
     }
 
     const handleOrderDelete = (key: React.Key) => {
-        const newData = inbound_orders.filter((item) => item.key !== key);
-        setInboundOrders(newData);
+        const _orders = inbound_orders.filter((item) => item.key !== key);
+        setInboundOrders(_orders);
     };
 
     const handleOrderDetailDelete = (inbound_order_detail: IHCInboundOrderDetail) => {
-        // const newData = dataSource.filter((item) => item.order_details.filter(item_detail => {
-
-        // }));
-        // setDataSource(newData);
+        const new_orders = [...inbound_orders];
+        const new_order_index = new_orders.findIndex(item => inbound_order_detail.order_code === item.order_code);
+        const new_order = new_orders[new_order_index];
+        const new_order_details = new_order.order_details.filter(_detail => _detail.key !== inbound_order_detail.key);
+        new_order.order_details = new_order_details;
+        setInboundOrders(new_orders);
     };
 
     const first_columns = [
-        { title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "70px", fixed: 'left', },
+        {
+            title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "70px", fixed: 'left',
+        },
         // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: "150px", fixed: 'left' },
         { title: '订单号', dataIndex: 'external_order_code', key: 'external_order_code', align: 'center', width: "160px", fixed: 'left' },
         { title: '关联单号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: "150px", },
@@ -388,7 +386,7 @@ const App: React.FC = () => {
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: "130px", },
         {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "130px", editable: true,
-            // render: (value, record, index) => { return <InputNumber value={value}></InputNumber>; }
+            render: (value: any, record: any, index: number) => { return <InputNumber value={value}></InputNumber>; }
         },
         { title: '订单时间', dataIndex: 'order_time', key: 'order_time', align: 'center', width: "130px", },
         { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: "130px", },
@@ -402,17 +400,17 @@ const App: React.FC = () => {
             align: "center",
             width: "100px",
             fixed: 'right',
-            // render: (_, record: any, index: number) =>
-            //     inbound_orders.length >= 1 ? (
-            //         <div>
-            //             <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
-            //                 <Button type='primary'>关闭</Button>
-            //             </Popconfirm>
-            //             <Popconfirm title="确定删除吗?" onConfirm={() => handleOrderDelete(record.key)}>
-            //                 <Button style={{ marginTop: "10px" }}>删除</Button>
-            //             </Popconfirm>
-            //         </div>
-            //     ) : null,
+            render: (_: any, record: IHCInboundOrder, index: number) =>
+                inbound_orders.length >= 1 ? (
+                    <div>
+                        <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
+                            <Button type='primary'>关闭</Button>
+                        </Popconfirm>
+                        <Popconfirm title="确定删除吗?" onConfirm={() => handleOrderDelete(record.key)}>
+                            <Button style={{ marginTop: "10px" }}>删除</Button>
+                        </Popconfirm>
+                    </div>
+                ) : null,
         },
     ];
 
@@ -422,7 +420,7 @@ const App: React.FC = () => {
         }
         return {
             ...col,
-            onCell: (record: DataType) => ({
+            onCell: (record: IHCInboundOrder) => ({
                 record,
                 editable: col.editable,
                 dataIndex: col.dataIndex,
@@ -444,7 +442,7 @@ const App: React.FC = () => {
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '130px' },
         {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "130px", editable: true,
-            // render: (value, record, index) => { return <InputNumber value={value}></InputNumber>; }
+            render: (value: any, record: IHCInboundOrderDetail, index: number) => { return <InputNumber value={value}></InputNumber>; }
         },
         // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '130px' },
         // { title: '创建人', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '130px' },
@@ -459,17 +457,17 @@ const App: React.FC = () => {
             align: "center",
             width: "100px",
             fixed: 'right',
-            // render: (_, record: any, index: number) =>
-            //     inbound_orders.length >= 1 ? (
-            //         <div>
-            //             <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderDetailClose(record)}>
-            //                 <Button type='primary'>关闭</Button>
-            //             </Popconfirm>
-            //             <Popconfirm title="确定删除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
-            //                 <Button style={{ marginTop: "10px" }}>删除</Button>
-            //             </Popconfirm>
-            //         </div>
-            //     ) : null,
+            render: (_: any, record: IHCInboundOrderDetail, index: number) =>
+                inbound_orders.length >= 1 ? (
+                    <div>
+                        <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderDetailClose(record)}>
+                            <Button type='primary'>关闭</Button>
+                        </Popconfirm>
+                        <Popconfirm title="确定删除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
+                            <Button style={{ marginTop: "10px" }}>删除</Button>
+                        </Popconfirm>
+                    </div>
+                ) : null,
         },
     ];
 
@@ -479,7 +477,7 @@ const App: React.FC = () => {
         }
         return {
             ...col,
-            onCell: (record: SecondDataType) => ({
+            onCell: (record: IHCInboundOrderDetail) => ({
                 record,
                 editable: col.editable,
                 dataIndex: col.dataIndex,
@@ -495,7 +493,7 @@ const App: React.FC = () => {
             components={second_components}
             rowClassName={() => 'editable-row'}
             bordered
-            columns={second_columns_final as ColumnsType<{}>}
+            columns={second_columns_final as ColumnsType<IHCInboundOrderDetail>}
             dataSource={record.order_details || []}
             pagination={false}
             scroll={{ x: 960, y: 300 }}
@@ -535,7 +533,7 @@ const App: React.FC = () => {
                 components={components}
                 rowClassName={() => 'editable-row'}
                 bordered
-                columns={first_columns_final as ColumnsType<any>}
+                columns={first_columns_final as ColumnsType<IHCInboundOrder>}
                 expandable={{ expandedRowRender }}
                 dataSource={inbound_orders}
                 scroll={{ x: 960, y: 600 }}
