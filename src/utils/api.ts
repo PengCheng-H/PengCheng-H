@@ -129,6 +129,14 @@ class HCApi {
         return await this.SendPostRequest(hc_config.api.inbound_order_workbench_allocate, order_list);
     }
 
+    public async CloseInboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.inbound_order_close, { order_code });
+    }
+
+    public async CloseInboundOrderDetail(order_code: string, order_detail_id: number): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.inbound_order_detail_close, { order_code, order_detail_id });
+    }
+
     public async GetInboundOrders(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetInboundOrdersRes> {
         if (!item_code) { return hc_utils.CreateErrorRes(); }
 
@@ -140,6 +148,7 @@ class HCApi {
 
         return await this.SendGetRequest(hc_config.api.inbound_order_get, params);
     }
+
 
 
 
@@ -157,6 +166,14 @@ class HCApi {
 
     public async ActivateOutboundOrder(outbound_order_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.outbound_order_activate, { outbound_order_code });
+    }
+
+    public async CloseOutboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.outbound_order_close, { order_code });
+    }
+
+    public async CloseOutboundOrderDetail(order_code: string, order_detail_id: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.outbound_order_detail_close, { order_code, order_detail_id });
     }
 
     public async GetOutboundOrders(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetOutboundOrdersRes> {
