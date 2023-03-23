@@ -51,8 +51,8 @@
         "workbench_get": "/wms_server/workbench/get",
         "workbench_work_start": "/wms_server/workbench/start_work",
         "workbench_work_stop": "/wms_server/workbench/stop_work",
-        "workbench_task_detail_view": "/wms_server/workbench/box/detail",
-        "workbench_task_confirm": "/wms_server/workbench/task/finish",
+        "workbench_task_detail_view": "/wms_server/workbench/task_detail/view",
+        "workbench_task_detail_confirm": "/wms_server/workbench/task_detail/confirm",
         "wms_task_inbound_finish": "/api/wms/tsask/move-in/finish",
         "wms_task_outbound_finish": "/api/wms/tsask/move-out/finish",
         "wms_box_out_roller_finish": "/api/wms/wcs/box-out-roller/finish"
