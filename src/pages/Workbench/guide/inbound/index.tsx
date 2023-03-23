@@ -121,7 +121,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
         message.info("正在分配并激活订单，请稍后~");
 
         for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
-            const allocate_result = await api.AllocateWorkbenchInboundOrder([{ order_code, order_details: [...order_details] }]);
+            const allocate_result = await api.InboundOrderAutoAllocateList([{ order_code, order_details: [...order_details] }]);
             if (allocate_result && allocate_result.result_code == 0) {
                 message.success(`分配订单数量成功。订单编号: ${order_code}。`);
                 continue;

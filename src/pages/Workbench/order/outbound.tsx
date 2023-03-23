@@ -1,13 +1,14 @@
 import type { FormInstance } from 'antd/es/form';
 import { DefaultOptionType } from 'antd/es/cascader';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Form, Input, Popconfirm, Table, Cascader, InputNumber, InputRef, message } from 'antd';
+import { Button, Form, Input, Popconfirm, Table, Cascader, InputNumber, InputRef, message, Row, Col } from 'antd';
 
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
 import order_list from '../../../mocks/outbound_order.20230321.mock';
 import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
 import { ColumnsType } from 'antd/es/table';
+import moment from 'moment';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -428,44 +429,52 @@ const App: React.FC = () => {
 
     const first_columns = [
         {
-            title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "70px", fixed: 'left',
+            title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "65px", fixed: 'left',
         },
         // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: "150px", fixed: 'left' },
         { title: '订单号', dataIndex: 'external_order_code', key: 'external_order_code', align: 'center', width: "160px", fixed: 'left' },
-        { title: '关联单号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: "150px", },
+        { title: '关联单号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: "160px", },
         // { title: '关联单号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: "150px", },
-        { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "130px", },
-        { title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: "130px", },
-        { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: "130px", },
-        { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: "130px", },
-        { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: "130px", },
+        { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "100px", },
+        { title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: "100px", },
+        { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: "90px", },
+        { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: "110px", },
+        { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: "110px", },
         {
-            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "130px", editable: true,
-            // render: (value: any, record: any, index: number) => { return <InputNumber value={value}></InputNumber>; }
+            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: false,
         },
-        { title: '订单时间', dataIndex: 'order_time', key: 'order_time', align: 'center', width: "130px", },
-        { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: "130px", },
-        { title: '创建来源', dataIndex: 'created_from', key: 'created_from', align: 'center', width: "130px", },
+        {
+            title: '订单时间', dataIndex: 'order_time', key: 'order_time', align: 'center', width: "115px",
+            render: (value: any, record: any, index: number) => { return <span>{moment(value).format('YYYY-MM-DD HH:mm:ss')}</span>; }
+        },
+        {
+            title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: "115px",
+            render: (value: any, record: any, index: number) => { return <span>{moment(value).format('YYYY-MM-DD HH:mm:ss')}</span>; }
+        },
+        { title: '创建来源', dataIndex: 'created_from', key: 'created_from', align: 'center', width: "115px", },
         // { title: '创建人', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: "130px", },
-        { title: '最近操作时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: "130px", },
+        {
+            title: '操作时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: "115px",
+            render: (value: any, record: any, index: number) => { return <span>{moment(value).format('YYYY-MM-DD HH:mm:ss')}</span>; }
+        },
         // { title: '最近操作人', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: "130px", }
         {
             title: '操作',
             dataIndex: 'operation',
             align: "center",
-            width: "100px",
+            width: "180px",
             fixed: 'right',
             render: (_: any, record: IHCOutboundOrder, index: number) =>
                 outbound_orders.length >= 1 ? (
                     <div>
                         <Popconfirm title="确定分配吗?" onConfirm={() => confirmOutboundOrders(record)}>
-                            <Button type='primary'>确认分配</Button>
+                            <Button type='primary'>确认自动分配料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
-                            <Button style={{ marginTop: "10px" }} type='primary'>关闭</Button>
+                            <Button style={{ marginTop: "5px" }} type='primary'>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
-                            <Button style={{ marginTop: "10px" }}>移除</Button>
+                            <Button style={{ marginLeft: "15px" }}>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -489,22 +498,33 @@ const App: React.FC = () => {
     });
 
     const second_columns = [
-        { title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: '70px', fixed: 'left' },
-        { title: '行号', dataIndex: 'line_no', key: 'line_no', align: 'center', width: '100px', fixed: 'left' },
+        // { title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: '70px', fixed: 'left' },
+        { title: '行号', dataIndex: 'line_no', key: 'line_no', align: 'center', width: '65px', fixed: 'left' },
         // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '130px' },
-        // { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '130px' },
-        { title: '物品编码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '130px' },
-        { title: '供应商', dataIndex: 'supplier_code', key: 'supplier_code', align: 'center', width: '130px' },
-        { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: '130px' },
-        { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: '130px' },
-        { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '130px' },
+        { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '100px' },
+        { title: '物品编码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '100px' },
+        // { title: '物品名称', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
+        // { title: '物品规格', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
+        // { title: '物品型号', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
+        // { title: '物品单位', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
+        { title: '供应商', dataIndex: 'supplier_code', key: 'supplier_code', align: 'center', width: '100px' },
+        { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: '90px' },
+        { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: '110px' },
+        { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '110px' },
         {
-            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "130px", editable: true,
-            render: (value: any, record: IHCOutboundOrderDetail, index: number) => { return <InputNumber value={value}></InputNumber>; }
+            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: true,
+            render: (value: any, record: IHCOutboundOrderDetail, idx: number) => { return <InputNumber precision={2} value={value} ></InputNumber>; }
+        },
+        {
+            title: '指定料箱号', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "120px", editable: true,
+            render: (value: any, record: any, index: number) => { return <Input value={value}></Input>; }
         },
         // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '130px' },
         // { title: '创建人', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '130px' },
-        { title: '更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: '130px' },
+        {
+            title: '更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: '130px',
+            render: (value: any, record: any, index: number) => { return <span>{moment(value).format('YYYY-MM-DD HH:mm:ss')}</span>; }
+        },
         // { title: '操作人', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '130px' },
         // { title: '产品日期', dataIndex: 'production_date', key: 'production_date', align: 'center', width: '130px' },
         // { title: '存储日期', dataIndex: 'storage_date', key: 'storage_date', align: 'center', width: '130px' },
@@ -513,7 +533,7 @@ const App: React.FC = () => {
             title: '操作',
             dataIndex: 'operation',
             align: "center",
-            width: "100px",
+            width: "160px",
             fixed: 'right',
             render: (_: any, record: IHCOutboundOrderDetail, index: number) =>
                 outbound_orders.length >= 1 ? (
@@ -522,7 +542,7 @@ const App: React.FC = () => {
                             <Button type='primary'>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
-                            <Button style={{ marginTop: "10px" }}>移除</Button>
+                            <Button style={{ marginLeft: "5px" }}>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -555,13 +575,21 @@ const App: React.FC = () => {
             dataSource={record.order_details || []}
             pagination={false}
             scroll={{ x: 960, y: 300 }}
+            style={{ marginLeft: "65px" }}
         />;
     }
 
     return (
         <div>
-            <Button type="primary" style={{ margin: "10px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
-            <h1>出库单</h1>
+            <Row>
+                <Col span={12}>
+                    <h2 style={{ paddingLeft: "20px" }}>出库单分配</h2>
+                </Col>
+                <Col span={10}></Col>
+                <Col span={2}>
+                    <Button type="primary" style={{ marginTop: "20px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
+                </Col>
+            </Row>
             <div className="hc_panel">
                 <div className="search_box">
                     <label>*物品编码：</label>
