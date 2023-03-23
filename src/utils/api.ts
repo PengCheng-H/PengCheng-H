@@ -76,11 +76,6 @@ class HCApi {
         return await this.SendPostRequest(hc_config.api.box_update, { ...box });
     }
 
-    public async GetBoxDetail(box_code: string): Promise<IHttpRes.IHCGetBoxDetailRes> {
-        if (!box_code) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.workbench_task_detail_view, { box_code });
-    }
-
 
 
     public async AddOderType(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
@@ -151,7 +146,6 @@ class HCApi {
 
 
 
-
     public async QuickAddOutboundOrder(details: { supplier_code: string, item_code: string, quantity: number }[]): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.outbound_order_quick_add, { details });
     }
@@ -190,6 +184,26 @@ class HCApi {
 
 
 
+    public async WorkbenchStartWork(): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.workbench_work_start, {});
+    }
+
+    public async WorkbenchStopWork(): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.api.workbench_work_stop, {});
+    }
+
+    public async WorbenchTaskDetailView(box_code: string): Promise<IHttpRes.IHCGetBoxDetailRes> {
+        if (!box_code) { return hc_utils.CreateErrorRes(); }
+        return await this.SendGetRequest(hc_config.api.workbench_task_detail_view, { box_code });
+    }
+
+    public async WorkbenchTaskDetailConfirm(box_code: string, details: { item_code: string, box_region_id: number, actual_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
+        if (!box_code || !details) { return hc_utils.CreateErrorRes(); }
+        return await this.SendPostRequest(hc_config.api.workbench_task_detail_confirm, { box_code, details });
+    }
+
+
+
     public async ConfirmTask(task_code: string, quantity: number): Promise<IHttpRes.IHCGetWorkbenchWcsTasksRes> {
         return await this.SendPostRequest(hc_config.api.wms_task_confirm, { task_code, quantity });
     }
@@ -209,14 +223,6 @@ class HCApi {
 
     public async ActivateWcsTask(sub_task_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.api.wcs_task_activate, { sub_task_code });
-    }
-
-    public async ActivateWorkbenchWcsTask(): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.workbench_work_start, {});
-    }
-
-    public async FinishWorkbenchWcsTask(box_code: string, details: { item_code: string, box_region_id: number, actual_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.workbench_task_detail_confirm, { box_code, details });
     }
 
 
