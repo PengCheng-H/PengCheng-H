@@ -612,42 +612,28 @@ const App: React.FC = () => {
             </Row>
             <div className="hc_panel">
                 <div className="search_box">
-                    <Row>
-                        <label>*物品编码：</label>
-                        <Cascader
-                            className="search_text"
-                            options={item_options}
-                            placeholder="请输入物品码/物品名称/物品别名（必填）"
-                            showSearch={{ filter: onOptionFilter }}
-                            onChange={onItemOptionChange}
-                            onSearch={onItemOptionSearch}
-                        />
-                        <label style={{ marginLeft: "30px" }}>供应商编码：</label>
-                        <Cascader
-                            className="search_text"
-                            options={supplier_options}
-                            placeholder="请输入供应商码、供应商名称（选填）"
-                            showSearch={{ filter: onOptionFilter }}
-                            onChange={onSupplierOptionChange}
-                            onSearch={onSupplierOptionSearch}
-                        />
-                        <Button type="primary" icon={<SearchOutlined />} onClick={queryOrderList} style={{ marginLeft: "10px" }}>查询订单</Button>
-                        <Popconfirm title="确定分配吗?" onConfirm={() => confirmInboundOrders()}>
-                            <Button type="primary" icon={<CheckCircleOutlined />} style={{ marginLeft: "20px" }}>确认自动分配料箱</Button>
-                        </Popconfirm>
-                    </Row>
-                    <Row style={{ marginTop: '10px' }}>
-                        {/* <Button type="primary" onClick={queryOrderList} style={{ marginLeft: "10px" }}>查询订单</Button>
-                        <Popconfirm title="确定分配吗?" onConfirm={() => confirmInboundOrders()}>
-                            <Button type="primary" style={{ marginLeft: "20px" }}>确认自动分配料箱</Button>
-                        </Popconfirm> */}
-                        {/* <Popconfirm title="确定手工分配料箱(订单)吗？" onConfirm={() => confirmInboundOrders()}>
-                            <Button type='primary' style={{ marginLeft: "20px" }}>手工分配料箱(订单)</Button>
-                        </Popconfirm>
-                        <Popconfirm title="确定手工分配料箱(明细)吗？" onConfirm={() => confirmInboundOrders()}>
-                            <Button type='primary' style={{ marginLeft: "20px" }}>手工分配料箱(明细)</Button>
-                        </Popconfirm> */}
-                    </Row>
+                    <label>*物品编码：</label>
+                    <Cascader
+                        className="search_text"
+                        options={item_options}
+                        placeholder="请输入物品码/物品名称/物品别名（必填）"
+                        showSearch={{ filter: onOptionFilter }}
+                        onChange={onItemOptionChange}
+                        onSearch={onItemOptionSearch}
+                    />
+                    <label style={{ marginLeft: "30px" }}>供应商编码：</label>
+                    <Cascader
+                        className="search_text"
+                        options={supplier_options}
+                        placeholder="请输入供应商码、供应商名称（选填）"
+                        showSearch={{ filter: onOptionFilter }}
+                        onChange={onSupplierOptionChange}
+                        onSearch={onSupplierOptionSearch}
+                    />
+                    <Button type="primary" icon={<SearchOutlined />} onClick={queryOrderList} style={{ marginLeft: "10px" }}>查询订单</Button>
+                    <Popconfirm title="确定分配吗?" onConfirm={() => confirmInboundOrders()}>
+                        <Button type="primary" icon={<CheckCircleOutlined />} style={{ marginLeft: "20px" }}>确认自动分配料箱</Button>
+                    </Popconfirm>
                 </div>
             </div>
             <Table
