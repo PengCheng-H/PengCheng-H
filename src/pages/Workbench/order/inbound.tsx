@@ -606,11 +606,9 @@ const App: React.FC = () => {
                     <h2 style={{ paddingLeft: "20px" }}>入库单分配</h2>
                 </Col>
                 <Col span={7}></Col>
-                <Col span={3}>
-                    <Button type="primary" icon={<FormOutlined />} style={{ marginTop: "20px" }} onClick={() => { window.location.href = "/workbench/order/inbound/quick_add" }}>手工创建入库单</Button>
-                </Col>
-                <Col span={2}>
-                    <Button type="primary" icon={<RollbackOutlined />} style={{ marginTop: "20px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
+                <Col span={5}>
+                    <Button type="primary" icon={<FormOutlined />} onClick={() => { window.location.href = "/workbench/order/inbound/quick_add" }}>手工创建入库单</Button>
+                    <Button type="primary" icon={<RollbackOutlined />} style={{ marginTop: "20px", marginLeft: "10px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
                 </Col>
             </Row>
             <div className="hc_panel">
