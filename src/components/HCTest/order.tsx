@@ -250,7 +250,7 @@ const App: React.FC = () => {
             return;
         }
 
-        const get_items_result = await api.GetItems(item_code);
+        const get_items_result = await api.ItemsFindByText(item_code);
         if (get_items_result && get_items_result.result_code === 0) {
             const item_options: DefaultOptionType[] = [];
             for (let item of get_items_result.data.data_list) {
@@ -295,7 +295,7 @@ const App: React.FC = () => {
             return;
         }
 
-        const get_suppliers_result = await api.GetSuppliers(supplier_code);
+        const get_suppliers_result = await api.SupplierFindByText(supplier_code);
         if (get_suppliers_result && get_suppliers_result.result_code === 0) {
             const supplier_options: DefaultOptionType[] = [];
             for (let supplier of get_suppliers_result.data.data_list) {
@@ -324,7 +324,7 @@ const App: React.FC = () => {
     }
 
     async function queryOrderList() {
-        const get_order_result = await api.GetInboundOrders(item_code, supplier_code)
+        const get_order_result = await api.OrderInboundFind(item_code, supplier_code)
         if (!get_order_result || get_order_result.result_code !== 0) {
             message.error(`查询订单失败！err_msg: ${get_order_result.result_msg}`);
             return

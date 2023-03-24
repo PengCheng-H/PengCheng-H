@@ -1,14 +1,15 @@
+import moment from 'moment';
+import { ColumnsType } from 'antd/es/table';
 import type { FormInstance } from 'antd/es/form';
 import { DefaultOptionType } from 'antd/es/cascader';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Form, Input, Popconfirm, Table, Cascader, InputNumber, InputRef, message, Row, Col } from 'antd';
+import { SearchOutlined, CheckCircleOutlined, RollbackOutlined, BorderInnerOutlined, BorderOuterOutlined, DeleteOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
-import order_list from '../../../mocks/outbound_order.20230321.mock';
+import mock_order_list from '../../../mocks/outbound_order.20230321.mock';
 import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
-import { ColumnsType } from 'antd/es/table';
-import moment from 'moment';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -259,7 +260,7 @@ const App: React.FC = () => {
             return;
         }
 
-        const get_items_result = await api.GetItems(item_code);
+        const get_items_result = await api.ItemsFindByText(item_code);
         if (get_items_result && get_items_result.result_code === 0) {
             const item_options: DefaultOptionType[] = [];
             for (let item of get_items_result.data.data_list) {
@@ -304,7 +305,7 @@ const App: React.FC = () => {
             return;
         }
 
-        const get_suppliers_result = await api.GetSuppliers(supplier_code);
+        const get_suppliers_result = await api.SupplierFindByText(supplier_code);
         if (get_suppliers_result && get_suppliers_result.result_code === 0) {
             const supplier_options: DefaultOptionType[] = [];
             for (let supplier of get_suppliers_result.data.data_list) {
@@ -333,12 +334,18 @@ const App: React.FC = () => {
     }
 
     async function queryOrderList() {
+        if (hc_config.debug.enable && hc_config.debug.enable_mock) {
+            message.warning(`[debug] 查询订单成功。订单总数 ${mock_order_list.length}`);
+            setOutboundOrders(mock_order_list);
+            return;
+        }
+
         if (!item_code) {
             message.error('物品编码不能为空！');
             return;
         }
 
-        const get_order_result = await api.GetOutboundOrders(item_code, supplier_code)
+        const get_order_result = await api.OrderOutboundFind(item_code, supplier_code)
         if (!get_order_result || get_order_result.result_code !== 0) {
             message.error(`查询订单失败！err_msg: ${get_order_result.result_msg}`);
             return;
@@ -375,7 +382,7 @@ const App: React.FC = () => {
         });
 
         message.info(`向后台确认分配结果. 订单编码: ${outbound_order.order_code}`);
-        const allocate_result = await api.AllocateWorkbenchOutboundOrder(outbound_order.order_code, _order_details);
+        const allocate_result = await api.OrderOutboundAutoAllocateDetails(outbound_order.order_code, _order_details);
 
         if (allocate_result.result_code !== 0) {
             message.error(`订单分配数量失败！result_code: ${allocate_result.result_code} 提示: ${allocate_result.result_msg}`);
@@ -393,7 +400,7 @@ const App: React.FC = () => {
 
     async function handleOrderClose(order: IHCOutboundOrder) {
         message.info(`closing order. ${order.order_code}`);
-        const close_result = await api.CloseOutboundOrder(order.order_code);
+        const close_result = await api.OrderOutboundClose(order.order_code);
         if (close_result.result_code !== 0) {
             message.error(`关闭订单失败！订单编码: ${order.order_code} 提示: ${close_result.result_msg}`);
             return
@@ -404,7 +411,7 @@ const App: React.FC = () => {
 
     async function handleOrderDetailClose(order_detail: IHCOutboundOrderDetail) {
         message.info(`closing order detail. ${order_detail.line_no}`);
-        const close_result = await api.CloseOutboundOrderDetail(order_detail.order_code, order_detail.order_detail_id);
+        const close_result = await api.OrderOutboundDetailClose(order_detail.order_code, order_detail.order_detail_id);
         if (close_result.result_code !== 0) {
             message.error(`关闭订单行失败！订单编码: ${order_detail.order_code} 明细编码: ${order_detail.order_detail_id} 提示: ${close_result.result_msg}`);
             return
@@ -462,19 +469,19 @@ const App: React.FC = () => {
             title: '操作',
             dataIndex: 'operation',
             align: "center",
-            width: "180px",
+            width: "210px",
             fixed: 'right',
             render: (_: any, record: IHCOutboundOrder, index: number) =>
                 outbound_orders.length >= 1 ? (
                     <div>
                         <Popconfirm title="确定分配吗?" onConfirm={() => confirmOutboundOrders(record)}>
-                            <Button type='primary'>确认自动分配料箱</Button>
+                            <Button icon={<CheckCircleOutlined />} type='primary'>确认自动分配料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
-                            <Button style={{ marginTop: "5px" }} type='primary'>关闭</Button>
+                            <Button icon={<CloseCircleOutlined />} style={{ marginTop: "5px" }} type='primary'>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
-                            <Button style={{ marginLeft: "15px" }}>移除</Button>
+                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }}>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -533,16 +540,16 @@ const App: React.FC = () => {
             title: '操作',
             dataIndex: 'operation',
             align: "center",
-            width: "160px",
+            width: "210px",
             fixed: 'right',
             render: (_: any, record: IHCOutboundOrderDetail, index: number) =>
                 outbound_orders.length >= 1 ? (
                     <div>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderDetailClose(record)}>
-                            <Button type='primary'>关闭</Button>
+                            <Button icon={<CloseCircleOutlined />} type='primary'>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
-                            <Button style={{ marginLeft: "5px" }}>移除</Button>
+                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }}>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -587,7 +594,7 @@ const App: React.FC = () => {
                 </Col>
                 <Col span={10}></Col>
                 <Col span={2}>
-                    <Button type="primary" style={{ marginTop: "20px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
+                    <Button type="primary" icon={<RollbackOutlined />} style={{ marginTop: "20px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
                 </Col>
             </Row>
             <div className="hc_panel">
@@ -610,8 +617,7 @@ const App: React.FC = () => {
                         onChange={onSupplierOptionChange}
                         onSearch={onSupplierOptionSearch}
                     />
-                    <Button type="primary" onClick={queryOrderList} style={{ marginLeft: "30px" }}>查询订单</Button>
-                    {/* <Button type="primary" onClick={confirmOutboundOrders} style={{ marginLeft: "30px" }}>确认分配</Button> */}
+                    <Button type="primary" icon={<SearchOutlined />} onClick={queryOrderList} style={{ marginLeft: "10px" }}>查询订单</Button>
                 </div>
             </div>
             <Table

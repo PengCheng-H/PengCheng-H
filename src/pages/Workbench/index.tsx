@@ -3,7 +3,6 @@ import React from "react";
 import HCOrder from "./order";
 import HCPickStation from "./pick_station";
 import HCWorkbenchTask from "./task";
-import HCWorkbenchGuide from "./guide";
 import './index.css';
 import { Col, Row } from "antd";
 

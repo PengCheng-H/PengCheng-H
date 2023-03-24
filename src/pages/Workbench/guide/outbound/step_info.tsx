@@ -77,7 +77,7 @@ export default class HCOutboundOrderInfo extends React.Component<IHCOutboundOrde
     }
 
     async onSearch_item_code(value: string, cb: Function) {
-        const result = await api.GetItems(value);
+        const result = await api.ItemsFindByText(value);
 
         if (result.result_code.toString() === "0" && Array.isArray(result.data.data_list)) {
             const dataSource = result.data.data_list.map((item: IHCItem) => {
@@ -109,7 +109,7 @@ export default class HCOutboundOrderInfo extends React.Component<IHCOutboundOrde
     }
 
     async onSearch_supplier_code(value: string, cb: Function) {
-        const result = await api.GetSuppliers(value);
+        const result = await api.SupplierFindByText(value);
 
         if (result.result_code.toString() === "0" && Array.isArray(result.data.data_list)) {
             const dataSource = result.data.data_list.map((item: IHCSupplier) => {

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Col, Row } from "antd";
+import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 
 
 
@@ -10,12 +11,12 @@ export default class HCOrder extends React.Component {
             <Row>
                 <Col span={6} offset={4}>
                     <Link to={{ pathname: "/workbench/order/inbound" }}>
-                        <Button type="primary" style={{ width: "100%", height: "100px", margin: "10px auto", fontSize: "3em" }}>入库</Button>
+                        <Button icon={<LoginOutlined />} type="primary" style={{ width: "100%", height: "100px", margin: "10px auto", fontSize: "3em" }}>入库</Button>
                     </Link>
                 </Col>
                 <Col span={6} offset={4}>
                     <Link to={{ pathname: "/workbench/order/outbound" }}>
-                        <Button type="primary" style={{ width: "100%", height: "100px", margin: "10px auto", fontSize: "3em" }}>出库</Button>
+                        <Button icon={<LogoutOutlined />} type="primary" style={{ width: "100%", height: "100px", margin: "10px auto", fontSize: "3em" }}>出库</Button>
                     </Link>
                 </Col>
             </Row>
