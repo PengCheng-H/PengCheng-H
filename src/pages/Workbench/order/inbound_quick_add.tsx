@@ -1,8 +1,8 @@
 import { EditableProTable } from '@ant-design/pro-components';
 import React, { useRef, useState } from 'react';
-import { Button, Cascader, Col, Row, message } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PlusOutlined, RollbackOutlined } from '@ant-design/icons';
+import { Button, Cascader, Col, InputNumber, Modal, Row, message } from 'antd';
 
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
@@ -18,12 +18,14 @@ type DataSourceType = {
 
 export default () => {
     const actionRef = useRef<ActionType>();
-    const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
-    const [supplier_options, setSupplierOptions] = useState<DefaultOptionType[]>([]);
     const [item_code, setItemCode] = useState<string>("");
-    const [supplier_code, setSupplierCode] = useState<string>("");
+    const [item_quantity, setItemQuantity] = useState<number>(0);
+    const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
     const [items, setItems] = useState<IHCItem[]>([]);
-    const [suppliers, setSuppliers] = useState<IHCSupplier[]>([]);
+    const [supplier_code, setSupplierCode] = useState<string>("");
+    const [supplier_options, setSupplierOptions] = useState<DefaultOptionType[]>([]);
+    const [suppliers, setSuppliers] = useState<IHCSupplier[]>([])
+    const [is_show_item_modal, setIsShowItemModal] = useState<boolean>(false);
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
     const [dataSource, setDataSource] = useState<readonly DataSourceType[]>([]);
     const columns: ProColumns<DataSourceType>[] = [
@@ -51,7 +53,7 @@ export default () => {
         {
             title: '操作',
             valueType: 'option',
-            width: 80,
+            width: "90px",
             align: 'center',
             render: (text, record, _, action) => [
                 <a
@@ -198,6 +200,39 @@ export default () => {
         setSupplierCode("");
     }
 
+    function onAddItem() {
+        setIsShowItemModal(true);
+    }
+
+    function onAddItemCancel() {
+        clearItemParams();
+        setIsShowItemModal(false);
+    }
+
+    function onAddItemOk() {
+        if (!item_code || !item_quantity) {
+            message.error("物品编码或物品数量不能为空！");
+            return;
+        }
+
+        const newItem = {
+            id: (Math.random() * 1000000).toFixed(0),
+            item_code: item_code,
+            quantity: item_quantity
+        };
+
+        setDataSource([...dataSource, newItem]);
+        clearItemParams();
+        setIsShowItemModal(false);
+    }
+
+    function clearItemParams() {
+        setItemCode("");
+        setItemQuantity(0);
+        setItemOptions([]);
+        setItems([]);
+    }
+
     return <div>
         <Row className='hc_panel' style={{ backgroundColor: "#eee" }}>
             <Col span={8}>
@@ -219,14 +254,10 @@ export default () => {
             <Col span={5}>
                 <Button
                     type="primary"
-                    onClick={() => {
-                        actionRef.current?.addEditRecord?.({
-                            id: (Math.random() * 1000000).toFixed(0),
-                        });
-                    }}
+                    onClick={onAddItem}
                     icon={<PlusOutlined />}
                 >
-                    新增物品
+                    添加物品
                 </Button>
                 <Button type="primary" icon={<RollbackOutlined />} style={{ marginLeft: "5px" }} onClick={() => { window.location.href = "/workbench/order/inbound" }}>返回上一层</Button>
             </Col>
@@ -249,11 +280,29 @@ export default () => {
                     actionRender: (row, config, dom) => [dom.save, dom.cancel],
                 }}
             />
-
         </div>
         <Row>
             <Col span={22}></Col>
             <Col span={2}><Button type='primary' onClick={createOrder}>创建订单</Button></Col>
         </Row>
+
+        <Modal title="录入物品信息" open={is_show_item_modal} onOk={onAddItemOk} onCancel={onAddItemCancel}>
+            <Row style={{ marginTop: "30px" }}>
+                <label>*物品编码：</label>
+                <Cascader
+                    className="search_text"
+                    options={item_options}
+                    placeholder="请输入物品码/物品名称/物品别名（必填）"
+                    showSearch={{ filter: onOptionFilter }}
+                    onChange={onItemOptionChange}
+                    onSearch={onItemOptionSearch}
+                    style={{ width: "330px" }}
+                />
+            </Row>
+            <Row style={{ marginTop: "10px" }}>
+                <label>*物品编码：</label>
+                <InputNumber precision={2} value={item_quantity} min={0} max={999999999} onChange={(value: number | null) => { setItemQuantity(value || 0) }} />
+            </Row>
+        </Modal>
     </div>;
 };
