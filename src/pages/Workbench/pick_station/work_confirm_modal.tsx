@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Input, InputNumber, Modal, Row, message } from "antd";
+import { CheckCircleOutlined } from '@ant-design/icons';
+import { Button, InputNumber, Modal, Row, message } from "antd";
 
 import api from "../../../utils/api";
 import { IHCBoxDetail, IHCItem, IHCPickStation } from "../../../types/interface";
@@ -32,7 +33,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
 
     render(): React.ReactNode {
         return <div>
-            <Button type="primary" onClick={this.showModal.bind(this)}>作业详情确认</Button>
+            <Button icon={<CheckCircleOutlined />} type="primary" onClick={this.showModal.bind(this)}>作业详情确认</Button>
             <Modal title="作业详情" open={this.state.modal_open} okText="作业完成确认" cancelText="取消" onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
                 <Row><span>料箱编号：</span>{this.state.box_code}</Row>
                 <Row><span>任务类型：</span>{this.state.task_type == "0" ? "入库" : "出库"}</Row>
@@ -63,7 +64,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
             box_detail.key = box_detail.item_code;
             box_detail.item_detail = {} as IHCItem;
             box_detail.item_detail.key = box_detail.item_detail.item_code;
-            const get_item_detail_result = await api.GetItemDetail(box_detail.item_code);
+            const get_item_detail_result = await api.ItemDetailGet(box_detail.item_code);
             if (get_item_detail_result && get_item_detail_result.result_code == 0) {
                 box_detail.item_detail = get_item_detail_result.data;
             }

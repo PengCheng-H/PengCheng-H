@@ -28,7 +28,6 @@ export default class HCWorkbenchTask extends React.Component {
                 className='task_statuses'
             />
             <Button type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_task'>搜索任务</Button>
-            <Button type='primary' icon={<FireOutlined />} onClick={this.onBtnActivateClick.bind(this)} className='activate_task'>激活任务</Button>
             <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} className='table' />
         </div>
     }
@@ -42,7 +41,7 @@ export default class HCWorkbenchTask extends React.Component {
     }
 
     async onBtnSearchClick() {
-        const result: IHCGetWorkbenchWcsTasksRes = await api.GetWorkbenchWcsTasks(this.state.wcs_task_statuses);
+        const result: IHCGetWorkbenchWcsTasksRes = await api.WcsTaskFind(this.state.wcs_task_statuses);
 
         if (!result || result.result_code != 0) {
             message.error(`查询失败，${result.result_msg}。`)
@@ -60,15 +59,6 @@ export default class HCWorkbenchTask extends React.Component {
 
         this.setState({ task_list: result.data.data_list || [] });
         message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
-    }
-
-    async onBtnActivateClick() {
-        const activate_result: IHttpRes.IHCResponse = await api.WorkbenchStartWork();
-        if (activate_result && activate_result.result_code == 0) {
-            message.success("激活任务成功。");
-        } else {
-            message.error("激活任务失败！");
-        }
     }
 }
 

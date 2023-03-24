@@ -15,214 +15,218 @@ class HCApi {
 
 
 
-    public async AddItem(item: IBase.IHCItem): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.item_add, { ...item });
+    public async ItemAdd(item: IBase.IHCItem): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.item_add, { ...item });
     }
 
-    public async UodateItem(item: IBase.IHCItem): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.item_update, { ...item });
+    public async ItemUpdate(item: IBase.IHCItem): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.item_update, { ...item });
     }
 
-    public async GetItems(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetItemsRes> {
-        if (!text) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.item_list_get, { text, page_no, page_size });
+    public async ItemDetailGet(item_code: string): Promise<IHttpRes.IHCGetItemDetailRes> {
+        return await this.SendGetRequest(hc_config.urls.item_detail_get, { item_code });
     }
 
-    public async GetItemDetail(item_code: string): Promise<IHttpRes.IHCGetItemDetailRes> {
-        return await this.SendGetRequest(hc_config.api.item_detail_get, { item_code });
-    }
-
-
-
-    public async AddSupplier(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.supplier_add, { ...supplier });
-    }
-
-    public async UodateSupplier(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.supplier_update, { ...supplier });
-    }
-
-    public async GetSuppliers(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetSupplierRes> {
-        if (!text) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.supplier_list_get, { text, page_no, page_size });
-    }
-
-    public async GetSupplierDetail(supplier_code: string): Promise<IHttpRes.IHCGetSupplierDetailRes> {
-        return await this.SendGetRequest(hc_config.api.supplier_detail_get, { supplier_code });
+    public async ItemsFindByText(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetItemsRes> {
+        return await this.SendGetRequest(hc_config.urls.item_find_by_text, { text, page_no, page_size });
     }
 
 
 
-    public async AddLocation(location: IBase.IHCLocation): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.location_add, { ...location });
+
+    public async SupplierAdd(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.supplier_add, { ...supplier });
     }
 
-    public async UodateLocation(location: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.location_update, { ...location });
+    public async SupplierUpdate(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.supplier_update, { ...supplier });
     }
 
-    public async GetLocationDetail(location_code: string): Promise<IHttpRes.IHCGetLocationDetailRes> {
-        if (!location_code) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.location_detail_get, { location_code });
+    public async SupplierDetailGet(supplier_code: string): Promise<IHttpRes.IHCGetSupplierDetailRes> {
+        return await this.SendGetRequest(hc_config.urls.supplier_detail_get, { supplier_code });
     }
 
-
-
-    public async AddBox(box: IBase.IHCBox): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.box_add, { ...box });
-    }
-
-    public async UodateBox(box: IBase.IHCBox): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.box_update, { ...box });
+    public async SupplierFindByText(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetSupplierRes> {
+        return await this.SendGetRequest(hc_config.urls.supplier_list_get, { text, page_no, page_size });
     }
 
 
 
-    public async AddOderType(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.order_type_add, { order_type_code, order_type_name, work_type });
+    public async LocationAdd(location: IBase.IHCLocation): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.location_add, { ...location });
     }
 
-    public async UpdateOrderType(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.order_type_update, { order_type_code, order_type_name, work_type });
+    public async LocationUpdate(location: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.location_update, { ...location });
     }
 
-    public async GetOrderTypeDetail(order_type_code: string): Promise<IHttpRes.IHCGetOderTypeDetailRes> {
-        if (!order_type_code) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.order_type_detail_get, { order_type_code });
-    }
-
-
-
-    public async AddPickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.pick_station_add, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
-    }
-
-    public async UpdatePickStation(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.pick_station_update, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
-    }
-
-    public async GetPickStation(pick_station_code: string): Promise<IHttpRes.IHCGetPickStationRes> {
-        if (!pick_station_code) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.pick_station_get, { pick_station_code });
-    }
-
-    public async GetPickAllStation(): Promise<IHttpRes.IHCGetPickStationsRes> {
-        return await this.SendGetRequest(hc_config.api.pick_station_get_all, {});
+    public async LocationDetailGet(location_code: string): Promise<IHttpRes.IHCGetLocationDetailRes> {
+        return await this.SendGetRequest(hc_config.urls.location_detail_get, { location_code });
     }
 
 
 
-    public async QuickAddInboundOrder(supplier_code: string, details: { item_code: string, quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.inbound_order_quick_add, { supplier_code, details });
+    public async BoxAdd(box: IBase.IHCBox): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.box_add, { ...box });
     }
 
-    public async InboundOrderAutoAllocateFull(order_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.inbound_order_auto_allocate_full, { order_code });
+    public async BoxUpdate(box: IBase.IHCBox): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.box_update, { ...box });
     }
 
-    public async InboundOrderAutoAllocateList(order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.inbound_order_auto_allocate_list, order_list);
+    public async BoxDetailGet(box_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.box_get, { box_code });
     }
 
-    public async CloseInboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.inbound_order_close, { order_code });
+
+
+    public async OrderTypeAdd(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_type_add, { order_type_code, order_type_name, work_type });
     }
 
-    public async CloseInboundOrderDetail(order_code: string, order_detail_id: number): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.inbound_order_detail_close, { order_code, order_detail_id });
+    public async OrderTypeUpdate(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_type_update, { order_type_code, order_type_name, work_type });
     }
 
-    public async GetInboundOrders(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetInboundOrdersRes> {
-        if (!item_code) { return hc_utils.CreateErrorRes(); }
+    public async OrderTypeDetailGet(order_type_code: string): Promise<IHttpRes.IHCGetOderTypeDetailRes> {
+        return await this.SendGetRequest(hc_config.urls.order_type_detail_get, { order_type_code });
+    }
 
+
+
+    public async PickStationAdd(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.pick_station_add, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
+    }
+
+    public async PickStationUpdate(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.pick_station_update, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
+    }
+
+    public async PickStationDetailGet(pick_station_code: string): Promise<IHttpRes.IHCGetPickStationRes> {
+        return await this.SendGetRequest(hc_config.urls.pick_station_get, { pick_station_code });
+    }
+
+    public async PickStationGetAll(): Promise<IHttpRes.IHCGetPickStationsRes> {
+        return await this.SendGetRequest(hc_config.urls.pick_station_get_all, {});
+    }
+
+
+
+    public async OrderInboundQuickAdd(supplier_code: string, details: { item_code: string, quantity: number }[]): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_quick_add, { supplier_code, details });
+    }
+
+    public async OrderInboundAutoAllocateFull(order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_auto_allocate_full, { order_code });
+    }
+
+    public async OrderInboundAutoAllocateList(order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[]): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_auto_allocate_list, order_list);
+    }
+
+    public async OrderInboundManualAllocateFull(order_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_manual_allocate_full, { order_code, box_code });
+    }
+
+    public async OrderInboundManualAllocateDetails(order_code: string, order_details: { order_detail_id: number, box_code: string, allocate_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_manual_allocate_details, { order_code, order_details });
+    }
+
+    public async OrderInboundClose(order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_close, { order_code });
+    }
+
+    public async OrderInboundDetailClose(order_code: string, order_detail_id: number): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_detail_close, { order_code, order_detail_id });
+    }
+
+    public async OrderInboundFind(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetInboundOrdersRes> {
         const params: object[] = [{ item_code }];
         if (supplier_code) { params.push({ supplier_code }); }
         order_statuses?.forEach(value => {
             params.push({ order_statuses: value });
         });
 
-        return await this.SendGetRequest(hc_config.api.inbound_order_get, params);
+        return await this.SendGetRequest(hc_config.urls.order_inbound_find, params);
     }
 
 
 
-    public async QuickAddOutboundOrder(details: { supplier_code: string, item_code: string, quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.outbound_order_quick_add, { details });
+    public async OrderOutboundQuickAdd(details: { supplier_code: string, item_code: string, quantity: number }[]): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_outbound_quick_add, { details });
     }
 
-    public async AllocateOutboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.outbound_order_allocate, { order_code });
+    public async OrderOutboundAutoAllocateFull(order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_outbound_auto_allocate_full, { order_code });
     }
 
-    public async AllocateWorkbenchOutboundOrder(order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.outbound_order_workbench_allocate, { order_code, order_details });
+    public async OrderOutboundAutoAllocateDetails(order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_outbound_auto_allocate_details, { order_code, order_details });
     }
 
-    public async ActivateOutboundOrder(outbound_order_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.outbound_order_activate, { outbound_order_code });
+    public async OrderOutboundActivate(outbound_order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_outbound_activate, { outbound_order_code });
     }
 
-    public async CloseOutboundOrder(order_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.outbound_order_close, { order_code });
+    public async OrderOutboundPause(outbound_order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_outbound_pause, { outbound_order_code });
     }
 
-    public async CloseOutboundOrderDetail(order_code: string, order_detail_id: number): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.outbound_order_detail_close, { order_code, order_detail_id });
+    public async OrderOutboundClose(order_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_outbound_close, { order_code });
     }
 
-    public async GetOutboundOrders(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetOutboundOrdersRes> {
-        if (!item_code) { return hc_utils.CreateErrorRes(); }
+    public async OrderOutboundDetailClose(order_code: string, order_detail_id: number): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_outbound_detail_close, { order_code, order_detail_id });
+    }
 
+    public async OrderOutboundFind(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetOutboundOrdersRes> {
         const params: object[] = [{ item_code }];
         if (supplier_code) { params.push({ supplier_code }); }
         order_statuses?.forEach(value => {
             params.push({ order_statuses: value });
         });
 
-        return await this.SendGetRequest(hc_config.api.outbound_order_get, params);
+        return await this.SendGetRequest(hc_config.urls.order_outbound_find, params);
     }
 
 
 
     public async WorkbenchStartWork(): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.workbench_work_start, {});
+        return await this.SendPostRequest(hc_config.urls.workbench_start_work, {});
     }
 
     public async WorkbenchStopWork(): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.workbench_work_stop, {});
+        return await this.SendPostRequest(hc_config.urls.workbench_stop_work, {});
     }
 
     public async WorbenchTaskDetailView(box_code: string): Promise<IHttpRes.IHCGetBoxDetailRes> {
-        if (!box_code) { return hc_utils.CreateErrorRes(); }
-        return await this.SendGetRequest(hc_config.api.workbench_task_detail_view, { box_code });
+        return await this.SendGetRequest(hc_config.urls.workbench_task_detail_view, { box_code });
     }
 
     public async WorkbenchTaskDetailConfirm(box_code: string, details: { item_code: string, box_region_id: number, actual_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        if (!box_code || !details) { return hc_utils.CreateErrorRes(); }
-        return await this.SendPostRequest(hc_config.api.workbench_task_detail_confirm, { box_code, details });
+        return await this.SendPostRequest(hc_config.urls.workbench_task_detail_confirm, { box_code, details });
     }
 
 
 
-    public async ConfirmTask(task_code: string, quantity: number): Promise<IHttpRes.IHCGetWorkbenchWcsTasksRes> {
-        return await this.SendPostRequest(hc_config.api.wms_task_confirm, { task_code, quantity });
+    public async WmsTaskConfirm(task_code: string, quantity: number): Promise<IHttpRes.IHCGetWorkbenchWcsTasksRes> {
+        return await this.SendPostRequest(hc_config.urls.wms_task_confirm, { task_code, quantity });
     }
 
 
 
-    public async GetWorkbenchWcsTasks(wcs_task_statuses: number[] = [0]): Promise<IHttpRes.IHCGetWorkbenchWcsTasksRes> {
-        if (!wcs_task_statuses) { return hc_utils.CreateErrorRes(); }
-
+    public async WcsTaskFind(wcs_task_statuses: number[] = [0]): Promise<IHttpRes.IHCGetWorkbenchWcsTasksRes> {
         const params: object[] = [];
         wcs_task_statuses?.forEach(value => {
             params.push({ wcs_task_statuses: value });
         });
 
-        return await this.SendGetRequest(hc_config.api.wcs_task_find, params);
+        return await this.SendGetRequest(hc_config.urls.wcs_task_find, params);
     }
 
-    public async ActivateWcsTask(sub_task_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.api.wcs_task_activate, { sub_task_code });
+    public async WcsTaskActivate(sub_task_code: string): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.wcs_task_activate, { sub_task_code });
     }
 
 

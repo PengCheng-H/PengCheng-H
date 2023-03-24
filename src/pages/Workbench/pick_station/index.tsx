@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, message } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
+import { SearchOutlined, PlayCircleOutlined, PauseCircleOutlined } from '@ant-design/icons';
 
 import api from "../../../utils/api";
 import * as IHttpRes from "../../../types/http_response.interface";
@@ -13,9 +14,9 @@ export default class HCPickStation extends React.Component {
 
     render(): React.ReactNode {
         return <div className="hc_panel">
-            <Button type="primary" onClick={this.GetPickStations.bind(this)} style={{ margin: "5px" }}>更新拣货台状态</Button>
-            <Button type="primary" onClick={this.StartWork.bind(this)} style={{ margin: "5px" }}>开始作业</Button>
-            <Button type="primary" onClick={this.StopWork.bind(this)} style={{ margin: "5px" }}>停止作业</Button>
+            <Button type="primary" icon={<SearchOutlined />} onClick={this.GetPickStations.bind(this)} style={{ margin: "5px" }}>更新拣货台状态</Button>
+            <Button type="primary" icon={<PlayCircleOutlined />} onClick={this.StartWork.bind(this)} style={{ margin: "5px" }}>开始作业</Button>
+            <Button type="primary" icon={<PauseCircleOutlined />} onClick={this.StopWork.bind(this)} style={{ margin: "5px" }}>停止作业</Button>
             <Table columns={pick_station_headers} dataSource={this.state.pick_station_list} pagination={{ pageSize: 10 }} className='table' />
         </div>;
     }
@@ -25,7 +26,7 @@ export default class HCPickStation extends React.Component {
     }
 
     async GetPickStations() {
-        const result: IHttpRes.IHCGetPickStationsRes = await api.GetPickAllStation();
+        const result: IHttpRes.IHCGetPickStationsRes = await api.PickStationGetAll();
         if (!result || result.result_code !== 0) {
             message.error(`获取拣货台信息失败，${result.result_msg}。`)
             return;

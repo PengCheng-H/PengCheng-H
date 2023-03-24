@@ -121,7 +121,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
         message.info("正在分配并激活订单，请稍后~");
 
         for (let [order_code, order_details] of Object.entries(this.child_allocate.state.item_allocated_details as [])) {
-            const allocate_result = await api.InboundOrderAutoAllocateList([{ order_code, order_details: [...order_details] }]);
+            const allocate_result = await api.OrderInboundAutoAllocateList([{ order_code, order_details: [...order_details] }]);
             if (allocate_result && allocate_result.result_code == 0) {
                 message.success(`分配订单数量成功。订单编号: ${order_code}。`);
                 continue;
@@ -134,7 +134,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
     }
 
     async quick_add_orders() {
-        const result = await api.QuickAddInboundOrder(
+        const result = await api.OrderInboundQuickAdd(
             this.state.supplier_code, [
             {
                 item_code: this.state.item_code,
@@ -152,7 +152,7 @@ export default class HCInboundTaskGuide extends React.Component<{}, {}> {
 
     async allocate_orders(from_quikc_add_order: boolean = false) {
         message.info(`入库物品: ${this.state.item_code}, 入库数量: ${this.state.item_quantity}`);
-        const get_result: IHttpRes.IHCGetInboundOrdersRes = await api.GetInboundOrders(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
+        const get_result: IHttpRes.IHCGetInboundOrdersRes = await api.OrderInboundFind(this.state.item_code, this.state.supplier_code, [0, 1, 2, 3])
 
         if (!get_result || get_result.result_code != 0) {
             message.warning(`分配物品数量到订单失败！物品: ${this.state.item_code}, 数量: ${this.state.item_quantity}。`);
