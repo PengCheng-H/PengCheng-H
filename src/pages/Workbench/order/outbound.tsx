@@ -4,7 +4,7 @@ import type { FormInstance } from 'antd/es/form';
 import { DefaultOptionType } from 'antd/es/cascader';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Form, Input, Popconfirm, Table, Cascader, InputNumber, InputRef, message, Row, Col } from 'antd';
-import { SearchOutlined, CheckCircleOutlined, RollbackOutlined, BorderInnerOutlined, BorderOuterOutlined, DeleteOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { SearchOutlined, CheckCircleOutlined, RollbackOutlined, FormOutlined, DeleteOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
@@ -592,7 +592,10 @@ const App: React.FC = () => {
                 <Col span={12}>
                     <h2 style={{ paddingLeft: "20px" }}>出库单分配</h2>
                 </Col>
-                <Col span={10}></Col>
+                <Col span={7}></Col>
+                <Col span={3}>
+                    <Button type="primary" icon={<FormOutlined />} style={{ marginTop: "20px" }} onClick={() => { window.location.href = "/workbench/order/outbound/quick_add" }}>手工创建出库单</Button>
+                </Col>
                 <Col span={2}>
                     <Button type="primary" icon={<RollbackOutlined />} style={{ marginTop: "20px" }} onClick={() => { window.location.href = "/workbench" }}>返回主页</Button>
                 </Col>
