@@ -478,10 +478,10 @@ const App: React.FC = () => {
                             <Button icon={<CheckCircleOutlined />} type='primary'>确认自动分配料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
-                            <Button icon={<CloseCircleOutlined />} style={{ marginTop: "5px" }} type='primary'>关闭</Button>
+                            <Button icon={<CloseCircleOutlined />} style={{ marginTop: "5px" }} type='primary' danger>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
-                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }}>移除</Button>
+                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }} danger>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -546,10 +546,10 @@ const App: React.FC = () => {
                 outbound_orders.length >= 1 ? (
                     <div>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderDetailClose(record)}>
-                            <Button icon={<CloseCircleOutlined />} type='primary'>关闭</Button>
+                            <Button icon={<CloseCircleOutlined />} type='primary' danger>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
-                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }}>移除</Button>
+                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }} danger>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,

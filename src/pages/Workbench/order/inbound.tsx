@@ -488,13 +488,13 @@ const App: React.FC = () => {
                             <Button type='primary' icon={<BorderOuterOutlined />}>手工分配整单料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
-                            <Button icon={<CloseCircleOutlined />} style={{ marginLeft: "5px" }} type='primary'>关闭</Button>
+                            <Button icon={<CloseCircleOutlined />} style={{ marginLeft: "5px" }} type='primary' danger>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定手工分配明细料箱吗？" onConfirm={() => confirmInboundOrders()}>
                             <Button type='primary' icon={<BorderInnerOutlined />} style={{ marginTop: "5px" }}>手工分配明细料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
-                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }}>移除</Button>
+                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }} danger>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -559,10 +559,10 @@ const App: React.FC = () => {
                 inbound_orders.length >= 1 ? (
                     <div>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderDetailClose(record)}>
-                            <Button icon={<CloseCircleOutlined />} type='primary'>关闭</Button>
+                            <Button icon={<CloseCircleOutlined />} type='primary' danger>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDetailDelete(record)}>
-                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }}>移除</Button>
+                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }} danger>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
