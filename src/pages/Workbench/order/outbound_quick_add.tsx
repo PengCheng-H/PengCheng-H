@@ -42,6 +42,12 @@ export default () => {
             },
         },
         {
+            title: '物品扩展编码',
+            dataIndex: 'item_extend_code1',
+            valueType: 'text',
+            align: 'center',
+        },
+        {
             title: '物品数量',
             dataIndex: 'quantity',
             align: 'center',
@@ -216,7 +222,7 @@ export default () => {
         setIsShowItemModal(false);
     }
 
-    function onAddItemOk() {
+    async function onAddItemOk() {
         if (!item_code || !item_quantity) {
             message.error("物品编码或物品数量不能为空！");
             return;
@@ -225,9 +231,17 @@ export default () => {
         const newItem = {
             id: (Math.random() * 1000000).toFixed(0),
             item_code: item_code,
+            item_extend_code1: "",
             quantity: item_quantity,
             supplier_code: supplier_code
         };
+
+        const get_item_result = await api.ItemDetailGet(item_code);
+        if (get_item_result && get_item_result.result_code === 0) {
+            const _item: IHCItem = get_item_result.data;
+            newItem.item_extend_code1 = _item.item_extend_code1;
+        }
+
 
         setDataSource([...dataSource, newItem]);
         clearItemParams();
@@ -300,7 +314,7 @@ export default () => {
                 />
             </Row>
             <Row style={{ marginTop: "10px" }}>
-                <label>*物品编码：</label>
+                <label>*物品数量：</label>
                 <InputNumber precision={2} value={item_quantity} min={0} max={999999999} onChange={(value: number | null) => { setItemQuantity(value || 0) }} />
             </Row>
             <Row style={{ marginTop: "10px" }}>

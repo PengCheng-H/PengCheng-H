@@ -117,11 +117,14 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
             modal_open: false,
             loadding: false
         });
+
+        window.location.href = "/";
     }
 
     handleCancel() {
         this.setState({
             modal_open: false
         });
+        window.location.href = "/";
     }
 }
