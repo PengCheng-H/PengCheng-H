@@ -10,8 +10,8 @@ import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
 import * as IHttpReq from "../../../types/http_request.interface";
 import mock_order_list from '../../../mocks/inbound_order.20230321.mock';
-import { IHCInboundOrder, IHCInboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
 import { em_order_status } from '../../../types/enum';
+import { IHCInboundOrder, IHCInboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -587,6 +587,7 @@ const App: React.FC = () => {
         }
 
         message.success(`关闭订单成功。订单编码: ${order.order_code}`);
+        await queryOrderList();
     }
 
     async function handleOrderDetailClose(order_detail: IHCInboundOrderDetail) {
@@ -598,6 +599,7 @@ const App: React.FC = () => {
         }
 
         message.success(`关闭订单行成功。订单编码: ${order_detail.order_code}, 明细编码: ${order_detail.order_detail_id}`);
+        await queryOrderList();
     }
 
     const handleOrderDelete = (key: React.Key) => {
@@ -644,7 +646,7 @@ const App: React.FC = () => {
         {
             title: '指定料箱和货位', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "210px", editable: false,
             render: (value: any, record: IHCInboundOrder, index: number) => {
-                return <Cascader
+                return record.order_status in ["0", "1", "2", "3"] ? <Cascader
                     id={record.order_code}
                     key={record.order_code}
                     className="search_text"
@@ -654,7 +656,7 @@ const App: React.FC = () => {
                     onChange={(_box_codes) => { onOrderBoxOptionChange(_box_codes, record); }}
                     onSearch={(_box_code) => { onOrderBoxOptionSearch(_box_code, record); }}
                     style={{ width: "185px" }}
-                />;
+                /> : <span>-</span>;
             }
         },
         {
@@ -733,12 +735,12 @@ const App: React.FC = () => {
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '110px' },
         {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px",
-            render: (value: any, record: IHCInboundOrderDetail, index: number) => { return <InputNumber precision={2} value={value}></InputNumber>; }
+            render: (value: any, record: IHCInboundOrderDetail, index: number) => { return record.order_status in ["0", "1", "2", "3"] ? <InputNumber precision={2} value={value}></InputNumber> : <span>0</span>; }
         },
         {
             title: '指定料箱和货位', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "210px", editable: false,
             render: (value: any, record: IHCInboundOrderDetail, index: number) => {
-                return <Cascader
+                return record.order_status in ["0", "1", "2", "3"] ? <Cascader
                     id={record.order_code}
                     key={record.order_code}
                     className="search_text"
@@ -748,7 +750,7 @@ const App: React.FC = () => {
                     onChange={(_box_codes) => { onOrderDetailBoxOptionChange(_box_codes, record); }}
                     onSearch={(_box_code) => { onOrderDetailBoxOptionSearch(_box_code, record); }}
                     style={{ width: "180px" }}
-                />;
+                /> : <span>-</span>;
             }
         },
         // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '130px' },
