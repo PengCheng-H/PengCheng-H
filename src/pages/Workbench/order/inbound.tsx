@@ -518,15 +518,13 @@ const App: React.FC = () => {
         }
 
         message.success(`订单分配数量成功。`);
-        setTimeout(() => {
-            window.location.href = "/";
-        }, 1000);
+        await queryOrderList();
     }
 
     // 手工整单分配料箱
     async function onManualAllocateOrder(order: IHCInboundOrder) {
         if (!order || !order.order_code || !order.allocate_box_code) {
-            message.error('未找到料箱，无法分配！');
+            message.error(`未指定料箱，无法手工整单分配！订单号: ${order.order_code}`);
             return;
         }
 
@@ -539,6 +537,7 @@ const App: React.FC = () => {
         }
 
         message.success(`手工整单分配成功。订单号: ${order.order_code}, 料箱号: ${order.allocate_box_code}`);
+        await queryOrderList();
     }
 
     // 手工整单分配料箱
@@ -549,15 +548,18 @@ const App: React.FC = () => {
         }
 
         const params: IHttpReq.IHCOrderInboundManaulAllocateDetailsReq = { order_code: order.order_code, order_details: [] };
-        order.order_details.forEach(_detail => {
+        for (let _detail of order.order_details) {
             if (_detail.allocate_box_code) {
                 params.order_details.push({
                     order_detail_id: _detail.order_detail_id,
                     allocate_quantity: _detail.order_cur_allocate_qty,
                     box_code: _detail.allocate_box_code
                 });
+            } else {
+                message.error(`未指定明细料箱，无法手工明细分配！订单号: ${order.order_code}, 行号: ${_detail.line_no}`);
+                return;
             }
-        });
+        }
 
         message.info(`请求手工明细分配. 订单号: ${order.order_code}, 物品数量: ${params.order_details.length}`);
         const allocate_result = await api.OrderInboundManualAllocateDetails(params);
@@ -568,6 +570,7 @@ const App: React.FC = () => {
         }
 
         message.success(`手工明细分配成功。订单号: ${order.order_code}, 物品数量: ${params.order_details.length}`);
+        await queryOrderList();
     }
 
     async function handleOrderClose(order: IHCInboundOrder) {
@@ -608,10 +611,18 @@ const App: React.FC = () => {
 
     const first_columns = [
         {
-            title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "65px", fixed: 'left',
+            title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "80px", fixed: 'left',
+            sorter: {
+                compare: (a: IHCInboundOrder, b: IHCInboundOrder) => a.key - b.key,
+            }
         },
         // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: "150px", fixed: 'left' },
-        { title: '订单号', dataIndex: 'external_order_code', key: 'external_order_code', align: 'center', width: "160px", fixed: 'left' },
+        {
+            title: '订单号', dataIndex: 'external_order_code', key: 'external_order_code', align: 'center', width: "160px", fixed: 'left',
+            sorter: {
+                compare: (a: IHCInboundOrder, b: IHCInboundOrder) => a.external_order_code.localeCompare(b.external_order_code),
+            }
+        },
         // { title: '关联单号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: "160px", },
         // { title: '关联单号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: "150px", },
         { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "100px", },
