@@ -579,7 +579,7 @@ const App: React.FC = () => {
     }
 
     async function handleOrderClose(order: IHCInboundOrder) {
-        message.info(`closing order. ${order.order_code}`);
+        message.info(`请求关闭订单. ${order.order_code}`);
         const close_result = await api.OrderInboundClose(order.order_code);
         if (close_result.result_code !== 0) {
             message.error(`关闭订单失败！订单编码: ${order.order_code} 提示: ${close_result.result_msg}`);
@@ -591,7 +591,7 @@ const App: React.FC = () => {
     }
 
     async function handleOrderDetailClose(order_detail: IHCInboundOrderDetail) {
-        message.info(`closing order detail. ${order_detail.line_no}`);
+        message.info(`请求关闭订单行. ${order_detail.line_no}`);
         const close_result = await api.OrderInboundDetailClose(order_detail.order_code, order_detail.order_detail_id);
         if (close_result.result_code !== 0) {
             message.error(`关闭订单行失败！订单编码: ${order_detail.order_code} 明细编码: ${order_detail.order_detail_id} 提示: ${close_result.result_msg}`);

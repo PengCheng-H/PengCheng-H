@@ -350,11 +350,11 @@ const App: React.FC = () => {
     }
 
     function handleOrderClose(order: IHCInboundOrder) {
-        message.info(`closing order. ${order.order_code}`);
+        message.info(`请求关闭订单. ${order.order_code}`);
     }
 
     function handleOrderDetailClose(order_detail: IHCInboundOrderDetail) {
-        message.info(`closing order detail. ${order_detail.line_no}`);
+        message.info(`请求关闭订单行. ${order_detail.line_no}`);
     }
 
     const handleOrderDelete = (key: React.Key) => {
