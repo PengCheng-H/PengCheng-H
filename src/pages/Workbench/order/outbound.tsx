@@ -397,12 +397,7 @@ const App: React.FC = () => {
         }
 
         message.success(`订单分配数量成功。`);
-
-        setItemCode("");
-        setSupplierCode("");
-        setItemOptions([]);
-        setSupplierOptions([]);
-        setOutboundOrders([]);
+        await queryOrderList();
     }
 
     async function handleOrderClose(order: IHCOutboundOrder) {
