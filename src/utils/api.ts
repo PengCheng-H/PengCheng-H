@@ -233,7 +233,8 @@ class HCApi {
 
 
     public async InventoryFindEmptyBoxes(params: IHttpReq.IHCInventoryFindEmptyBoxesReq = {}): Promise<IHttpRes.IHCInventoryFindEmptyBoxesRes> {
-        params.pagination_param = params.pagination_param || { page_no: 1, page_size: 200 };
+        params.page_no = params.page_no || 1;
+        params.page_size = params.page_size || 200;
         return await this.SendGetRequest(hc_config.urls.inventory_find_empty_boxes, params);
     }
 
