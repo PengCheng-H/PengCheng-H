@@ -11,6 +11,7 @@ import hc_config from "../../../config/index.json";
 import * as IHttpReq from "../../../types/http_request.interface";
 import mock_order_list from '../../../mocks/inbound_order.20230321.mock';
 import { IHCInboundOrder, IHCInboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
+import { em_order_status } from '../../../types/enum';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -434,6 +435,10 @@ const App: React.FC = () => {
             return;
         }
 
+        get_order_result.data.data_list.sort((a, b) => {
+            return a.external_order_code.localeCompare(b.external_order_code);
+        });
+
         let order_key = 0;
         get_order_result.data.data_list.map(order => {
             order.key = (order_key += 1);
@@ -625,7 +630,10 @@ const App: React.FC = () => {
         },
         // { title: '关联单号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: "160px", },
         // { title: '关联单号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: "150px", },
-        { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "100px", },
+        {
+            title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "105px",
+            render: (value: string) => { return em_order_status[`${value}`]; }
+        },
         // { title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: "100px", },
         { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: "90px", },
         { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: "110px", },
@@ -710,7 +718,10 @@ const App: React.FC = () => {
         // { title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: '70px', fixed: 'left' },
         { title: '行号', dataIndex: 'line_no', key: 'line_no', align: 'center', width: '65px', fixed: 'left' },
         // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '130px' },
-        { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '100px' },
+        {
+            title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '105px',
+            render: (value: string) => { return em_order_status[`${value}`]; }
+        },
         { title: '物品编码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '100px' },
         // { title: '物品名称', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
         // { title: '物品规格', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
