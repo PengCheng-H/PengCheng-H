@@ -12,6 +12,7 @@ import * as IHttpReq from "../../../types/http_request.interface";
 import mock_order_list from '../../../mocks/inbound_order.20230321.mock';
 import { em_order_status } from '../../../types/enum';
 import { IHCInboundOrder, IHCInboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
+import './index.css';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -200,6 +201,7 @@ const second_components = {
 
 const App: React.FC = () => {
     type IBox = { box_code: string, location_code: string };
+    const [global_loadding, setGlobalLoadding] = useState<boolean>(false);
     const [inbound_orders, setInboundOrders] = useState<IHCInboundOrder[]>([]);
     const [item_code, setItemCode] = useState<string>("");
     const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
@@ -500,6 +502,7 @@ const App: React.FC = () => {
             return;
         }
 
+        setGlobalLoadding(true);
         const _order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[] = [];
         inbound_orders.forEach(_order => {
             const __order: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] } = { order_code: _order.order_code, order_details: [] };
@@ -523,6 +526,7 @@ const App: React.FC = () => {
         }
 
         message.success(`订单分配数量成功。`);
+        setGlobalLoadding(false);
         await queryOrderList();
     }
 
@@ -684,16 +688,16 @@ const App: React.FC = () => {
                 inbound_orders.length >= 1 ? (
                     <div>
                         <Popconfirm title="确定手工整单分配料箱吗？" onConfirm={() => onManualAllocateOrder(record)}>
-                            <Button type='primary' icon={<BorderOuterOutlined />}>手工分配整单料箱</Button>
+                            <Button type='primary' icon={<BorderOuterOutlined />} loading={global_loadding}>手工分配整单料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
-                            <Button icon={<CloseCircleOutlined />} style={{ marginLeft: "5px" }} type='primary' danger>关闭</Button>
+                            <Button icon={<CloseCircleOutlined />} style={{ marginLeft: "5px" }} type='primary' danger loading={global_loadding}>关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定手工分配明细料箱吗？" onConfirm={() => onManualAllocateOrderDetails(record)}>
-                            <Button type='primary' icon={<BorderInnerOutlined />} style={{ marginTop: "5px" }}>手工分配明细料箱</Button>
+                            <Button type='primary' icon={<BorderInnerOutlined />} style={{ marginTop: "5px" }} loading={global_loadding}>手工分配明细料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
-                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }} danger>移除</Button>
+                            <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }} danger loading={global_loadding}>移除</Button>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -845,9 +849,9 @@ const App: React.FC = () => {
                         onChange={onSupplierOptionChange}
                         onSearch={onSupplierOptionSearch}
                     />
-                    <Button type="primary" icon={<SearchOutlined />} onClick={queryOrderList} style={{ marginLeft: "10px" }}>查询订单</Button>
+                    <Button type="primary" icon={<SearchOutlined />} onClick={queryOrderList} style={{ marginLeft: "10px" }} loading={global_loadding}>查询订单</Button>
                     <Popconfirm title="确定分配吗?" onConfirm={() => onAutoAllocateList()}>
-                        <Button type="primary" icon={<CheckCircleOutlined />} style={{ marginLeft: "20px" }}>确认自动分配料箱</Button>
+                        <Button type="primary" icon={<CheckCircleOutlined />} style={{ marginLeft: "20px" }} loading={global_loadding}>确认自动分配料箱</Button>
                     </Popconfirm>
                 </div>
             </div>

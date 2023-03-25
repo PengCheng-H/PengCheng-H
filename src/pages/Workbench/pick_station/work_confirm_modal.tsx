@@ -16,6 +16,7 @@ interface WorkConfirmModalState {
     modal_open: boolean;
     pick_station: IHCPickStation;
     box_details: IHCBoxDetail[];
+    loadding: boolean;
 }
 
 export default class WorkConfirmModal extends React.Component<WorkConfirmModalProps, WorkConfirmModalState> {
@@ -28,13 +29,14 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
             modal_open: false,
             pick_station: this.props.pick_station,
             box_details: [],
+            loadding: false
         };
     }
 
     render(): React.ReactNode {
         return <div>
             <Button icon={<CheckCircleOutlined />} type="primary" onClick={this.showModal.bind(this)}>作业详情确认</Button>
-            <Modal title="作业详情" open={this.state.modal_open} okText="作业完成确认" cancelText="取消" onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
+            <Modal title="作业详情" open={this.state.modal_open} okText="作业完成确认" cancelText="取消" onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)} confirmLoading={this.state.loadding}>
                 <Row><span>料箱编号：</span>{this.state.box_code}</Row>
                 <Row><span>任务类型：</span>{this.state.task_type == "0" ? "入库" : "出库"}</Row>
                 {this.state.box_details.length ? this.state.box_details.map(box_detail => {
@@ -92,6 +94,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
     }
 
     async handleOk() {
+        this.setState({ loadding: true });
         let details: { item_code: string, box_region_id: number, actual_quantity: number }[] = [];
 
         this.state.box_details.map(item => {
@@ -112,14 +115,17 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
 
         this.setState({
             modal_open: false,
+            loadding: false
         }, () => {
-            window.location.href = ""
+            setTimeout(window.location.reload, 1000)
         });
     }
 
     handleCancel() {
         this.setState({
             modal_open: false
+        }, () => {
+            setTimeout(window.location.reload, 1000)
         });
     }
 }
