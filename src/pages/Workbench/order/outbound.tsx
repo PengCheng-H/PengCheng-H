@@ -10,6 +10,7 @@ import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
 import mock_order_list from '../../../mocks/outbound_order.20230321.mock';
 import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
+import { em_order_status } from '../../../types/enum';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -197,12 +198,13 @@ const second_components = {
 };
 
 const App: React.FC = () => {
+    type IBox = { box_code: string, location_code: string };
     const [outbound_orders, setOutboundOrders] = useState<IHCOutboundOrder[]>([]);
-    const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
-    const [supplier_options, setSupplierOptions] = useState<DefaultOptionType[]>([]);
     const [item_code, setItemCode] = useState<string>("");
-    const [supplier_code, setSupplierCode] = useState<string>("");
+    const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
     const [items, setItems] = useState<IHCItem[]>([]);
+    const [supplier_code, setSupplierCode] = useState<string>("");
+    const [supplier_options, setSupplierOptions] = useState<DefaultOptionType[]>([]);
     const [suppliers, setSuppliers] = useState<IHCSupplier[]>([]);
 
     function handleSaveOrder(row: IHCOutboundOrder) {
@@ -351,6 +353,10 @@ const App: React.FC = () => {
             return;
         }
 
+        get_order_result.data.data_list.sort((a, b) => {
+            return a.external_order_code.localeCompare(b.external_order_code);
+        });
+
         let order_key = 0;
         get_order_result.data.data_list.map(order => {
             order.key = (order_key += 1);
@@ -437,12 +443,23 @@ const App: React.FC = () => {
     const first_columns = [
         {
             title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "65px", fixed: 'left',
+            sorter: {
+                compare: (a: IHCOutboundOrder, b: IHCOutboundOrder) => a.key - b.key,
+            }
         },
         // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: "150px", fixed: 'left' },
-        { title: '订单号', dataIndex: 'external_order_code', key: 'external_order_code', align: 'center', width: "160px", fixed: 'left' },
+        {
+            title: '订单号', dataIndex: 'external_order_code', key: 'external_order_code', align: 'center', width: "160px", fixed: 'left',
+            sorter: {
+                compare: (a: IHCOutboundOrder, b: IHCOutboundOrder) => a.external_order_code.localeCompare(b.external_order_code),
+            }
+        },
         { title: '关联单号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: "160px", },
         // { title: '关联单号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: "150px", },
-        { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "100px", },
+        {
+            title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "100px",
+            render: (value: string) => { return em_order_status[`${value}`]; }
+        },
         { title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: "100px", },
         { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: "90px", },
         { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: "110px", },
@@ -508,7 +525,10 @@ const App: React.FC = () => {
         // { title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: '70px', fixed: 'left' },
         { title: '行号', dataIndex: 'line_no', key: 'line_no', align: 'center', width: '65px', fixed: 'left' },
         // { title: 'WMS单号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '130px' },
-        { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '100px' },
+        {
+            title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '100px',
+            render: (value: string) => { return em_order_status[`${value}`]; }
+        },
         { title: '物品编码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '100px' },
         // { title: '物品名称', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
         // { title: '物品规格', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
@@ -521,10 +541,6 @@ const App: React.FC = () => {
         {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: true,
             render: (value: any, record: IHCOutboundOrderDetail, idx: number) => { return <InputNumber precision={2} value={value} ></InputNumber>; }
-        },
-        {
-            title: '指定料箱号', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "120px", editable: true,
-            render: (value: any, record: any, index: number) => { return <Input value={value}></Input>; }
         },
         // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '130px' },
         // { title: '创建人', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '130px' },
