@@ -239,3 +239,8 @@ export interface IHCPickStation {
     last_updated_operator: string
 }
 
+export interface IHCPagination {
+    page_no?: number
+    page_size?: number
+    total_count?: number
+}

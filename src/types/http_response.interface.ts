@@ -90,3 +90,12 @@ export interface IHCGetWorkbenchWcsTasksRes extends IHCResponse {
         data_list: IHCWcsTask[]
     }
 }
+
+export interface IHCInventoryFindEmptyBoxesRes extends IHCResponse {
+    data: {
+        total_count: number
+        page_no: number
+        page_size: number
+        data_list: { box_code: string, location_code: string }[]
+    }
+}

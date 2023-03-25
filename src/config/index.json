@@ -47,13 +47,14 @@
         "order_outbound_auto_allocate_details": "/wms_server/order/outbound/auto_allocate_details",
         "order_outbound_close": "/wms_server/order/outbound/close",
         "order_outbound_detail_close": "/wms_server/order/outbound/close_detail",
-        "wms_task_confirm": "/wms_server/wms_task/confirm",
-        "wcs_task_find": "/wms_server/wcs_task/find",
-        "wcs_task_activate": "/wms_server/wcs_task/activate_sub_task",
         "workbench_get": "/wms_server/workbench/get",
         "workbench_start_work": "/wms_server/workbench/start_work",
         "workbench_stop_work": "/wms_server/workbench/stop_work",
         "workbench_task_detail_view": "/wms_server/workbench/task_detail/view",
-        "workbench_task_detail_confirm": "/wms_server/workbench/task_detail/confirm"
+        "workbench_task_detail_confirm": "/wms_server/workbench/task_detail/confirm",
+        "wms_task_confirm": "/wms_server/wms_task/confirm",
+        "wcs_task_find": "/wms_server/wcs_task/find",
+        "wcs_task_activate": "/wms_server/wcs_task/activate_sub_task",
+        "inventory_find_empty_boxes": "/wms_server/inventory/find_empty_boxes"
     }
 }

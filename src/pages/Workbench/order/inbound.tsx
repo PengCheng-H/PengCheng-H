@@ -8,6 +8,7 @@ import { SearchOutlined, CheckCircleOutlined, RollbackOutlined, BorderInnerOutli
 
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
+import * as IHttpReq from "../../../types/http_request.interface";
 import mock_order_list from '../../../mocks/inbound_order.20230321.mock';
 import { IHCInboundOrder, IHCInboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
 
@@ -197,13 +198,16 @@ const second_components = {
 };
 
 const App: React.FC = () => {
+    type IBox = { box_code: string, location_code: string };
     const [inbound_orders, setInboundOrders] = useState<IHCInboundOrder[]>([]);
-    const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
-    const [supplier_options, setSupplierOptions] = useState<DefaultOptionType[]>([]);
     const [item_code, setItemCode] = useState<string>("");
-    const [supplier_code, setSupplierCode] = useState<string>("");
+    const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
     const [items, setItems] = useState<IHCItem[]>([]);
+    const [supplier_code, setSupplierCode] = useState<string>("");
+    const [supplier_options, setSupplierOptions] = useState<DefaultOptionType[]>([]);
     const [suppliers, setSuppliers] = useState<IHCSupplier[]>([]);
+    const [box_options, setBoxOptions] = useState<DefaultOptionType[]>([]);
+    const [boxes, setBoxes] = useState<IBox[]>([]);
 
     function handleSaveOrder(row: IHCInboundOrder) {
         const new_orders = [...inbound_orders];
@@ -244,8 +248,8 @@ const App: React.FC = () => {
     }
 
     function onItemOptionChange(item_codes: any) {
-        const item_code = item_codes ? item_codes[0] : "";
-        setItemCode(item_code);
+        const _item_code = item_codes ? item_codes[0] : "";
+        setItemCode(_item_code);
     }
 
     async function onItemOptionSearch(item_code: string) {
@@ -261,19 +265,22 @@ const App: React.FC = () => {
         }
 
         const get_items_result = await api.ItemsFindByText(item_code);
-        if (get_items_result && get_items_result.result_code === 0) {
-            const item_options: DefaultOptionType[] = [];
-            for (let item of get_items_result.data.data_list) {
-                const item_label = `[${item.item_code}]-[${item.item_extend_code1}]-[${item.item_name}]`;
-                item_options.push({
-                    label: item_label,
-                    value: item.item_code
-                });
-            }
-
-            setItems(get_items_result.data.data_list);
-            setItemOptions(item_options);
+        if (get_items_result.result_code !== 0) {
+            message.error(`搜索物品失败！err_msg: ${get_items_result.result_msg}`);
+            return;
         }
+
+        const item_options: DefaultOptionType[] = [];
+        for (let item of get_items_result.data.data_list) {
+            const item_label = `[${item.item_code}]-[${item.item_extend_code1}]-[${item.item_name}]`;
+            item_options.push({
+                label: item_label,
+                value: item.item_code
+            });
+        }
+
+        setItems(get_items_result.data.data_list);
+        setItemOptions(item_options);
     }
 
     function onItemOptionSearchTest(item_code: string) {
@@ -289,8 +296,8 @@ const App: React.FC = () => {
     }
 
     function onSupplierOptionChange(supplier_codes: any) {
-        const supplier_code = supplier_codes ? supplier_codes[0] : "";
-        setSupplierCode(supplier_code);
+        const _supplier_code = supplier_codes ? supplier_codes[0] : "";
+        setSupplierCode(_supplier_code);
     }
 
     async function onSupplierOptionSearch(supplier_code: string) {
@@ -306,19 +313,22 @@ const App: React.FC = () => {
         }
 
         const get_suppliers_result = await api.SupplierFindByText(supplier_code);
-        if (get_suppliers_result && get_suppliers_result.result_code === 0) {
-            const supplier_options: DefaultOptionType[] = [];
-            for (let supplier of get_suppliers_result.data.data_list) {
-                const supplier_label = `[${supplier.supplier_code}]-[${supplier.supplier_name}]`;
-                supplier_options.push({
-                    label: supplier_label,
-                    value: supplier.supplier_code
-                });
-            }
-
-            setSuppliers(get_suppliers_result.data.data_list);
-            setSupplierOptions(supplier_options);
+        if (get_suppliers_result.result_code !== 0) {
+            message.error(`搜索供应商失败！err_msg: ${get_suppliers_result.result_msg}`);
+            return;
         }
+
+        const supplier_options: DefaultOptionType[] = [];
+        for (let supplier of get_suppliers_result.data.data_list) {
+            const supplier_label = `[${supplier.supplier_code}]-[${supplier.supplier_name}]`;
+            supplier_options.push({
+                label: supplier_label,
+                value: supplier.supplier_code
+            });
+        }
+
+        setSuppliers(get_suppliers_result.data.data_list);
+        setSupplierOptions(supplier_options);
     }
 
     function onSupplierOptionSearchTest(supplier_code: string) {
@@ -331,6 +341,79 @@ const App: React.FC = () => {
         }
 
         setSupplierOptions(supplier_options);
+    }
+
+    function onOrderBoxOptionChange(_box_codes: any, order: IHCInboundOrder) {
+        const _box_code = _box_codes ? _box_codes[0] : "";
+        order.allocate_box_code = _box_code;
+        const new_orders = [...inbound_orders];
+        const new_order_index = new_orders.findIndex(item => order.order_code === item.order_code);
+        const new_order = new_orders[new_order_index];
+        new_orders.splice(new_order_index, 1, {
+            ...new_order,
+            ...order,
+        });
+        setInboundOrders(new_orders);
+    }
+
+    async function onOrderBoxOptionSearch(_box_code_part: string, order: IHCInboundOrder) {
+        const get_boxes_result = await api.InventoryFindEmptyBoxes();
+        // const get_boxes_result = await api.InventoryFindEmptyBoxes({ box_code: _box_code_part });
+        if (get_boxes_result.result_code !== 0) {
+            message.error(`搜索料箱失败！err_msg: ${get_boxes_result.result_msg}`);
+            return;
+        }
+
+        const _box_options: DefaultOptionType[] = [];
+        for (let box of get_boxes_result.data.data_list) {
+            const box_label = `[${box.box_code}]_[${box.location_code}]`;
+            _box_options.push({
+                label: box_label,
+                value: box.box_code
+            });
+        }
+
+        setBoxes(get_boxes_result.data.data_list);
+        setBoxOptions(_box_options);
+    }
+
+    function onOrderDetailBoxOptionChange(_box_codes: any, order_detail: IHCInboundOrderDetail) {
+        const _box_code = _box_codes ? _box_codes[0] : "";
+        order_detail.allocate_box_code = _box_code;
+        const new_orders = [...inbound_orders];
+        const new_order_index = new_orders.findIndex(item => order_detail.order_code === item.order_code);
+        const new_order = new_orders[new_order_index];
+        const new_order_details = [...new_order.order_details];
+        const new_order_detail_index = new_order_details.findIndex(item => item.key === order_detail.key);
+        const new_order_detail = new_order_details[new_order_detail_index];
+        new_order_details.splice(new_order_detail_index, 1, {
+            ...new_order_detail,
+            ...order_detail,
+        });
+        new_order.order_details = new_order_details;
+        new_order.order_cur_allocate_qty = 0;
+        new_order.order_details.forEach(_detail => {
+            new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty + Math.floor(_detail.order_cur_allocate_qty);
+        });
+        setInboundOrders(new_orders);
+    }
+
+    async function onOrderDetailBoxOptionSearch(_box_code_part: string, order_detail: IHCInboundOrderDetail) {
+        const get_boxes_result = await api.InventoryFindEmptyBoxes();
+        // const get_boxes_result = await api.InventoryFindEmptyBoxes({ box_code: _box_code_part });
+        if (get_boxes_result && get_boxes_result.result_code === 0) {
+            const _box_options: DefaultOptionType[] = [];
+            for (let box of get_boxes_result.data.data_list) {
+                const box_label = `[${box.box_code}]_[${box.location_code}]`;
+                _box_options.push({
+                    label: box_label,
+                    value: box.box_code
+                });
+            }
+
+            setBoxes(get_boxes_result.data.data_list);
+            setBoxOptions(_box_options);
+        }
     }
 
     async function queryOrderList() {
@@ -370,7 +453,43 @@ const App: React.FC = () => {
         setInboundOrders(get_order_result.data.data_list);
     }
 
-    async function confirmInboundOrders() {
+    // 自动整单分配: TODO
+    async function onAutoAllocateFull() {
+        if (!inbound_orders || !inbound_orders.length) {
+            message.error('未找到订单信息，无法分配！');
+            return;
+        }
+
+        // const _order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[] = [];
+        // inbound_orders.forEach(_order => {
+        //     const __order: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] } = { order_code: _order.order_code, order_details: [] };
+
+        //     _order.order_details.forEach(_detail => {
+        //         __order.order_details.push({
+        //             order_detail_id: _detail.order_detail_id,
+        //             allocate_quantity: _detail.order_cur_allocate_qty as number
+        //         });
+        //     });
+
+        //     _order_list.push(__order)
+        // });
+
+        // message.info(`向后台确认分配结果. 订单数量: ${_order_list.length}`);
+        // const allocate_result = await api.OrderInboundAutoAllocateList(_order_list);
+
+        // if (allocate_result.result_code !== 0) {
+        //     message.error(`订单分配数量失败！result_code: ${allocate_result.result_code} 提示: ${allocate_result.result_msg}`);
+        //     return
+        // }
+
+        // message.success(`订单分配数量成功。`);
+        // setTimeout(() => {
+        //     window.location.href = "/";
+        // }, 1000);
+    }
+
+    // 自动分配料箱
+    async function onAutoAllocateList() {
         if (!inbound_orders || !inbound_orders.length) {
             message.error('未找到订单信息，无法分配！');
             return;
@@ -402,6 +521,53 @@ const App: React.FC = () => {
         setTimeout(() => {
             window.location.href = "/";
         }, 1000);
+    }
+
+    // 手工整单分配料箱
+    async function onManualAllocateOrder(order: IHCInboundOrder) {
+        if (!order || !order.order_code || !order.allocate_box_code) {
+            message.error('未找到料箱，无法分配！');
+            return;
+        }
+
+        message.info(`请求手工整单分配. 订单号: ${order.order_code}, 料箱号: ${order.allocate_box_code}`);
+        const allocate_result = await api.OrderInboundManualAllocateFull(order.order_code, order.allocate_box_code as string);
+
+        if (allocate_result.result_code !== 0) {
+            message.error(`手工整单分配失败！result_code: ${allocate_result.result_code} 提示: ${allocate_result.result_msg}`);
+            return
+        }
+
+        message.success(`手工整单分配成功。订单号: ${order.order_code}, 料箱号: ${order.allocate_box_code}`);
+    }
+
+    // 手工整单分配料箱
+    async function onManualAllocateOrderDetails(order: IHCInboundOrder) {
+        if (!order || !order.order_details || !order.order_details.length) {
+            message.error('未找到明细，无法分配！');
+            return;
+        }
+
+        const params: IHttpReq.IHCOrderInboundManaulAllocateDetailsReq = { order_code: order.order_code, order_details: [] };
+        order.order_details.forEach(_detail => {
+            if (_detail.allocate_box_code) {
+                params.order_details.push({
+                    order_detail_id: _detail.order_detail_id,
+                    allocate_quantity: _detail.order_cur_allocate_qty,
+                    box_code: _detail.allocate_box_code
+                });
+            }
+        });
+
+        message.info(`请求手工明细分配. 订单号: ${order.order_code}, 物品数量: ${params.order_details.length}`);
+        const allocate_result = await api.OrderInboundManualAllocateDetails(params);
+
+        if (allocate_result.result_code !== 0) {
+            message.error(`手工明细分配失败！result_code: ${allocate_result.result_code} 提示: ${allocate_result.result_msg}`);
+            return
+        }
+
+        message.success(`手工明细分配成功。订单号: ${order.order_code}, 物品数量: ${params.order_details.length}`);
     }
 
     async function handleOrderClose(order: IHCInboundOrder) {
@@ -449,7 +615,7 @@ const App: React.FC = () => {
         // { title: '关联单号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: "160px", },
         // { title: '关联单号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: "150px", },
         { title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: "100px", },
-        { title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: "100px", },
+        // { title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: "100px", },
         { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: "90px", },
         { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: "110px", },
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: "110px", },
@@ -457,8 +623,20 @@ const App: React.FC = () => {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px"
         },
         {
-            title: '指定料箱号', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "120px", editable: true,
-            render: (value: any, record: any, index: number) => { return <Input value={value}></Input>; }
+            title: '指定料箱和货位', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "210px", editable: false,
+            render: (value: any, record: IHCInboundOrder, index: number) => {
+                return <Cascader
+                    id={record.order_code}
+                    key={record.order_code}
+                    className="search_text"
+                    options={box_options}
+                    placeholder="[料箱号]_[货位号]"
+                    showSearch={{ filter: onOptionFilter }}
+                    onChange={(_box_codes) => { onOrderBoxOptionChange(_box_codes, record); }}
+                    onSearch={(_box_code) => { onOrderBoxOptionSearch(_box_code, record); }}
+                    style={{ width: "185px" }}
+                />;
+            }
         },
         {
             title: '订单时间', dataIndex: 'order_time', key: 'order_time', align: 'center', width: "115px",
@@ -484,13 +662,13 @@ const App: React.FC = () => {
             render: (_: any, record: IHCInboundOrder, index: number) =>
                 inbound_orders.length >= 1 ? (
                     <div>
-                        <Popconfirm title="确定手工整单分配料箱吗？" onConfirm={() => confirmInboundOrders()}>
+                        <Popconfirm title="确定手工整单分配料箱吗？" onConfirm={() => onManualAllocateOrder(record)}>
                             <Button type='primary' icon={<BorderOuterOutlined />}>手工分配整单料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => handleOrderClose(record)}>
                             <Button icon={<CloseCircleOutlined />} style={{ marginLeft: "5px" }} type='primary' danger>关闭</Button>
                         </Popconfirm>
-                        <Popconfirm title="确定手工分配明细料箱吗？" onConfirm={() => confirmInboundOrders()}>
+                        <Popconfirm title="确定手工分配明细料箱吗？" onConfirm={() => onManualAllocateOrderDetails(record)}>
                             <Button type='primary' icon={<BorderInnerOutlined />} style={{ marginTop: "5px" }}>手工分配明细料箱</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
@@ -532,12 +710,24 @@ const App: React.FC = () => {
         { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: '110px' },
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '110px' },
         {
-            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: true,
+            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px",
             render: (value: any, record: IHCInboundOrderDetail, index: number) => { return <InputNumber precision={2} value={value}></InputNumber>; }
         },
         {
-            title: '指定料箱号', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "120px", editable: true,
-            render: (value: any, record: any, index: number) => { return <Input value={value}></Input>; }
+            title: '指定料箱和货位', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "210px", editable: false,
+            render: (value: any, record: IHCInboundOrderDetail, index: number) => {
+                return <Cascader
+                    id={record.order_code}
+                    key={record.order_code}
+                    className="search_text"
+                    options={box_options}
+                    placeholder="[料箱号]_[货位号]"
+                    showSearch={{ filter: onOptionFilter }}
+                    onChange={(_box_codes) => { onOrderDetailBoxOptionChange(_box_codes, record); }}
+                    onSearch={(_box_code) => { onOrderDetailBoxOptionSearch(_box_code, record); }}
+                    style={{ width: "180px" }}
+                />;
+            }
         },
         // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '130px' },
         // { title: '创建人', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '130px' },
@@ -632,7 +822,7 @@ const App: React.FC = () => {
                         onSearch={onSupplierOptionSearch}
                     />
                     <Button type="primary" icon={<SearchOutlined />} onClick={queryOrderList} style={{ marginLeft: "10px" }}>查询订单</Button>
-                    <Popconfirm title="确定分配吗?" onConfirm={() => confirmInboundOrders()}>
+                    <Popconfirm title="确定分配吗?" onConfirm={() => onAutoAllocateList()}>
                         <Button type="primary" icon={<CheckCircleOutlined />} style={{ marginLeft: "20px" }}>确认自动分配料箱</Button>
                     </Popconfirm>
                 </div>

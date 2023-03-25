@@ -2,6 +2,7 @@ import hc_utils from ".";
 import hc_config from "../config/index.json";
 import HCHttpClient from "./http_client";
 import * as IBase from "../types/interface";
+import * as IHttpReq from "../types/http_request.interface";
 import * as IHttpRes from "../types/http_response.interface";
 
 
@@ -128,8 +129,8 @@ class HCApi {
         return await this.SendPostRequest(hc_config.urls.order_inbound_manual_allocate_full, { order_code, box_code });
     }
 
-    public async OrderInboundManualAllocateDetails(order_code: string, order_details: { order_detail_id: number, box_code: string, allocate_quantity: number }[]): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.urls.order_inbound_manual_allocate_details, { order_code, order_details });
+    public async OrderInboundManualAllocateDetails(params: IHttpReq.IHCOrderInboundManaulAllocateDetailsReq): Promise<IHttpRes.IHCResponse> {
+        return await this.SendPostRequest(hc_config.urls.order_inbound_manual_allocate_details, params);
     }
 
     public async OrderInboundClose(order_code: string): Promise<IHttpRes.IHCResponse> {
@@ -227,6 +228,13 @@ class HCApi {
 
     public async WcsTaskActivate(sub_task_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.urls.wcs_task_activate, { sub_task_code });
+    }
+
+
+
+    public async InventoryFindEmptyBoxes(params: IHttpReq.IHCInventoryFindEmptyBoxesReq = {}): Promise<IHttpRes.IHCInventoryFindEmptyBoxesRes> {
+        params.pagination_param = params.pagination_param || { page_no: 1, page_size: 200 };
+        return await this.SendGetRequest(hc_config.urls.inventory_find_empty_boxes, params);
     }
 
 
