@@ -9,8 +9,8 @@ import { SearchOutlined, CheckCircleOutlined, RollbackOutlined, FormOutlined, De
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
 import mock_order_list from '../../../mocks/outbound_order.20230321.mock';
-import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
 import { em_order_status } from '../../../types/enum';
+import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -413,6 +413,7 @@ const App: React.FC = () => {
         }
 
         message.success(`关闭订单成功。订单编码: ${order.order_code}`);
+        await queryOrderList();
     }
 
     async function handleOrderDetailClose(order_detail: IHCOutboundOrderDetail) {
@@ -424,6 +425,7 @@ const App: React.FC = () => {
         }
 
         message.success(`关闭订单行成功。订单编码: ${order_detail.order_code}, 明细编码: ${order_detail.order_detail_id}`);
+        await queryOrderList();
     }
 
     const handleOrderDelete = (key: React.Key) => {
@@ -442,7 +444,7 @@ const App: React.FC = () => {
 
     const first_columns = [
         {
-            title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "65px", fixed: 'left',
+            title: '序号', dataIndex: 'key', key: 'key', align: 'center', width: "80px", fixed: 'left',
             sorter: {
                 compare: (a: IHCOutboundOrder, b: IHCOutboundOrder) => a.key - b.key,
             }
@@ -540,7 +542,7 @@ const App: React.FC = () => {
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '110px' },
         {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: true,
-            render: (value: any, record: IHCOutboundOrderDetail, idx: number) => { return <InputNumber precision={2} value={value} ></InputNumber>; }
+            render: (value: any, record: IHCOutboundOrderDetail, idx: number) => { return record.order_status in ["0", "1", "2", "3"] ? <InputNumber precision={2} value={value} ></InputNumber> : <span>0</span>; }
         },
         // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '130px' },
         // { title: '创建人', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '130px' },
