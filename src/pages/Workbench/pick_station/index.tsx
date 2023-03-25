@@ -10,13 +10,23 @@ import { IHCPickStation } from "../../../types/interface";
 import { em_pick_station_status } from "../../../types/enum";
 
 export default class HCPickStation extends React.Component {
-    state: { pick_station_list: IHCPickStation[] } = { pick_station_list: [] }
+    state: {
+        pick_station_list: IHCPickStation[];
+        update_ps_loading: boolean;
+        start_work_loading: boolean;
+        stop_work_loading: boolean;
+    } = {
+            pick_station_list: [],
+            update_ps_loading: false,
+            start_work_loading: false,
+            stop_work_loading: false,
+        }
 
     render(): React.ReactNode {
         return <div className="hc_panel">
-            <Button type="primary" icon={<SearchOutlined />} onClick={this.GetPickStations.bind(this)} style={{ margin: "5px" }}>更新拣货台状态</Button>
-            <Button type="primary" icon={<PlayCircleOutlined />} onClick={this.StartWork.bind(this)} style={{ margin: "5px" }}>开始作业</Button>
-            <Button type="primary" icon={<PauseCircleOutlined />} onClick={this.StopWork.bind(this)} style={{ margin: "5px" }}>停止作业</Button>
+            <Button type="primary" icon={<SearchOutlined />} onClick={this.GetPickStations.bind(this)} style={{ margin: "5px" }} loading={this.state.update_ps_loading}>更新拣货台状态</Button>
+            <Button type="primary" icon={<PlayCircleOutlined />} onClick={this.StartWork.bind(this)} style={{ margin: "5px" }} loading={this.state.start_work_loading} >开始作业</Button>
+            <Button type="primary" icon={<PauseCircleOutlined />} onClick={this.StopWork.bind(this)} style={{ margin: "5px" }} loading={this.state.stop_work_loading}>停止作业</Button>
             <Table columns={pick_station_headers} dataSource={this.state.pick_station_list} pagination={{ pageSize: 10 }} className='table' />
         </div>;
     }
@@ -26,6 +36,7 @@ export default class HCPickStation extends React.Component {
     }
 
     async GetPickStations() {
+        this.setState({ update_ps_loading: true });
         const result: IHttpRes.IHCGetPickStationsRes = await api.PickStationGetAll();
         if (!result || result.result_code !== 0) {
             message.error(`获取拣货台信息失败，${result.result_msg}。`)
@@ -37,29 +48,34 @@ export default class HCPickStation extends React.Component {
         });
 
         this.setState({
-            pick_station_list: result.data
+            pick_station_list: result.data,
+            update_ps_loading: false
         }, () => {
             message.success(`获取拣货台信息成功，共获取 ${result.data.length} 个拣货台数据。`);
         });
     }
 
     async StartWork() {
+        this.setState({ start_work_loading: true });
         const start_result: IHttpRes.IHCResponse = await api.WorkbenchStartWork();
         if (!start_result || start_result.result_code !== 0) {
             message.error(`开始作业失败！result_code: ${start_result.result_code} err_msg: ${start_result.result_msg}`);
             return;
         }
         message.success("开始作业成功。");
+        this.setState({ start_work_loading: false });
         setTimeout(() => { window.location.reload() }, 1000 * 3);
     }
 
     async StopWork() {
+        this.setState({ stop_work_loading: true });
         const stop_result: IHttpRes.IHCResponse = await api.WorkbenchStopWork();
         if (!stop_result || stop_result.result_code !== 0) {
             message.error(`停止作业失败！result_code: ${stop_result.result_code} err_msg: ${stop_result.result_msg}`);
             return;
         }
         message.success("停止作业成功。");
+        this.setState({ stop_work_loading: false });
         setTimeout(() => { window.location.reload() }, 1000 * 3);
     }
 }

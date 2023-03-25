@@ -13,7 +13,7 @@ import './index.css';
 
 
 export default class HCWorkbenchTask extends React.Component {
-    state: { wcs_task_statuses: number[], task_list: IHCWcsTask[] } = { "wcs_task_statuses": [], task_list: [] };
+    state: { wcs_task_statuses: number[]; task_list: IHCWcsTask[]; search_task_loading: boolean; } = { "wcs_task_statuses": [], task_list: [], search_task_loading: false };
 
     render(): React.ReactNode {
         return <div className="hc_panel hc_task_panel">
@@ -27,7 +27,7 @@ export default class HCWorkbenchTask extends React.Component {
                 options={options}
                 className='task_statuses'
             />
-            <Button type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_task'>搜索任务</Button>
+            <Button type='primary' icon={<SearchOutlined />} onClick={this.onBtnSearchClick.bind(this)} className='search_task' loading={this.state.search_task_loading}>搜索任务</Button>
             <Table columns={wcs_task_headers} dataSource={this.state.task_list} pagination={{ pageSize: 10 }} className='table' />
         </div>
     }
@@ -41,6 +41,7 @@ export default class HCWorkbenchTask extends React.Component {
     }
 
     async onBtnSearchClick() {
+        this.setState({ search_task_loading: true });
         const result: IHCGetWorkbenchWcsTasksRes = await api.WcsTaskFind(this.state.wcs_task_statuses);
 
         if (!result || result.result_code != 0) {
@@ -57,7 +58,7 @@ export default class HCWorkbenchTask extends React.Component {
             });
         }
 
-        this.setState({ task_list: result.data.data_list || [] });
+        this.setState({ task_list: result.data.data_list || [], search_task_loading: false });
         message.success(`查询成功，共找到 ${result.data.data_list.length} 个任务。`)
     }
 }

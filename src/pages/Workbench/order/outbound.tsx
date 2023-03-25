@@ -11,6 +11,7 @@ import hc_config from "../../../config/index.json";
 import mock_order_list from '../../../mocks/outbound_order.20230321.mock';
 import { em_order_status } from '../../../types/enum';
 import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCItem, IHCSupplier } from '../../../types/interface';
+import './index.css';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
