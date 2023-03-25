@@ -116,16 +116,12 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
         this.setState({
             modal_open: false,
             loadding: false
-        }, () => {
-            setTimeout(window.location.reload, 1000)
         });
     }
 
     handleCancel() {
         this.setState({
             modal_open: false
-        }, () => {
-            setTimeout(window.location.reload, 1000)
         });
     }
 }
