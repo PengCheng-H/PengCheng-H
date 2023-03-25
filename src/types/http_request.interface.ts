@@ -9,7 +9,8 @@ export interface IHCInventoryFindEmptyBoxesReq extends IHCRequest {
     rows?: number[];
     columns?: number[];
     layers?: number[];
-    pagination_param?: IBase.IHCPagination;
+    page_no?: number
+    page_size?: number
 }
 
 // OrderInboundManualAllocateDetails
