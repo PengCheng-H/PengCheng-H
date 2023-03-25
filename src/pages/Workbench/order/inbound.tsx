@@ -560,7 +560,7 @@ const App: React.FC = () => {
                     allocate_quantity: _detail.order_cur_allocate_qty,
                     box_code: _detail.allocate_box_code
                 });
-            } else {
+            } else if (_detail.order_status in ["4", "5", "6", "7", "8", "9"]) {
                 message.error(`未指定明细料箱，无法手工明细分配！订单号: ${order.order_code}, 行号: ${_detail.line_no}`);
                 return;
             }
