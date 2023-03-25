@@ -50,7 +50,7 @@ export default class HCPickStation extends React.Component {
             return;
         }
         message.success("开始作业成功。");
-        setTimeout(() => { window.location.reload() }, 1000);
+        setTimeout(() => { window.location.reload() }, 1000 * 3);
     }
 
     async StopWork() {
@@ -60,7 +60,7 @@ export default class HCPickStation extends React.Component {
             return;
         }
         message.success("停止作业成功。");
-        setTimeout(() => { window.location.reload() }, 1000);
+        setTimeout(() => { window.location.reload() }, 1000 * 3);
     }
 }
 
