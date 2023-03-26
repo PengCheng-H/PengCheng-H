@@ -363,12 +363,12 @@ const App: React.FC = () => {
         get_order_result.data.data_list.map(order => {
             order.key = (order_key += 1);
             order.order_cur_allocate_qty = order.order_qty - order.order_finished_qty - order.order_allocated_qty;
-            order.order_cur_allocate_qty = order.order_cur_allocate_qty || 0;
+            order.order_cur_allocate_qty = order.order_cur_allocate_qty >= 0 ? order.order_cur_allocate_qty : 0;
             let detail_key = 0;
             order.order_details.map(detail => {
                 detail.key = (detail_key += 1);
                 detail.order_cur_allocate_qty = detail.order_qty - detail.order_finished_qty - detail.order_allocated_qty;
-                detail.order_cur_allocate_qty = detail.order_cur_allocate_qty || 0;
+                detail.order_cur_allocate_qty = detail.order_cur_allocate_qty >= 0 ? detail.order_cur_allocate_qty : 0;
             });
         });
 

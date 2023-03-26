@@ -447,14 +447,14 @@ const App: React.FC = () => {
         get_order_result.data.data_list.map(order => {
             order.key = (order_key += 1);
             order.order_cur_allocate_qty = order.order_qty - order.order_finished_qty - order.order_allocated_qty;
-            order.order_cur_allocate_qty = order.order_cur_allocate_qty || 0;
+            order.order_cur_allocate_qty = order.order_cur_allocate_qty >= 0 ? order.order_cur_allocate_qty : 0;
             order.allocate_box_code = order.allocate_box_code || "";
             let detail_key = 0;
             order.order_details.map(detail => {
                 if (detail.order_status !== '7') {
                     detail.key = (detail_key += 1);
                     detail.order_cur_allocate_qty = detail.order_qty - detail.order_finished_qty - detail.order_allocated_qty;
-                    detail.order_cur_allocate_qty = detail.order_cur_allocate_qty || 0;
+                    detail.order_cur_allocate_qty = detail.order_cur_allocate_qty >= 0 ? detail.order_cur_allocate_qty : 0;
                     detail.allocate_box_code = detail.allocate_box_code || "";
                 }
             });
@@ -470,33 +470,6 @@ const App: React.FC = () => {
             message.error('未找到订单信息，无法分配！');
             return;
         }
-
-        // const _order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[] = [];
-        // inbound_orders.forEach(_order => {
-        //     const __order: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] } = { order_code: _order.order_code, order_details: [] };
-
-        //     _order.order_details.forEach(_detail => {
-        //         __order.order_details.push({
-        //             order_detail_id: _detail.order_detail_id,
-        //             allocate_quantity: _detail.order_cur_allocate_qty as number
-        //         });
-        //     });
-
-        //     _order_list.push(__order)
-        // });
-
-        // message.info(`向后台确认分配结果. 订单数量: ${_order_list.length}`);
-        // const allocate_result = await api.OrderInboundAutoAllocateList(_order_list);
-
-        // if (allocate_result.result_code !== 0) {
-        //     message.error(`订单分配数量失败！result_code: ${allocate_result.result_code} 提示: ${allocate_result.result_msg}`);
-        //     return
-        // }
-
-        // message.success(`订单分配数量成功。`);
-        // setTimeout(() => {
-        //     window.location.href = "/";
-        // }, 1000);
     }
 
     // 自动分配料箱
@@ -561,15 +534,16 @@ const App: React.FC = () => {
         }
 
         const params: IHttpReq.IHCOrderInboundManaulAllocateDetailsReq = { order_code: order.order_code, order_details: [] };
+        const keys = ["4", "5", "6", "7", "8", "9"];
         for (let _detail of order.order_details) {
-            if (_detail.allocate_box_code) {
+            if (keys.indexOf(_detail.order_status) >= 0) {
+                continue;
+            } else if (_detail.allocate_box_code) {
                 params.order_details.push({
                     order_detail_id: _detail.order_detail_id,
                     allocate_quantity: _detail.order_cur_allocate_qty,
                     box_code: _detail.allocate_box_code
                 });
-            } else if (_detail.order_status in ["4", "5", "6", "7", "8", "9"]) {
-                continue;
             } else {
                 message.error(`未指定明细料箱，无法手工明细分配！订单号: ${order.order_code}, 行号: ${_detail.line_no}`);
                 return;
