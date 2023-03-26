@@ -1,9 +1,9 @@
 FROM node:16.18-alpine as builder
 
-LABEL Version=1.0.0 \
-  Maintainer=pengcheng.peng@hcrobots.com \
-  BuildTime=2023-03-02 \
-  Description="WMS UI"
+LABEL Version=1.0.1 \
+    Maintainer=pengcheng.peng@hcrobots.com \
+    BuildTime=2023-03-02 \
+    Description="WMS UI"
 
 ARG WORKSPACE=/opt/wms_ui
 
