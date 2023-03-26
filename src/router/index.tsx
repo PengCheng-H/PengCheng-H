@@ -10,7 +10,6 @@ import HCOrderInbound from "../pages/Workbench/order/inbound";
 import HCOrderInboundQuickAdd from "../pages/Workbench/order/inbound_quick_add";
 import HCOrderOutbound from "../pages/Workbench/order/outbound";
 import HCOrderOutboundQuickAdd from "../pages/Workbench/order/outbound_quick_add";
-import HCTestIndex from "../components/HCTest";
 
 
 export default class HCRouter extends React.Component {
@@ -24,7 +23,6 @@ export default class HCRouter extends React.Component {
             { path: "workbench/order/inbound/quick_add", element: <HCOrderInboundQuickAdd /> },
             { path: "workbench/order/outbound", element: <HCOrderOutbound /> },
             { path: "workbench/order/outbound/quick_add", element: <HCOrderOutboundQuickAdd /> },
-            { path: "test", element: <HCTestIndex /> },
             { path: "*", element: <HCWorkbench /> }
         ], { basename: "" });
 
