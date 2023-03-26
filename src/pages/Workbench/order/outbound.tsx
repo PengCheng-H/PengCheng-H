@@ -238,6 +238,7 @@ const App: React.FC = () => {
         new_order.order_cur_allocate_qty = 0;
         new_order.order_details.forEach(_detail => {
             new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty + Math.floor(_detail.order_cur_allocate_qty);
+            new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty || 0;
         });
         setOutboundOrders(new_orders);
     };
@@ -362,10 +363,12 @@ const App: React.FC = () => {
         get_order_result.data.data_list.map(order => {
             order.key = (order_key += 1);
             order.order_cur_allocate_qty = order.order_qty - order.order_finished_qty - order.order_allocated_qty;
+            order.order_cur_allocate_qty = order.order_cur_allocate_qty || 0;
             let detail_key = 0;
             order.order_details.map(detail => {
                 detail.key = (detail_key += 1);
                 detail.order_cur_allocate_qty = detail.order_qty - detail.order_finished_qty - detail.order_allocated_qty;
+                detail.order_cur_allocate_qty = detail.order_cur_allocate_qty || 0;
             });
         });
 

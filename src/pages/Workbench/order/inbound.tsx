@@ -242,6 +242,7 @@ const App: React.FC = () => {
         new_order.order_cur_allocate_qty = 0;
         new_order.order_details.forEach(_detail => {
             new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty + Math.floor(_detail.order_cur_allocate_qty);
+            new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty || 0;
         });
         setInboundOrders(new_orders);
     };
@@ -397,6 +398,7 @@ const App: React.FC = () => {
         new_order.order_cur_allocate_qty = 0;
         new_order.order_details.forEach(_detail => {
             new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty + Math.floor(_detail.order_cur_allocate_qty);
+            new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty || 0;
         });
         setInboundOrders(new_orders);
     }
@@ -445,12 +447,14 @@ const App: React.FC = () => {
         get_order_result.data.data_list.map(order => {
             order.key = (order_key += 1);
             order.order_cur_allocate_qty = order.order_qty - order.order_finished_qty - order.order_allocated_qty;
+            order.order_cur_allocate_qty = order.order_cur_allocate_qty || 0;
             order.allocate_box_code = order.allocate_box_code || "";
             let detail_key = 0;
             order.order_details.map(detail => {
                 if (detail.order_status !== '7') {
                     detail.key = (detail_key += 1);
                     detail.order_cur_allocate_qty = detail.order_qty - detail.order_finished_qty - detail.order_allocated_qty;
+                    detail.order_cur_allocate_qty = detail.order_cur_allocate_qty || 0;
                     detail.allocate_box_code = detail.allocate_box_code || "";
                 }
             });
@@ -565,6 +569,8 @@ const App: React.FC = () => {
                     box_code: _detail.allocate_box_code
                 });
             } else if (_detail.order_status in ["4", "5", "6", "7", "8", "9"]) {
+                continue;
+            } else {
                 message.error(`未指定明细料箱，无法手工明细分配！订单号: ${order.order_code}, 行号: ${_detail.line_no}`);
                 return;
             }
@@ -738,7 +744,7 @@ const App: React.FC = () => {
         { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: '110px' },
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '110px' },
         {
-            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px",
+            title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: true,
             render: (value: any, record: IHCInboundOrderDetail, index: number) => { return record.order_status in ["0", "1", "2", "3"] ? <InputNumber precision={2} value={value}></InputNumber> : <span>0</span>; }
         },
         {
