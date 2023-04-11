@@ -41,8 +41,14 @@ export default () => {
             },
         },
         {
-            title: '物品扩展编码',
+            title: '物料货号',
             dataIndex: 'item_extend_code1',
+            valueType: 'text',
+            align: 'center',
+        },
+        {
+            title: '物品名称',
+            dataIndex: 'item_name',
             valueType: 'text',
             align: 'center',
         },
@@ -224,6 +230,7 @@ export default () => {
         const newItem = {
             id: (Math.random() * 1000000).toFixed(0),
             item_code: item_code,
+            item_name:"",
             item_extend_code1: "",
             quantity: item_quantity
         };
@@ -231,6 +238,7 @@ export default () => {
         const get_item_result = await api.ItemDetailGet(item_code);
         if (get_item_result && get_item_result.result_code === 0) {
             const _item: IHCItem = get_item_result.data;
+            newItem.item_name = _item.item_name;
             newItem.item_extend_code1 = _item.item_extend_code1;
         }
 
