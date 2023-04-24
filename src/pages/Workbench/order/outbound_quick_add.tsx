@@ -19,6 +19,7 @@ type DataSourceType = {
 
 export default () => {
     const actionRef = useRef<ActionType>();
+    const inputRef = useRef<HTMLInputElement>(null);
     const [item_code, setItemCode] = useState<string>("");
     const [item_quantity, setItemQuantity] = useState<number>(0);
     const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
@@ -113,6 +114,7 @@ export default () => {
     function onItemOptionChange(item_codes: any) {
         const item_code = item_codes ? item_codes[0] : "";
         setItemCode(item_code);
+        inputRef.current?.focus()
     }
 
     async function onItemOptionSearch(item_code: string) {
@@ -351,7 +353,8 @@ export default () => {
                 <Row style={{ marginTop: "10px" }}>
                     <label>*物品数量：</label>
                     <InputNumber
-                        precision={2}
+                        ref={inputRef}
+                        precision={0}
                         value={item_quantity}
                         min={0}
                         max={999999999}
