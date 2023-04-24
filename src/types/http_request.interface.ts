@@ -1,6 +1,6 @@
-import * as IBase from "./interface";
-
-export interface IHCRequest { }
+export interface IHCRequest {
+    [key: string]: unknown;
+}
 
 export interface IHCInventoryFindEmptyBoxesReq extends IHCRequest {
     box_code?: string;
