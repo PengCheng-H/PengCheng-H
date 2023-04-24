@@ -1,6 +1,6 @@
 import React from "react";
 import { ColumnsType } from 'antd/es/table';
-import { SearchOutlined, FireOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { Button, Select, SelectProps, Table, message } from 'antd';
 
 import api from '../../../utils/api';
@@ -8,7 +8,6 @@ import utils from '../../../utils';
 import * as IHttpRes from "../../../types/http_response.interface";
 import { IHCWcsTask } from '../../../types/interface';
 import { em_wcs_task_status, em_wcs_task_types } from "../../../types/enum";
-import { IHCGetWorkbenchWcsTasksRes } from '../../../types/http_response.interface';
 import './index.css';
 
 
@@ -42,7 +41,7 @@ export default class HCWorkbenchTask extends React.Component {
 
     async onBtnSearchClick() {
         this.setState({ search_task_loading: true });
-        const result: IHCGetWorkbenchWcsTasksRes = await api.WcsTaskFind(this.state.wcs_task_statuses);
+        const result: IHttpRes.IHCGetWorkbenchWcsTasksRes = await api.WcsTaskFind(this.state.wcs_task_statuses);
 
         if (!result || result.result_code != 0) {
             message.error(`查询失败，${result.result_msg}。`)
