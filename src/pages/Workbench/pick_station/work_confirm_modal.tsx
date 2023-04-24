@@ -62,7 +62,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
 
         const box_details = result.data.region_task_details;
 
-        for (let box_detail of box_details) {
+        for (const box_detail of box_details) {
             box_detail.key = box_detail.item_code;
             box_detail.item_detail = {} as IHCItem;
             box_detail.item_detail.key = box_detail.item_detail.item_code;
@@ -95,7 +95,7 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
 
     async handleOk() {
         this.setState({ loadding: true });
-        let details: { item_code: string, box_region_id: number, actual_quantity: number }[] = [];
+        const details: { item_code: string, box_region_id: number, actual_quantity: number }[] = [];
 
         this.state.box_details.map(item => {
             details.push({

@@ -3,7 +3,7 @@ import HCSideMenu from '../../components/HCSideMenu';
 
 
 
-export default class HCHome extends React.Component<{}, {}>{
+export default class HCHome extends React.Component<object, object>{
     render(): React.ReactNode {
         return <div>
             <HCSideMenu />
