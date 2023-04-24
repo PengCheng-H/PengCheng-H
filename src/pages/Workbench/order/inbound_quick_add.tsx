@@ -1,8 +1,8 @@
 import { EditableProTable } from '@ant-design/pro-components';
-import React, { useRef, useState } from 'react';
+import React, { ElementRef, forwardRef, useRef, useState } from 'react';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PlusOutlined, RollbackOutlined } from '@ant-design/icons';
-import { Button, Cascader, Col, InputNumber, Modal, Row, message } from 'antd';
+import { Button, Cascader, Col, Input, InputNumber, Modal, Row, message } from 'antd';
 
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
@@ -18,6 +18,7 @@ type DataSourceType = {
 
 export default () => {
     const actionRef = useRef<ActionType>();
+    const inputRef = useRef<HTMLInputElement>(null);
     const [item_code, setItemCode] = useState<string>("");
     const [item_quantity, setItemQuantity] = useState<number>(0);
     const [item_options, setItemOptions] = useState<DefaultOptionType[]>([]);
@@ -96,6 +97,7 @@ export default () => {
     function onItemOptionChange(item_codes: any) {
         const item_code = item_codes ? item_codes[0] : "";
         setItemCode(item_code);
+        inputRef.current?.focus()
     }
 
     async function onItemOptionSearch(item_code: string) {
@@ -322,7 +324,7 @@ export default () => {
             </Row>
             <Row style={{ marginTop: "10px" }}>
                 <label>*物品数量：</label>
-                <InputNumber precision={2} value={item_quantity} min={0} max={999999999} onChange={(value: number | null) => { setItemQuantity(value || 0) }} />
+                <InputNumber ref={inputRef} precision={0} value={item_quantity} min={0} max={999999999} onChange={(value: number | null) => { setItemQuantity(value || 0) }} />
             </Row>
         </Modal>
     </div>;

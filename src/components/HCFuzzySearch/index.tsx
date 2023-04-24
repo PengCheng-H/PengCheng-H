@@ -9,7 +9,7 @@ interface Props {
     className?: string;
     autoFocus?: boolean;
     onChange?: (value: string) => void;
-    onSearch?: (value: string, cb: Function) => void;
+    onSearch?: (value: string, cb: any) => void;
 }
 
 interface DataSourceType { label: string, value: any }
