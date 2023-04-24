@@ -15,8 +15,8 @@ import './index.css';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
-interface Item extends IHCOutboundOrder { }
-interface SecondItem extends IHCOutboundOrderDetail { }
+type Item = IHCOutboundOrder
+type SecondItem = IHCOutboundOrderDetail
 
 interface EditableRowProps {
     index: number;
@@ -217,7 +217,7 @@ const App: React.FC = () => {
             ...row,
         });
         setOutboundOrders(new_orders);
-    };
+    }
 
     function handleSaveOrderDetail(row: IHCOutboundOrderDetail) {
         if (row.order_cur_allocate_qty < 0) {
@@ -241,7 +241,7 @@ const App: React.FC = () => {
             new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty || 0;
         });
         setOutboundOrders(new_orders);
-    };
+    }
 
     function onOptionFilter(inputValue: string, path: DefaultOptionType[]): boolean {
         return path.some((option) => (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1,);
@@ -267,7 +267,7 @@ const App: React.FC = () => {
         const get_items_result = await api.ItemsFindByText(item_code);
         if (get_items_result && get_items_result.result_code === 0) {
             const item_options: DefaultOptionType[] = [];
-            for (let item of get_items_result.data.data_list) {
+            for (const item of get_items_result.data.data_list) {
                 const item_label = `[${item.item_code}]-[${item.item_extend_code1}]-[${item.item_name}]`;
                 item_options.push({
                     label: item_label,
@@ -312,7 +312,7 @@ const App: React.FC = () => {
         const get_suppliers_result = await api.SupplierFindByText(supplier_code);
         if (get_suppliers_result && get_suppliers_result.result_code === 0) {
             const supplier_options: DefaultOptionType[] = [];
-            for (let supplier of get_suppliers_result.data.data_list) {
+            for (const supplier of get_suppliers_result.data.data_list) {
                 const supplier_label = `[${supplier.supplier_code}]-[${supplier.supplier_name}]`;
                 supplier_options.push({
                     label: supplier_label,
