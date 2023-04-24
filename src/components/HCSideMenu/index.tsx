@@ -33,7 +33,7 @@ const items: MenuItem[] = [
     }
 ];
 
-type HCSideMenuProps = {}
+type HCSideMenuProps = object
 
 type HCSideMenuState = {
     theme: MenuTheme
