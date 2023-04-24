@@ -1,4 +1,3 @@
-import hc_utils from ".";
 import hc_config from "../config/index.json";
 import HCHttpClient from "./http_client";
 import * as IBase from "../types/interface";
@@ -28,7 +27,7 @@ class HCApi {
         return await this.SendGetRequest(hc_config.urls.item_detail_get, { item_code });
     }
 
-    public async ItemsFindByText(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetItemsRes> {
+    public async ItemsFindByText(text: string, page_no = 1, page_size = 2000): Promise<IHttpRes.IHCGetItemsRes> {
         return await this.SendGetRequest(hc_config.urls.item_find_by_text, { text, page_no, page_size });
     }
 
@@ -47,7 +46,7 @@ class HCApi {
         return await this.SendGetRequest(hc_config.urls.supplier_detail_get, { supplier_code });
     }
 
-    public async SupplierFindByText(text: string, page_no: number = 1, page_size: number = 2000): Promise<IHttpRes.IHCGetSupplierRes> {
+    public async SupplierFindByText(text: string, page_no = 1, page_size = 2000): Promise<IHttpRes.IHCGetSupplierRes> {
         return await this.SendGetRequest(hc_config.urls.supplier_list_get, { text, page_no, page_size });
     }
 
@@ -141,8 +140,8 @@ class HCApi {
         return await this.SendPostRequest(hc_config.urls.order_inbound_detail_close, { order_code, order_detail_id });
     }
 
-    public async OrderInboundFind(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetInboundOrdersRes> {
-        const params: object[] = [{ item_code }];
+    public async OrderInboundFind(item_code: string, supplier_code = "", order_statuses: number[] = [0, 1, 2, 3], page_no = 1, page_size = 100): Promise<IHttpRes.IHCGetInboundOrdersRes> {
+        const params: object[] = [{ item_code, page_no, page_size }];
         if (supplier_code) { params.push({ supplier_code }); }
         order_statuses?.forEach(value => {
             params.push({ order_statuses: value });
@@ -181,8 +180,8 @@ class HCApi {
         return await this.SendPostRequest(hc_config.urls.order_outbound_detail_close, { order_code, order_detail_id });
     }
 
-    public async OrderOutboundFind(item_code: string, supplier_code: string = "", order_statuses: number[] = [0]): Promise<IHttpRes.IHCGetOutboundOrdersRes> {
-        const params: object[] = [{ item_code }];
+    public async OrderOutboundFind(item_code: string, supplier_code = "", order_statuses: number[] = [0, 1, 2, 3], page_no = 1, page_size = 100): Promise<IHttpRes.IHCGetOutboundOrdersRes> {
+        const params: object[] = [{ item_code, page_no, page_size }];
         if (supplier_code) { params.push({ supplier_code }); }
         order_statuses?.forEach(value => {
             params.push({ order_statuses: value });
@@ -246,7 +245,7 @@ class HCApi {
      * @param params 请求参数
      * @returns 
      */
-    private async SendGetRequest(path: string, params: {} | [] = {}): Promise<IHttpRes.IHCResponse> {
+    private async SendGetRequest(path: string, params: object | [] = {}): Promise<IHttpRes.IHCResponse> {
         let url = `${hc_config.wms_server.protocol}${hc_config.wms_server.host}:${hc_config.wms_server.port}${path}`;
 
         if (Boolean(hc_config.debug.enable) && Boolean(hc_config.debug.enable_proxy)) {
@@ -266,7 +265,7 @@ class HCApi {
      * @param params 请求参数
      * @returns 
      */
-    private JoinGetParams(params: {} | []): string {
+    private JoinGetParams(params: object | []): string {
         let result = '';
 
         if (Array.isArray(params)) {
