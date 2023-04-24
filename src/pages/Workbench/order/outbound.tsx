@@ -344,11 +344,6 @@ const App: React.FC = () => {
             return;
         }
 
-        if (!item_code) {
-            message.error('物品编码不能为空！');
-            return;
-        }
-
         const get_order_result = await api.OrderOutboundFind(item_code, supplier_code)
         if (!get_order_result || get_order_result.result_code !== 0) {
             message.error(`查询订单失败！err_msg: ${get_order_result.result_msg}`);
