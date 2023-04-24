@@ -33,7 +33,7 @@ export default class HCWorkbenchTask extends React.Component {
     }
 
     onSelTaskStatesChange(value: number[], option: any) {
-        this.setState({ "wcs_task_statuses": value });;
+        this.setState({ "wcs_task_statuses": value });
     }
 
     componentDidMount(): void {

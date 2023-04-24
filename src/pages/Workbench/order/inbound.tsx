@@ -16,8 +16,8 @@ import './index.css';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
-interface Item extends IHCInboundOrder { }
-interface SecondItem extends IHCInboundOrderDetail { }
+type Item = IHCInboundOrder
+type SecondItem = IHCInboundOrderDetail
 
 interface EditableRowProps {
     index: number;
@@ -221,7 +221,7 @@ const App: React.FC = () => {
             ...row,
         });
         setInboundOrders(new_orders);
-    };
+    }
 
     function handleSaveOrderDetail(row: IHCInboundOrderDetail) {
         if (row.order_cur_allocate_qty < 0) {
@@ -245,7 +245,7 @@ const App: React.FC = () => {
             new_order.order_cur_allocate_qty = new_order.order_cur_allocate_qty || 0;
         });
         setInboundOrders(new_orders);
-    };
+    }
 
     function onOptionFilter(inputValue: string, path: DefaultOptionType[]): boolean {
         return path.some((option) => (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1,);
@@ -275,7 +275,7 @@ const App: React.FC = () => {
         }
 
         const item_options: DefaultOptionType[] = [];
-        for (let item of get_items_result.data.data_list) {
+        for (const item of get_items_result.data.data_list) {
             const item_label = `[${item.item_code}]-[${item.item_extend_code1}]-[${item.item_name}]`;
             item_options.push({
                 label: item_label,
@@ -323,7 +323,7 @@ const App: React.FC = () => {
         }
 
         const supplier_options: DefaultOptionType[] = [];
-        for (let supplier of get_suppliers_result.data.data_list) {
+        for (const supplier of get_suppliers_result.data.data_list) {
             const supplier_label = `[${supplier.supplier_code}]-[${supplier.supplier_name}]`;
             supplier_options.push({
                 label: supplier_label,
@@ -369,7 +369,7 @@ const App: React.FC = () => {
         }
 
         const _box_options: DefaultOptionType[] = [];
-        for (let box of get_boxes_result.data.data_list) {
+        for (const box of get_boxes_result.data.data_list) {
             const box_label = `[${box.box_code}]_[${box.location_code}]`;
             _box_options.push({
                 label: box_label,
@@ -403,12 +403,12 @@ const App: React.FC = () => {
         setInboundOrders(new_orders);
     }
 
-    async function onOrderDetailBoxOptionSearch(_box_code_part: string, order_detail: IHCInboundOrderDetail) {
+    async function onOrderDetailBoxOptionSearch(_box_code_part: string, _order_detail: IHCInboundOrderDetail) {
         const get_boxes_result = await api.InventoryFindEmptyBoxes();
         // const get_boxes_result = await api.InventoryFindEmptyBoxes({ box_code: _box_code_part });
         if (get_boxes_result && get_boxes_result.result_code === 0) {
             const _box_options: DefaultOptionType[] = [];
-            for (let box of get_boxes_result.data.data_list) {
+            for (const box of get_boxes_result.data.data_list) {
                 const box_label = `[${box.box_code}]_[${box.location_code}]`;
                 _box_options.push({
                     label: box_label,
@@ -535,7 +535,7 @@ const App: React.FC = () => {
 
         const params: IHttpReq.IHCOrderInboundManaulAllocateDetailsReq = { order_code: order.order_code, order_details: [] };
         const keys = ["4", "5", "6", "7", "8", "9"];
-        for (let _detail of order.order_details) {
+        for (const _detail of order.order_details) {
             if (keys.indexOf(_detail.order_status) >= 0) {
                 continue;
             } else if (_detail.allocate_box_code) {

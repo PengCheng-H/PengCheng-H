@@ -113,7 +113,7 @@ export default () => {
         const get_items_result = await api.ItemsFindByText(item_code);
         if (get_items_result && get_items_result.result_code === 0) {
             const item_options: DefaultOptionType[] = [];
-            for (let item of get_items_result.data.data_list) {
+            for (const item of get_items_result.data.data_list) {
                 const item_label = `[${item.item_code}]-[${item.item_extend_code1}]-[${item.item_name}]`;
                 item_options.push({
                     label: item_label,
@@ -158,7 +158,7 @@ export default () => {
         const get_suppliers_result = await api.SupplierFindByText(supplier_code);
         if (get_suppliers_result && get_suppliers_result.result_code === 0) {
             const supplier_options: DefaultOptionType[] = [];
-            for (let supplier of get_suppliers_result.data.data_list) {
+            for (const supplier of get_suppliers_result.data.data_list) {
                 const supplier_label = `[${supplier.supplier_code}]-[${supplier.supplier_name}]`;
                 supplier_options.push({
                     label: supplier_label,
@@ -230,7 +230,7 @@ export default () => {
         const newItem = {
             id: (Math.random() * 1000000).toFixed(0),
             item_code: item_code,
-            item_name:"",
+            item_name: "",
             item_extend_code1: "",
             quantity: item_quantity
         };
@@ -295,8 +295,8 @@ export default () => {
                 recordCreatorProps={false}
                 editable={{
                     editableKeys,
-                    onSave: async () => { },
-                    onValuesChange: async (_record, _dataSource) => { },
+                    // onSave: async () => { },
+                    // onValuesChange: async (_record, _dataSource) => { },
                     onChange: setEditableRowKeys,
                     actionRender: (row, config, dom) => [dom.save, dom.cancel],
                 }}
