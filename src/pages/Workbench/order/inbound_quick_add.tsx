@@ -42,7 +42,7 @@ export default () => {
             },
         },
         {
-            title: '物料货号',
+            title: '物品货号',
             dataIndex: 'item_extend_code1',
             valueType: 'text',
             align: 'center',
