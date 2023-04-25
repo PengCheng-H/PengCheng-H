@@ -35,7 +35,7 @@ for (let i = 1; i <= order_count; i++) {
         receiver_contact_name: `reciver_${i}`,
     };
 
-    let order_detail_count: number = Math.floor(Math.random() * (MAX_ORDER_DETAIL_COUNT - MIN_ORDER_DETAIL_COUNT + 1) + MIN_ORDER_DETAIL_COUNT);
+    const order_detail_count: number = Math.floor(Math.random() * (MAX_ORDER_DETAIL_COUNT - MIN_ORDER_DETAIL_COUNT + 1) + MIN_ORDER_DETAIL_COUNT);
     for (let j = 1; j <= order_detail_count; j++) {
         const order_detail: IHCOutboundOrderDetail = {
             key: j,
