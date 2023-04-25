@@ -32,7 +32,7 @@ for (let i = 1; i <= order_count; i++) {
         last_updated_time: "2023-03-21 00:00:00.000",
     };
 
-    let order_detail_count: number = Math.floor(Math.random() * (MAX_ORDER_DETAIL_COUNT - MIN_ORDER_DETAIL_COUNT + 1) + MIN_ORDER_DETAIL_COUNT);
+    const order_detail_count: number = Math.floor(Math.random() * (MAX_ORDER_DETAIL_COUNT - MIN_ORDER_DETAIL_COUNT + 1) + MIN_ORDER_DETAIL_COUNT);
     for (let j = 1; j <= order_detail_count; j++) {
         const order_detail: IHCInboundOrderDetail = {
             key: j,
