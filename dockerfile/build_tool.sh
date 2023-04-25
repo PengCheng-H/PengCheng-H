@@ -2,7 +2,7 @@
 
 NAME=wms_ui
 REPO=hcrobots/${NAME}
-TAG=v1.0.1
+TAG=v1.0.2
 
 # OS specific support.
 darwin=false
