@@ -43,10 +43,10 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
                     return <div key={box_detail.key}>
                         <hr />
                         <Row><label>料箱分区：</label><span>{box_detail.box_region_id}</span></Row>
-                        <Row><label>物料编码：</label><span>{box_detail.item_code}</span></Row>
-                        <Row><label>物料货号：</label><span>{box_detail.item_detail?.item_external_code1}</span></Row>
-                        <Row><label>物料名称：</label><span>{box_detail.item_detail?.item_name}</span></Row>
-                        <Row><label>物料数量：</label><InputNumber defaultValue={box_detail.quantity} onInput={this.handleItemQuantityChanged.bind(this, box_detail.key)}></InputNumber></Row>
+                        <Row><label>物品编码：</label><span>{box_detail.item_code}</span></Row>
+                        <Row><label>物品货号：</label><span>{box_detail.item_detail?.item_external_code1}</span></Row>
+                        <Row><label>物品名称：</label><span>{box_detail.item_detail?.item_name}</span></Row>
+                        <Row><label>物品数量：</label><InputNumber defaultValue={box_detail.quantity} onInput={this.handleItemQuantityChanged.bind(this, box_detail.key)}></InputNumber></Row>
                     </div>
                 }) : null}
             </Modal>

@@ -439,21 +439,29 @@ const App: React.FC = () => {
         });
 
         let order_key = 0;
-        get_order_result.data.data_list.map(order => {
+
+        for (const order of get_order_result.data.data_list) {
             order.key = (order_key += 1);
             order.order_cur_allocate_qty = order.order_qty - order.order_finished_qty - order.order_allocated_qty;
             order.order_cur_allocate_qty = order.order_cur_allocate_qty >= 0 ? order.order_cur_allocate_qty : 0;
             order.allocate_box_code = order.allocate_box_code || "";
             let detail_key = 0;
-            order.order_details.map(detail => {
+            for (const detail of order.order_details) {
                 if (detail.order_status !== '7') {
                     detail.key = (detail_key += 1);
                     detail.order_cur_allocate_qty = detail.order_qty - detail.order_finished_qty - detail.order_allocated_qty;
                     detail.order_cur_allocate_qty = detail.order_cur_allocate_qty >= 0 ? detail.order_cur_allocate_qty : 0;
                     detail.allocate_box_code = detail.allocate_box_code || "";
+                    const get_item_result = await api.ItemDetailGet(detail.item_code);
+                    if (get_item_result && get_item_result.result_code === 0 && get_item_result.data) {
+                        const _item: IHCItem = get_item_result.data;
+                        detail.item_name = _item.item_name;
+                        detail.item_extend_code1 = _item.item_extend_code1;
+                        console.debug(detail.item_name, detail.item_extend_code1, _item.item_name, _item.item_extend_code1)
+                    }
                 }
-            });
-        });
+            }
+        }
 
         message.success(`查询订单成功。订单总数 ${get_order_result.data.total_count}, 当前数量：${get_order_result.data.data_list.length}`);
         setInboundOrders(get_order_result.data.data_list);
@@ -704,8 +712,8 @@ const App: React.FC = () => {
             render: (value: string) => { return em_order_status[`${value}`]; }
         },
         { title: '物品编码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '100px' },
-        // { title: '物品名称', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
-        // { title: '物品规格', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
+        { title: '物品货号', dataIndex: 'item_extend_code1', key: 'external_order_code', align: 'center', width: '100px' },
+        { title: '物品名称', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
         // { title: '物品型号', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
         // { title: '物品单位', dataIndex: 'item_name', key: 'item_name', align: 'center', width: '100px' },
         { title: '供应商', dataIndex: 'supplier_code', key: 'supplier_code', align: 'center', width: '100px' },
@@ -714,7 +722,7 @@ const App: React.FC = () => {
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '110px' },
         {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: true,
-            render: (value: any, record: IHCInboundOrderDetail, index: number) => { return record.order_status in ["0", "1", "2", "3"] ? <InputNumber precision={2} value={value}></InputNumber> : <span>0</span>; }
+            render: (value: any, record: IHCInboundOrderDetail, index: number) => { return record.order_status in ["0", "1", "2", "3"] ? <InputNumber precision={0} value={value}></InputNumber> : <span>0</span>; }
         },
         {
             title: '指定料箱和货位', dataIndex: 'allocate_box_code', key: 'allocate_box_code', align: 'center', width: "210px", editable: false,
