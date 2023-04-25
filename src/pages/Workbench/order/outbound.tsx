@@ -536,7 +536,7 @@ const App: React.FC = () => {
         { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '110px' },
         {
             title: '本次分配数量', dataIndex: 'order_cur_allocate_qty', key: 'order_cur_allocate_qty', align: 'center', width: "120px", editable: true,
-            render: (value: any, record: IHCOutboundOrderDetail, idx: number) => { return record.order_status in ["0", "1", "2", "3"] ? <InputNumber precision={2} value={value} ></InputNumber> : <span>0</span>; }
+            render: (value: any, record: IHCOutboundOrderDetail, idx: number) => { return record.order_status in ["0", "1", "2", "3"] ? <InputNumber precision={0} value={value} ></InputNumber> : <span>0</span>; }
         },
         // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '130px' },
         // { title: '创建人', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '130px' },

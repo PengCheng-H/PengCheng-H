@@ -10,6 +10,8 @@ export interface IHCInboundOrderDetailLotProps {
 
 export interface IHCInboundOrderDetail {
     [key: string]: any;
+    item_name?: string;
+    item_extend_code1?: string;
     line_no: number;
     order_code: string;
     item_code: string;
