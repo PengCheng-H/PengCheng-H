@@ -109,13 +109,17 @@ export default class WorkConfirmModal extends React.Component<WorkConfirmModalPr
 
         if (!result || result.result_code != 0) {
             message.error(`作业失败! err_msg: ${result.result_msg}.`);
+            this.setState({
+                modal_open: false,
+                loadding: false
+            });
             return;
         }
 
 
         this.setState({
             modal_open: false,
-            loadding: false
+            // loadding: false
         });
 
         window.location.href = "/";
