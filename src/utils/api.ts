@@ -249,7 +249,7 @@ class HCApi {
         let url = `${hc_config.wms_server.protocol}${hc_config.wms_server.host}:${hc_config.wms_server.port}${path}`;
 
         if (Boolean(hc_config.debug.enable) && Boolean(hc_config.debug.enable_proxy)) {
-            url = `${path}`;
+            url = `/api${path}`;
         }
 
         if (params) {
@@ -294,7 +294,7 @@ class HCApi {
         let url = `${hc_config.wms_server.protocol}${hc_config.wms_server.host}:${hc_config.wms_server.port}${path}`;
 
         if (hc_config.debug.enable && hc_config.debug.enable_proxy) {
-            url = path;
+            url = `/api${path}`;
         }
 
         return await this.hc_http_client.SendPostRequest(url, params);

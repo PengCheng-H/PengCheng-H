@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Select } from 'antd';
+import { Select } from 'antd';
 
 
 interface Props {

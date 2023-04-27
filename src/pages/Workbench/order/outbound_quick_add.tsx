@@ -17,7 +17,7 @@ type DataSourceType = {
     supplier_code?: string;
 };
 
-export default () => {
+const QuickAddOutboundOrder = () => {
     const actionRef = useRef<ActionType>();
     const inputRef = useRef<HTMLInputElement>(null);
     const [item_code, setItemCode] = useState<string>("");
@@ -379,3 +379,5 @@ export default () => {
         </div>
     );
 };
+
+export default QuickAddOutboundOrder;
