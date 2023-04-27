@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 import HCRouter from './router';
 import './index.css';
 
-
-
 /**
  * @description 慧仓穿云箭WMS Web前端项目入口
  */
