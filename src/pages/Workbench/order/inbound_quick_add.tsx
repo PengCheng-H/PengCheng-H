@@ -16,7 +16,7 @@ type DataSourceType = {
     quantity?: number;
 };
 
-export default () => {
+const QuickAddInboundOrder = () => {
     const actionRef = useRef<ActionType>();
     const inputRef = useRef<HTMLInputElement>(null);
     const [item_code, setItemCode] = useState<string>("");
@@ -329,3 +329,5 @@ export default () => {
         </Modal>
     </div>;
 };
+
+export default QuickAddInboundOrder;
