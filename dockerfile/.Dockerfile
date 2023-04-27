@@ -1,4 +1,4 @@
-FROM node:18.20-alpine as builder
+FROM node:18.16-alpine as builder
 
 LABEL Version=1.0.2 \
     Maintainer=pengcheng.peng@hcrobots.com \
