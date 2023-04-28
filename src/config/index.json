@@ -53,6 +53,7 @@
         "workbench_task_detail_view": "/wms_server/workbench/task_detail/view",
         "workbench_task_detail_confirm": "/wms_server/workbench/task_detail/confirm",
         "wms_task_confirm": "/wms_server/wms_task/confirm",
+        "wms_task_close": "/wms_server/wms_task/close",
         "wcs_task_find": "/wms_server/wcs_task/find",
         "wcs_task_activate": "/wms_server/wcs_task/activate_sub_task",
         "inventory_find_empty_boxes": "/wms_server/inventory/find_empty_boxes"

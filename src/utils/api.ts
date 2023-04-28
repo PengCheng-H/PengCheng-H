@@ -214,6 +214,10 @@ class HCApi {
         return await this.SendPostRequest(hc_config.urls.wms_task_confirm, { task_code, quantity });
     }
 
+    public async WmsTaskClose(task_code: string): Promise<IHttpRes.IHCGetWorkbenchWcsTasksRes> {
+        return await this.SendPostRequest(hc_config.urls.wms_task_close, { task_code });
+    }
+
 
 
     public async WcsTaskFind(wcs_task_statuses: number[] = [0]): Promise<IHttpRes.IHCGetWorkbenchWcsTasksRes> {
