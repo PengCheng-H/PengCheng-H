@@ -4,7 +4,7 @@ import type { FormInstance } from 'antd/es/form';
 import { DefaultOptionType } from 'antd/es/cascader';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Form, Input, Popconfirm, Table, Cascader, InputNumber, InputRef, message, Row, Col } from 'antd';
-import { SearchOutlined, CheckCircleOutlined, RollbackOutlined, BorderInnerOutlined, BorderOuterOutlined, DeleteOutlined, CloseCircleOutlined, FormOutlined } from '@ant-design/icons';
+import { SearchOutlined, CheckCircleOutlined, RollbackOutlined, BorderInnerOutlined, BorderOuterOutlined, DeleteOutlined, CloseCircleOutlined, FormOutlined, StopOutlined } from '@ant-design/icons';
 
 import api from '../../../utils/api';
 import hc_config from "../../../config/index.json";
@@ -577,6 +577,19 @@ const App: React.FC = () => {
         await queryOrderList();
     }
 
+    // 取消分配剩余数量
+    async function onCancelAllocate(order: IHCInboundOrder) {
+        message.info(`请求取消订单剩余分配数量. 订单编码：${order.order_code}`);
+        const close_result = await api.WmsTaskClose(order.order_code);
+        if (close_result.result_code !== 0) {
+            message.error(`取消订单剩余分配数量失败！订单编码: ${order.order_code} 提示: ${close_result.result_msg}`);
+            return
+        }
+
+        message.success(`取消订单剩余分配数量成功！订单编码: ${order.order_code}`);
+        await queryOrderList();
+    }
+
     async function handleOrderDetailClose(order_detail: IHCInboundOrderDetail) {
         message.info(`请求关闭订单行. ${order_detail.line_no}`);
         const close_result = await api.OrderInboundDetailClose(order_detail.order_code, order_detail.order_detail_id);
@@ -669,7 +682,7 @@ const App: React.FC = () => {
             fixed: 'right',
             render: (_: any, record: IHCInboundOrder, index: number) =>
                 inbound_orders.length >= 1 ? (
-                    <div>
+                    <div style={{ textAlign: "left" }}>
                         <Popconfirm title="确定手工整单分配料箱吗？" onConfirm={() => onManualAllocateOrder(record)}>
                             <Button type='primary' icon={<BorderOuterOutlined />} loading={global_loadding}>手工分配整单料箱</Button>
                         </Popconfirm>
@@ -681,6 +694,9 @@ const App: React.FC = () => {
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => handleOrderDelete(record.key)}>
                             <Button icon={<DeleteOutlined />} style={{ marginLeft: "5px" }} danger loading={global_loadding}>移除</Button>
+                        </Popconfirm>
+                        <Popconfirm title="确认取消分配剩余数量吗？" onConfirm={() => onCancelAllocate(record)}>
+                            <Button type='primary' icon={<StopOutlined />} style={{ marginTop: "5px" }} loading={global_loadding}>取消分配剩余数量</Button>
                         </Popconfirm>
                     </div>
                 ) : null,

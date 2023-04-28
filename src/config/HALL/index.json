@@ -48,6 +48,7 @@
         "order_outbound_close": "/wms_server/order/outbound/close",
         "order_outbound_detail_close": "/wms_server/order/outbound/close_detail",
         "wms_task_confirm": "/wms_server/wms_task/confirm",
+        "wms_task_close": "/wms_server/wms_task/close",
         "wcs_task_find": "/wms_server/wcs_task/find",
         "wcs_task_activate": "/wms_server/wcs_task/activate_sub_task",
         "workbench_get": "/wms_server/workbench/get",
