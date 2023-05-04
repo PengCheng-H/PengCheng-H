@@ -1,5 +1,5 @@
-export default function HomeIndex() {
+export default function ConsoleIndex() {
     return <>
-        <h1>Console</h1> 
+        <h1>IndexConsole</h1> 
     </>
 }

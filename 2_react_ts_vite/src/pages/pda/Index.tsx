@@ -1,5 +1,5 @@
 export default function PdaIndex() {
     return <>
-        <h1>PDA</h1>
+        <h1>IndexPda</h1>
     </>
 }

@@ -1,5 +1,5 @@
-export default function HomeIndex() {
+export default function UserIndex() {
     return <>
-        <h1>User</h1>
+        <h1>IndexUser</h1>
     </>
 }
