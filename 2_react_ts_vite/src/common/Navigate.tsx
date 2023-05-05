@@ -1,9 +1,8 @@
 import React from 'react';
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import { LaptopOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 
-import RouterIndex from '../router/Index';
 
 const { Header, Content, Sider } = Layout;
 
@@ -95,7 +94,6 @@ const App: React.FC = () => {
                             background: colorBgContainer,
                         }}
                     >
-                        <RouterIndex />
                     </Content>
                 </Layout>
             </Layout>

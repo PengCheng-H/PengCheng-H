@@ -25,9 +25,11 @@ import UserIndex from '../pages/user/Index';
 import UserLogin from '../pages/user/Login';
 import UserRegiste from '../pages/user/Registe';
 import NoPageIndex from '../pages/no_page/Index';
+import Header from '../common/Header';
 
 export default function RouterIndex() {
     return <>
+        <Header />
         <BrowserRouter>
             <Routes>
                 <Route path='home'>
