@@ -1,9 +1,9 @@
-import RouterIndex from './router/Index';
+import NavigateIndex from './common/Navigate';
 
 export default function App() {
   return (
     <>
-        <RouterIndex />
+      <NavigateIndex />
     </>
   );
 }

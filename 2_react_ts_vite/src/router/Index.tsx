@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import HomeIndex from '../pages/home/Index';
 import WorkbenchIndex from '../pages/workbench/Index';
 import InboundOrder from '../pages/workbench/order/Inbound';
 import OutboundOrder from '../pages/workbench/order/Outbound';
@@ -29,6 +30,9 @@ export default function RouterIndex() {
     return <>
         <BrowserRouter>
             <Routes>
+                <Route path='home'>
+                    <Route path='' element={<HomeIndex />} />
+                </Route>
                 <Route path='workbench'>
                     <Route path='' element={<WorkbenchIndex />} />
                     <Route path='order'>
