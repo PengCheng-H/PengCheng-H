@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { LaptopOutlined } from '@ant-design/icons';
-import { MenuProps, message } from 'antd';
-import { Layout, Menu, theme } from 'antd';
+import { MenuProps } from 'antd';
+import { Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
-import { Navigate } from 'react-router-dom';
-import { Content } from 'antd/es/layout/layout';
+import config from 'src/config/Index';
 
 
 const items_nav_left: MenuProps['items'] = [
@@ -85,6 +84,9 @@ const SideNavigation: React.FC<any> = () => {
                 onClick={handleOnClick}
                 items={items_nav_left}
             />
+            <div className="verion-info" style={{ color: 'white', paddingTop: "20px", textAlign: "center" }}>
+                <p>当前版本: {config.version}</p>
+            </div>
         </Sider>
     );
 };
