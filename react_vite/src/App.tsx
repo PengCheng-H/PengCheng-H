@@ -1,12 +1,11 @@
 import { Layout } from "antd";
-import Navigation from "./components/Navigation";
-import { Content } from "antd/es/layout/layout";
+import GlobalRouter from "./router/Index";
 
 export default function App() {
   return (
     <>
       <Layout>
-        <Navigation />
+        <GlobalRouter />
       </Layout>
     </>
   );

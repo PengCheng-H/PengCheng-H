@@ -1,5 +1,5 @@
 export default function ConsoleIndex() {
     return <>
-        <h1>IndexConsole</h1> 
+        <h1>ConsoleIndex</h1>
     </>
 }
