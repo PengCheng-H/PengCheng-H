@@ -1,8 +1,32 @@
+import colors from 'tailwindcss/colors';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ['./src/**/*.{html,tsx}'],
     theme: {
-        extend: {},
-    },
-    plugins: [],
-};
+        screens: {
+            sm: '480px',
+            md: '768px',
+            lg: '976px',
+            xl: '1440px',
+        },
+        colors: {
+            gray: colors.gray,
+            blue: colors.blue,
+            red: colors.rose,
+            pink: colors.fuchsia,
+        },
+        fontFamily: {
+            sans: ['Graphik', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+        },
+        extend: {
+            spacing: {
+                '128': '32rem',
+                '144': '36rem',
+            },
+            borderRadius: {
+                '4xl': '2rem',
+            }
+        }
+    }
+}

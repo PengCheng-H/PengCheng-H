@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LaptopOutlined } from '@ant-design/icons';
 import { MenuProps, message } from 'antd';
 import { Layout, Menu, theme } from 'antd';
+import Sider from 'antd/es/layout/Sider';
+import { Navigate } from 'react-router-dom';
+import { Content } from 'antd/es/layout/layout';
 
-const { Sider } = Layout;
 
 const items_nav_left: MenuProps['items'] = [
     {
-        key: '/console/home',
+        key: '/console',
         icon: React.createElement(LaptopOutlined),
         label: '首页',
     },
@@ -16,7 +18,7 @@ const items_nav_left: MenuProps['items'] = [
         icon: React.createElement(LaptopOutlined),
         label: '基础数据',
         children: [
-            { key: '/console/basic/', icon: React.createElement(LaptopOutlined), label: '基础看板', },
+            { key: '/console/basic/dashboard', icon: React.createElement(LaptopOutlined), label: '基础看板', },
             { key: '/console/basic/boxes', icon: React.createElement(LaptopOutlined), label: '料箱管理', },
             { key: '/console/basic/cells', icon: React.createElement(LaptopOutlined), label: '货位管理', },
             { key: '/console/basic/items', icon: React.createElement(LaptopOutlined), label: '物品管理', },
@@ -28,7 +30,7 @@ const items_nav_left: MenuProps['items'] = [
         icon: React.createElement(LaptopOutlined),
         label: '库存管理',
         children: [
-            { key: '/console/inventory/', icon: React.createElement(LaptopOutlined), label: '库存看板', },
+            { key: '/console/inventory/dashboard', icon: React.createElement(LaptopOutlined), label: '库存看板', },
             { key: '/console/inventory/boxes', icon: React.createElement(LaptopOutlined), label: '料箱库存表', },
             { key: '/console/inventory/items', icon: React.createElement(LaptopOutlined), label: '物品库存表', },
             { key: '/console/inventory/summary', icon: React.createElement(LaptopOutlined), label: '库存汇总表', },
@@ -39,7 +41,7 @@ const items_nav_left: MenuProps['items'] = [
         icon: React.createElement(LaptopOutlined),
         label: '任务管理',
         children: [
-            { key: '/console/tasks/', icon: React.createElement(LaptopOutlined), label: '任务看板', },
+            { key: '/console/tasks/dashboard', icon: React.createElement(LaptopOutlined), label: '任务看板', },
             { key: '/console/tasks/wcs', icon: React.createElement(LaptopOutlined), label: 'WCS任务表', },
             { key: '/console/tasks/wms', icon: React.createElement(LaptopOutlined), label: 'WMS任务表', },
         ]
@@ -51,26 +53,40 @@ const items_nav_left: MenuProps['items'] = [
     },
 ];
 
-function onClick(info: any) {
-    message.info(info.key);
-    console.log(window.location.href, info);
-}
+const SideNavigation: React.FC<any> = () => {
+    const _defaultSelectedKeys = JSON.parse(localStorage.getItem("selectedKeys") || "[/console]")
+    const _defaultOpenKeys = JSON.parse(localStorage.getItem("openKeys") || "[/console]")
+    const [selectedKeys, setSelectedKeys] = useState<string[]>(_defaultSelectedKeys);
+    const [openKeys, setOpenKeys] = useState<string[]>(_defaultOpenKeys);
 
-export default function SideNavigation() {
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken();
+    const handleMenuSelect = ({ selectedKeys }: { selectedKeys: string[] }) => {
+        setSelectedKeys(selectedKeys);
+        localStorage.setItem("selectedKeys", JSON.stringify(selectedKeys));
+    };
+
+    const handleMenuOpen = (openKeys: string[]) => {
+        setOpenKeys(openKeys);
+        localStorage.setItem("openKeys", JSON.stringify(openKeys));
+    };
+
+    const handleOnClick = (info: any) => {
+        window.location.href = info.key
+    }
 
     return (
-        <Sider width={200} style={{ background: colorBgContainer }}>
+        <Sider>
             <Menu
+                theme='dark'
                 mode="inline"
-                defaultSelectedKeys={['/console/home']}
-                defaultOpenKeys={['/console/home']}
-                style={{ height: '100%', borderRight: 0 }}
+                defaultSelectedKeys={selectedKeys}
+                defaultOpenKeys={openKeys}
+                onSelect={handleMenuSelect}
+                onOpenChange={handleMenuOpen}
+                onClick={handleOnClick}
                 items={items_nav_left}
-                onClick={onClick}
             />
         </Sider>
     );
-}
+};
+
+export default SideNavigation;

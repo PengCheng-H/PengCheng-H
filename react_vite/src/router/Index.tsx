@@ -36,7 +36,7 @@ export default function GlobalRouter() {
         <BrowserRouter>
             <Routes>
                 {/* 主页路由 */}
-                <Route path='/' element={<HomeIndex />}>
+                {/* <Route path='/' element={<HomeIndex />}>
                     <Route path='help'>
                         <Route path='' element={<HelpIndex />} />
                         <Route path='manual'>
@@ -49,7 +49,7 @@ export default function GlobalRouter() {
                         <Route path='login' element={<UserLogin />} />
                         <Route path='registe' element={<UserRegiste />} />
                     </Route>
-                </Route>
+                </Route> */}
 
                 {/* 工作站路由 */}
                 <Route path='workbench' element={<WorkbenchIndex />}>
@@ -62,31 +62,33 @@ export default function GlobalRouter() {
                 {/* 控制台路由 */}
                 <Route path='console' element={<ConsoleIndex />}>
                     <Route path='basic'>
-                        <Route path='' element={<BasicIndex />} />
+                        <Route path='dashboard' element={<BasicIndex />} />
                         <Route path='boxes' element={<BasicBox />} />
                         <Route path='cells' element={<BasicCell />} />
                         <Route path='items' element={<BasicItem />} />
                         <Route path='suppliers' element={<BasicSupplier />} />
                     </Route>
                     <Route path='inventory'>
-                        <Route path='' element={<InventoryIndex />} />
+                        <Route path='dashboard' element={<InventoryIndex />} />
                         <Route path='boxes' element={<InventoryBox />} />
                         <Route path='items' element={<InventoryItem />} />
                         <Route path='summary' element={<InventorySummary />} />
                     </Route>
                     <Route path='tasks'>
-                        <Route path='' element={<TaskIndex />} />
+                        <Route path='dashboard' element={<TaskIndex />} />
                         <Route path='wcs' element={<TaskWcs />} />
                         <Route path='wms' element={<TaskWms />} />
                     </Route>
                     <Route path='users'>
-                        <Route path='' element={<UserManagement />} />
+                        <Route path='dashboard' element={<UserManagement />} />
                     </Route>
                 </Route>
 
                 {/* 默认路由 */}
                 <Route path='404' element={<NoPageIndex />} />
-                <Route path='*' element={<Navigate to="404" />} />
+                {/* <Route path='*' element={<Navigate to="workbench" />} /> */}
+                <Route path='*' element={<Navigate to="console" />} />
+                {/* <Route path='*' element={<Navigate to="404" />} /> */}
             </Routes >
         </BrowserRouter>
     )
