@@ -1,0 +1,14 @@
+.modal-detail {}
+
+.modal-detail label {
+    /* height: 20px; */
+    /* font-size: 16px; */
+    /* line-height: 1px; */
+}
+
+.modal-detail Input {
+    width: 250px;
+    /* height: 30px; */
+    /* margin: 5px; */
+    /* margin-top: 5px; */
+}

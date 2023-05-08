@@ -139,8 +139,6 @@ export interface IHCItem {
     item_alias_name: string
     item_extend_code1: string
     item_extend_code2: string
-    item_external_code1: string
-    item_external_code2: string
     item_length: number
     item_width: number;
     item_height: number

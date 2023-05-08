@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { LaptopOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';

@@ -22,7 +22,7 @@ class HCApi {
     }
 
     public async ItemUpdate(item: IBase.IHCItem): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.urls.item_update, { ...item });
+        return await this.SendPutRequest(hc_config.urls.item_update, { ...item });
     }
 
     public async ItemDetailGet(item_code: string): Promise<IHttpRes.IHCGetItemDetailRes> {
@@ -287,7 +287,7 @@ class HCApi {
             url += this.JoinGetParams(params);
         }
 
-        return await this.hc_http_client.SendGetRequest(url);
+        return await this.hc_http_client.Get(url);
     }
 
     /**
@@ -327,7 +327,23 @@ class HCApi {
             url = `/api${path}`;
         }
 
-        return await this.hc_http_client.SendPostRequest(url, params);
+        return await this.hc_http_client.Post(url, params);
+    }
+
+    /**
+     * @description 向服务器发送HTTP PUT请求，并同步返回结果
+     * @param path 请求路径
+     * @param params 请求参数
+     * @returns 
+     */
+    private async SendPutRequest(path: string, params: { [key: string]: any } = {}): Promise<IHttpRes.IHCResponse> {
+        let url = `${hc_config.wms_server.protocol}${hc_config.wms_server.host}:${hc_config.wms_server.port}${path}`;
+
+        if (hc_config.debug.enable && hc_config.debug.enable_proxy) {
+            url = `/api${path}`;
+        }
+
+        return await this.hc_http_client.Put(url, params);
     }
 }
 
