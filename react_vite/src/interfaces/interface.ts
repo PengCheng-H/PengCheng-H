@@ -200,16 +200,16 @@ export interface IHCLocation {
 }
 
 export interface IHCBox {
-    box_length: number
+    box_code: string
     location_code: string
+    box_length: number
+    box_width: number
     box_height: number
+    box_status: string
     box_region_count: number
+    box_rated_capacity: number
     created_time: string
     created_operator: string
-    box_code: string
-    box_width: number
-    box_rated_capacity: number
-    box_status: string
     last_updated_time: string
     last_updated_operator: string
 }

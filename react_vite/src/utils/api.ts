@@ -66,7 +66,7 @@ class HCApi {
         return await this.SendGetRequest(hc_config.urls.location_detail_get, { location_code });
     }
 
-    public async LocationListGet(text = "", status: LocationStatus[] = [], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
+    public async LocationListGet(text = "", status: LocationStatus[] = [], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetLocationRes> {
         return await this.SendGetRequest(hc_config.urls.location_list_get, { text, status, page_no, page_size });
     }
 
@@ -84,7 +84,7 @@ class HCApi {
         return await this.SendPostRequest(hc_config.urls.box_detail_get, { box_code });
     }
 
-    public async BoxListGet(text = "", status: BoxStatus[] = [], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
+    public async BoxListGet(text = "", status: BoxStatus[] = [], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetBoxRes> {
         return await this.SendGetRequest(hc_config.urls.box_list_get, { text, status, page_no, page_size });
     }
 

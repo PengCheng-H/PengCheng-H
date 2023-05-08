@@ -1,4 +1,4 @@
-import { IHCBoxDetail, IHCInboundOrder, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
+import { IHCBox, IHCBoxDetail, IHCInboundOrder, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
 
 export interface IHCResponse {
     result_code: number
@@ -45,11 +45,28 @@ export interface IHCGetLocationDetailRes extends IHCResponse {
     data: IHCLocation
 }
 
+export interface IHCGetLocationRes extends IHCResPagination {
+    data: {
+        total_count: number
+        page_no: number
+        page_size: number
+        data_list: IHCLocation[]
+    }
+}
+
 export interface IHCGetBoxDetailRes extends IHCResponse {
     data: {
         task_type: string
         box_code: string
         region_task_details: IHCBoxDetail[]
+    }
+}
+export interface IHCGetBoxRes extends IHCResPagination {
+    data: {
+        total_count: number
+        page_no: number
+        page_size: number
+        data_list: IHCBox[]
     }
 }
 
