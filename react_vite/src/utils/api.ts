@@ -58,7 +58,7 @@ class HCApi {
         return await this.SendPostRequest(hc_config.urls.location_add, { ...location });
     }
 
-    public async LocationUpdate(location: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
+    public async LocationUpdate(location: IBase.IHCLocation): Promise<IHttpRes.IHCResponse> {
         return await this.SendPutRequest(hc_config.urls.location_update, { ...location });
     }
 

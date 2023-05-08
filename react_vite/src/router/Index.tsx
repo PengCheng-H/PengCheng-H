@@ -16,7 +16,7 @@ import OutboundOrder from '../pages/workbench/order/Outbound';
 import ConsoleIndex from '../pages/console/Index';
 import BasicIndex from '../pages/console/basic_data/Index';
 import BasicBox from '../pages/console/basic_data/Box';
-import BasicCell from '../pages/console/basic_data/Cell';
+import BasicLocation from '../pages/console/basic_data/Location';
 import BasicItem from '../pages/console/basic_data/Item';
 import BasicSupplier from '../pages/console/basic_data/Supplier';
 import InventoryIndex from '../pages/console/inventory/Index';
@@ -64,7 +64,7 @@ export default function GlobalRouter() {
                     <Route path='basic'>
                         <Route path='dashboard' element={<BasicIndex />} />
                         <Route path='boxes' element={<BasicBox />} />
-                        <Route path='cells' element={<BasicCell />} />
+                        <Route path='cells' element={<BasicLocation />} />
                         <Route path='items' element={<BasicItem />} />
                         <Route path='suppliers' element={<BasicSupplier />} />
                     </Route>

@@ -187,14 +187,14 @@ export interface IHCSupplier {
 
 export interface IHCLocation {
     location_code: string
+    location_status: string
+    location_row: number
+    location_column: number
     location_layer: number
+    location_depth: number
     abc_type: string
     created_time: string
     created_operator: string
-    location_row: number
-    location_column: number
-    location_depth: number
-    location_status: string
     last_updated_time: string
     last_updated_operator: string
 }

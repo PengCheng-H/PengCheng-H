@@ -2,51 +2,49 @@ import { useEffect, useState } from "react"
 import { Button, Input, Modal, Select, Table, message } from "antd";
 
 import api from "src/utils/api"
-// import BoxDetail from "./BoxDetail";
-import { IHCBox } from "src/interfaces/interface";
-import { BoxStatus } from "src/types/enum";
+import LocationDetail from "./LocationDetail";
+import { IHCLocation } from "src/interfaces/interface";
+import { LocationStatus } from "src/types/enum";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
-import BoxDetail from "./BoxDetail";
 
 
-export default function BasicBox() {
+export default function BasicLocation() {
     const [timestamp, setTimestamp] = useState<number>(0)
-    const [boxList, setBoxList] = useState<IHCBox[]>([])
+    const [locationList, setLocationList] = useState<IHCLocation[]>([])
     const [showDetailModal, setShowDetailModal] = useState<boolean>(false)
-    const [curBeingModifedBox, setCurBeingModifedBox] = useState<IHCBox>({} as IHCBox)
+    const [curBeingModifedLocation, setCurBeingModifedLocation] = useState<IHCLocation>({} as IHCLocation)
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [text, setText] = useState<string>("")
-    const [boxStatus, setBoxStatus] = useState<BoxStatus[]>([])
+    const [locationStatus, setLocationStatus] = useState<LocationStatus[]>([])
     const statusOptions = [
-        { label: "禁用", value: BoxStatus.DISABLED },
-        { label: "启用", value: BoxStatus.ENABLED },
+        { label: "禁用", value: LocationStatus.DISABLED },
+        { label: "启用", value: LocationStatus.ENABLED },
     ];
 
     useEffect(() => {
-        getBoxList();
-    }, [text, boxStatus, currentPage, pageSize, timestamp]);
+        getLocationList();
+    }, [text, locationStatus, currentPage, pageSize, timestamp]);
 
-
-    async function getBoxList() {
-        const result = await api.BoxListGet(text, boxStatus, currentPage || DEFAULT_PAGE_NO, pageSize || DEFAULT_PAGE_SIZE);
+    async function getLocationList() {
+        const result = await api.LocationListGet(text, locationStatus, currentPage || DEFAULT_PAGE_NO, pageSize || DEFAULT_PAGE_SIZE);
         if (!result || result.result_code !== 0) {
-            message.error(`获取料箱列表失败！error_msg: ${result.result_msg}`);
+            message.error(`获取货位列表失败！error_msg: ${result.result_msg}`);
             return;
         }
 
-        setTotal(result.data.total_count);
-        setBoxList(result.data.data_list);
+        setTotal(result.data.total_count)
+        setLocationList(result.data.data_list);
 
         if (result.data.page_size !== pageSize) { setPageSize(result.data.page_size); }
         if (result.data.page_no !== currentPage) { setCurrentPage(result.data.page_no); }
     }
 
-    async function updateBoxDetail() {
-        const result = await api.BoxUpdate(curBeingModifedBox);
+    async function updateLocationDetail() {
+        const result = await api.LocationUpdate(curBeingModifedLocation);
         if (!result || result.result_code !== 0) {
-            message.error(`更新料箱数据失败！error_msg: ${result.result_msg}`);
+            message.error(`更新货位数据失败！error_msg: ${result.result_msg}`);
             return;
         }
 
@@ -60,19 +58,19 @@ export default function BasicBox() {
         }
     };
 
-    const handleModify = (value: unknown, record: IHCBox, index: number) => {
-        setCurBeingModifedBox(record)
+    const handleModify = (value: unknown, record: IHCLocation, index: number) => {
+        setCurBeingModifedLocation(record)
         setShowDetailModal(true);
     };
 
     const handleModifyConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const new_list = boxList.map((_box) => {
-            if (_box.box_code === curBeingModifedBox.box_code) { return curBeingModifedBox; }
-            return _box;
+        const new_list = locationList.map((_location) => {
+            if (_location.location_code === curBeingModifedLocation.location_code) { return curBeingModifedLocation; }
+            return _location;
         });
-        setBoxList(new_list);
+        setLocationList(new_list);
         setShowDetailModal(false);
-        updateBoxDetail();
+        updateLocationDetail();
     };
 
     const handleModifyCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -82,43 +80,41 @@ export default function BasicBox() {
 
     return <>
         <div style={{ marginBottom: 10, marginLeft: 10 }}>
-            <label>料箱码：</label>
+            <label>货位属性：</label>
             <Input
-                placeholder="请输入料箱码"
+                placeholder="请输入货位码"
                 style={{ width: 200, margin: 10 }}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
-            <label>料箱状态：</label>
+            <label>货位状态：</label>
             <Select
                 mode="multiple"
                 style={{ width: 200, marginRight: 16 }}
-                placeholder="请选择料箱状态"
+                placeholder="请选择货位状态"
                 options={statusOptions}
-                value={boxStatus}
-                onChange={(value) => { setBoxStatus(value) }}
+                value={locationStatus}
+                onChange={(value) => { setLocationStatus(value) }}
             />
         </div>
         <div style={{ width: '85vw', height: '90vh', overflow: 'auto' }}>
-            <Table<IHCBox>
+            <Table<IHCLocation>
                 sticky
                 scroll={{ x: '100%', y: '100%' }}
-                dataSource={boxList}
+                dataSource={locationList}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-
-                    { title: '箱号', dataIndex: 'box_code', key: 'box_code', width: '120px', fixed: 'left', },
-                    { title: '货位号', dataIndex: 'location_code', key: 'location_code', width: '120px', fixed: 'left', },
+                    { title: '货位码', dataIndex: 'location_code', key: 'location_code', width: '120px', fixed: 'left' },
                     {
-                        title: '状态', dataIndex: 'box_status', key: 'box_status', width: '120px', render: (value, record, index) => {
-                            return Object.keys(BoxStatus)[Object.values(BoxStatus).indexOf(value)]
+                        title: '状态', dataIndex: 'item_status', key: 'item_status', width: '120px', render: (value, record, index) => {
+                            return Object.keys(LocationStatus)[Object.values(LocationStatus).indexOf(value)]
                         }
                     },
-                    { title: '长度', dataIndex: 'box_length', key: 'box_length', width: '120px', },
-                    { title: '宽度', dataIndex: 'box_width', key: 'box_width', width: '120px', },
-                    { title: '高度', dataIndex: 'box_height', key: 'box_height', width: '120px', },
-                    { title: '分区数量', dataIndex: 'box_region_count', key: 'box_region_count', width: '120px', },
-                    { title: '额定数量', dataIndex: 'box_rated_capacity', key: 'box_rated_capacity', width: '120px', },
+                    { title: '排号', dataIndex: 'location_row', key: 'location_row', width: '120px', },
+                    { title: '列号', dataIndex: 'location_column', key: 'location_column', width: '120px', },
+                    { title: '层号', dataIndex: 'location_layer', key: 'location_layer', width: '120px', },
+                    { title: '深度', dataIndex: 'location_depth', key: 'location_depth', width: '120px', },
+                    { title: 'abc类型', dataIndex: 'abc_type', key: 'abc_type', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
                     { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
@@ -129,7 +125,7 @@ export default function BasicBox() {
                         }
                     },
                 ]}
-                rowKey={(record) => record.box_code.toString()}
+                rowKey={(record) => record.location_code.toString()}
                 pagination={{
                     total,
                     pageSize,
@@ -142,13 +138,13 @@ export default function BasicBox() {
         </div>
         <div>
             <Modal
-                title="修改料箱属性"
+                title="修改货位属性"
                 open={showDetailModal}
                 onOk={handleModifyConfirm}
                 onCancel={handleModifyCancel}
                 okButtonProps={{ style: { backgroundColor: '#f50' } }}
             >
-                <BoxDetail box={curBeingModifedBox} setBox={(box: IHCBox) => { setCurBeingModifedBox(box); }} />
+                <LocationDetail location={curBeingModifedLocation} setLocation={(location: IHCLocation) => { setCurBeingModifedLocation(location); }} />
             </Modal>
         </div>
     </>
