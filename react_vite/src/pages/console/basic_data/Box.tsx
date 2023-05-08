@@ -2,11 +2,10 @@ import { useEffect, useState } from "react"
 import { Button, Input, Modal, Select, Table, message } from "antd";
 
 import api from "src/utils/api"
-// import BoxDetail from "./BoxDetail";
+import BoxDetail from "./BoxDetail";
 import { IHCBox } from "src/interfaces/interface";
 import { BoxStatus } from "src/types/enum";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
-import BoxDetail from "./BoxDetail";
 
 
 export default function BasicBox() {
@@ -106,7 +105,6 @@ export default function BasicBox() {
                 dataSource={boxList}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-
                     { title: '箱号', dataIndex: 'box_code', key: 'box_code', width: '120px', fixed: 'left', },
                     { title: '货位号', dataIndex: 'location_code', key: 'location_code', width: '120px', fixed: 'left', },
                     {

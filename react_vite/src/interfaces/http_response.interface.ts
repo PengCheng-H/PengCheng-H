@@ -1,4 +1,4 @@
-import { IHCBox, IHCBoxDetail, IHCInboundOrder, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
+import { IHCBox, IHCBoxDetail, IHCInboundOrder, IHCInventoryBox, IHCInventoryItem, IHCInventorySummary, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
 
 export interface IHCResponse {
     result_code: number
@@ -122,7 +122,7 @@ export interface IHCInventorySummaryFindRes extends IHCResponse {
         total_count: number
         page_no: number
         page_size: number
-        data_list: object[]
+        data_list: IHCInventorySummary[]
     }
 }
 
@@ -131,7 +131,7 @@ export interface IHCInventoryBoxesFindRes extends IHCResponse {
         total_count: number
         page_no: number
         page_size: number
-        data_list: object[]
+        data_list: IHCInventoryBox[]
     }
 }
 
@@ -140,6 +140,6 @@ export interface IHCInventoryItemsFindRes extends IHCResponse {
         total_count: number
         page_no: number
         page_size: number
-        data_list: object[]
+        data_list: IHCInventoryItem[]
     }
 }

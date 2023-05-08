@@ -250,3 +250,51 @@ export interface IHCPagination {
     page_size?: number
     total_count?: number
 }
+
+export interface IHCInventorySummary {
+    key?: string | number
+    inventory_summary_id: number
+    item_code: string
+    quantity: number
+    package_unit: string
+    pick_allocated_qty: number
+    storage_allocated_qty: number
+    created_time: string
+    created_operator: string
+    last_updated_time: string
+    last_updated_operator: string
+}
+
+export interface IHCInventoryBox {
+    key?: string | number
+    inventory_summary_id: number
+    item_code: string
+    quantity: number
+    box_code: string
+    box_region_id: number
+    box_inventory_id: number
+    pick_allocated_qty: number
+    storage_allocated_qty: number
+    package_unit: string
+    created_time: string
+    created_operator: string
+    last_updated_time: string
+    last_updated_operator: string
+}
+
+export interface IHCInventoryItem {
+    key?: string | number
+    inventory_summary_id: number
+    item_code: string
+    quantity: number
+    box_code: string
+    box_region_id: number
+    box_inventory_id: number
+    pick_allocated_qty: number
+    storage_allocated_qty: number
+    package_unit: string
+    created_time: string
+    created_operator: string
+    last_updated_time: string
+    last_updated_operator: string
+}
