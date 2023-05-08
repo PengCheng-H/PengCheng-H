@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { LaptopOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
 import { Menu } from 'antd';
-import Sider from 'antd/es/layout/Sider';
 import config from 'src/config/Index';
 
 
@@ -73,7 +72,12 @@ const SideNavigation: React.FC<any> = () => {
     }
 
     return (
-        <Sider>
+        <>
+            <div style={{ height: "30px", background: "rgba(255, 255, 255, .2)", margin: "16px" }} >
+                <div className="verion-info" style={{ color: 'white', textAlign: "center", lineHeight: '30px' }}>
+                    <p>当前版本: {config.version}</p>
+                </div>
+            </div>
             <Menu
                 theme='dark'
                 mode="inline"
@@ -84,10 +88,7 @@ const SideNavigation: React.FC<any> = () => {
                 onClick={handleOnClick}
                 items={items_nav_left}
             />
-            <div className="verion-info" style={{ color: 'white', paddingTop: "20px", textAlign: "center" }}>
-                <p>当前版本: {config.version}</p>
-            </div>
-        </Sider>
+        </>
     );
 };
 
