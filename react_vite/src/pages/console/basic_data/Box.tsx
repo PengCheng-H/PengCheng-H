@@ -115,12 +115,12 @@ export default function BasicBox() {
                     { title: '长度', dataIndex: 'box_length', key: 'box_length', width: '120px', },
                     { title: '宽度', dataIndex: 'box_width', key: 'box_width', width: '120px', },
                     { title: '高度', dataIndex: 'box_height', key: 'box_height', width: '120px', },
-                    { title: '分区数量', dataIndex: 'box_region_count', key: 'box_region_count', width: '120px', },
-                    { title: '额定数量', dataIndex: 'box_rated_capacity', key: 'box_rated_capacity', width: '120px', },
+                    { title: '料箱分区数量', dataIndex: 'box_region_count', key: 'box_region_count', width: '120px', },
+                    { title: '料箱额定数量', dataIndex: 'box_rated_capacity', key: 'box_rated_capacity', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>

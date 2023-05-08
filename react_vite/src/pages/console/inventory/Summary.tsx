@@ -68,9 +68,9 @@ export default function InventorySummary() {
                     { title: '分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '120px', },
                     { title: '分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>

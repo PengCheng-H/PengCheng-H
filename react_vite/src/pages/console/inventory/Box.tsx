@@ -73,15 +73,15 @@ export default function InventoryBox() {
                     { title: '物品码', dataIndex: 'item_code', key: 'item_code', width: '120px', fixed: 'left', },
                     { title: '库存数量', dataIndex: 'quantity', key: 'quantity', width: '120px', },
                     { title: '料箱号', dataIndex: 'box_code', key: 'box_code', width: '120px', },
-                    { title: '箱库存编号', dataIndex: 'box_inventory_id', key: 'box_inventory_id', width: '120px', },
-                    { title: '箱分区编号', dataIndex: 'box_region_id', key: 'box_region_id', width: '120px', },
+                    { title: '料箱库存编号', dataIndex: 'box_inventory_id', key: 'box_inventory_id', width: '120px', },
+                    { title: '料箱分区编号', dataIndex: 'box_region_id', key: 'box_region_id', width: '120px', },
                     { title: '包装单位', dataIndex: 'package_unit', key: 'package_unit', width: '120px', },
-                    { title: '分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '120px', },
-                    { title: '分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '120px', },
+                    { title: '已分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '120px', },
+                    { title: '已分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>

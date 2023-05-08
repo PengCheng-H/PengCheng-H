@@ -116,9 +116,9 @@ export default function BasicLocation() {
                     { title: '深度', dataIndex: 'location_depth', key: 'location_depth', width: '120px', },
                     { title: 'abc类型', dataIndex: 'abc_type', key: 'abc_type', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>

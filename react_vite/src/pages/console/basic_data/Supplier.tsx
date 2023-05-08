@@ -106,11 +106,11 @@ export default function BasicSupplier() {
                     { title: '名称', dataIndex: 'supplier_name', key: 'supplier_name', width: '120px', fixed: 'left', },
                     { title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', width: '120px', },
                     { title: '别名', dataIndex: 'supplier_alias_name', key: 'supplier_alias_name', width: '120px', },
-                    { title: '创建来源', dataIndex: 'created_from', key: 'created_from', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
-                    { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
+                    // { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
