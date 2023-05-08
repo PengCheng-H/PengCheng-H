@@ -41,14 +41,14 @@ class HCApi {
     }
 
     public async SupplierUpdate(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.urls.supplier_update, { ...supplier });
+        return await this.SendPutRequest(hc_config.urls.supplier_update, { ...supplier });
     }
 
     public async SupplierDetailGet(supplier_code: string): Promise<IHttpRes.IHCGetSupplierDetailRes> {
         return await this.SendGetRequest(hc_config.urls.supplier_detail_get, { supplier_code });
     }
 
-    public async SupplierListGet(text = "", status: SupplierStatus["0"], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
+    public async SupplierListGet(text = "", status: SupplierStatus[] = [], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
         return await this.SendGetRequest(hc_config.urls.supplier_list_get, { text, status, page_no, page_size });
     }
 
@@ -59,14 +59,14 @@ class HCApi {
     }
 
     public async LocationUpdate(location: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.urls.location_update, { ...location });
+        return await this.SendPutRequest(hc_config.urls.location_update, { ...location });
     }
 
     public async LocationDetailGet(location_code: string): Promise<IHttpRes.IHCGetLocationDetailRes> {
         return await this.SendGetRequest(hc_config.urls.location_detail_get, { location_code });
     }
 
-    public async LocationListGet(text = "", status: LocationStatus[], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
+    public async LocationListGet(text = "", status: LocationStatus[] = [], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
         return await this.SendGetRequest(hc_config.urls.location_list_get, { text, status, page_no, page_size });
     }
 
@@ -77,14 +77,14 @@ class HCApi {
     }
 
     public async BoxUpdate(box: IBase.IHCBox): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.urls.box_update, { ...box });
+        return await this.SendPutRequest(hc_config.urls.box_update, { ...box });
     }
 
     public async BoxDetailGet(box_code: string): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.urls.box_detail_get, { box_code });
     }
 
-    public async BoxListGet(text = "", status: BoxStatus[], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
+    public async BoxListGet(text = "", status: BoxStatus[] = [], page_no = DEFAULT_PAGE_NO, page_size = DEFAULT_PAGE_SIZE): Promise<IHttpRes.IHCGetSupplierRes> {
         return await this.SendGetRequest(hc_config.urls.box_list_get, { text, status, page_no, page_size });
     }
 
@@ -95,7 +95,7 @@ class HCApi {
     }
 
     public async OrderTypeUpdate(order_type_code: string, order_type_name: string, work_type: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.urls.order_type_update, { order_type_code, order_type_name, work_type });
+        return await this.SendPutRequest(hc_config.urls.order_type_update, { order_type_code, order_type_name, work_type });
     }
 
     public async OrderTypeDetailGet(order_type_code: string): Promise<IHttpRes.IHCGetOderTypeDetailRes> {
@@ -109,7 +109,7 @@ class HCApi {
     }
 
     public async PickStationUpdate(pick_station_code: string, pick_station_status: string, wcs_task_code: string, box_code: string): Promise<IHttpRes.IHCResponse> {
-        return await this.SendPostRequest(hc_config.urls.pick_station_update, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
+        return await this.SendPutRequest(hc_config.urls.pick_station_update, { pick_station_code, pick_station_status, wcs_task_code, box_coed: box_code });
     }
 
     public async PickStationDetailGet(pick_station_code: string): Promise<IHttpRes.IHCGetPickStationRes> {

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
-import { Button, Input, Modal, Row, Select, Table, message } from "antd";
+import { Button, Input, Modal, Select, Table, message } from "antd";
 
 import api from "src/utils/api"
+import ItemDetail from "./ItemDetail";
 import { IHCItem } from "src/interfaces/interface";
 import { ItemStatus } from "src/types/enum";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
-import ItemDetail from "./ItemDetail";
 
 
 export default function BasicItem() {
@@ -80,14 +80,14 @@ export default function BasicItem() {
 
     return <>
         <div style={{ marginBottom: 10, marginLeft: 10 }}>
-            <label>物品码:</label>
+            <label>物品属性：</label>
             <Input
-                placeholder="请输入物品码"
+                placeholder="请输入物品码/名称/别名/扩展码/货号等"
                 style={{ width: 200, margin: 10 }}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
-            <label>物品状态:</label>
+            <label>物品状态：</label>
             <Select
                 mode="multiple"
                 style={{ width: 200, marginRight: 16 }}

@@ -1,5 +1,4 @@
 import { Input, Row } from "antd";
-import { useEffect, useState } from "react";
 import { IHCItem } from "src/interfaces/interface";
 import './index.css';
 

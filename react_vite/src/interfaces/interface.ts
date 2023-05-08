@@ -156,25 +156,31 @@ export interface IHCItem {
     production_date_as_lot: boolean
     production_date_mixed_days: number
     storage_strategy: string
-    storage_date_mixed_days: string
     storage_date_as_lot: boolean
+    storage_date_mixed_days: string
     pick_strategy: string
-    expiry_date_mixed_days: number
     expiry_date_as_lot: boolean
+    expiry_date_mixed_days: number
     created_from: string
-    created_operator: string
     created_time: string
-    last_updated_operator: string
+    created_operator: string
     last_updated_time: string
+    last_updated_operator: string
+    item_prop1: string
+    item_prop2: string
+    item_prop3: string
+    item_prop4: string
+    item_prop5: string
 }
 
 export interface IHCSupplier {
-    created_time: string
     supplier_code: string
     supplier_name: string
-    created_operator: string
-    created_from: string
     supplier_status: string
+    supplier_alias_name: string
+    created_from: string
+    created_time: string
+    created_operator: string
     last_updated_time: string
     last_updated_operator: string
 }
