@@ -41,9 +41,17 @@ export default function InventoryItem() {
         }
     };
 
-    const handleViewInventorySummary = (value: unknown, record: IHCInventoryItem, index: number) => { return };
+    const handleViewInventorySummary = (value: unknown, record: IHCInventoryItem, index: number) => {
+        localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
+        localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/summary"));
+        window.location.href = `/console/inventory/summary?text=${text}`
+    };
 
-    const handleViewInventoryBox = (value: unknown, record: IHCInventoryItem, index: number) => { return };
+    const handleViewInventoryBox = (value: unknown, record: IHCInventoryItem, index: number) => {
+        localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
+        localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/boxes"));
+        window.location.href = `/console/inventory/boxes?text=${text}&box_code=${boxCode}`
+    };
 
     return <>
         <div style={{ marginBottom: 10, marginLeft: 10 }}>

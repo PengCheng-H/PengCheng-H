@@ -35,7 +35,6 @@ class HCApi {
 
 
 
-
     public async SupplierAdd(supplier: IBase.IHCSupplier): Promise<IHttpRes.IHCResponse> {
         return await this.SendPostRequest(hc_config.urls.supplier_add, { ...supplier });
     }

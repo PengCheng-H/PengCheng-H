@@ -53,8 +53,8 @@ const items_nav_left: MenuProps['items'] = [
 ];
 
 const SideNavigation: React.FC<any> = () => {
-    const _defaultSelectedKeys = JSON.parse(localStorage.getItem("selectedKeys") || "[/console]")
-    const _defaultOpenKeys = JSON.parse(localStorage.getItem("openKeys") || "[/console]")
+    const _defaultSelectedKeys = JSON.parse(localStorage.getItem("selectedKeys") || '["/console"]')
+    const _defaultOpenKeys = JSON.parse(localStorage.getItem("openKeys") || '["/console"]')
     const [selectedKeys, setSelectedKeys] = useState<string[]>(_defaultSelectedKeys);
     const [openKeys, setOpenKeys] = useState<string[]>(_defaultOpenKeys);
 
