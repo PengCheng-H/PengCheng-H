@@ -43,15 +43,15 @@ export default function InventoryBox() {
     };
 
     const handleViewInventorySummary = (value: unknown, record: IHCInventoryBox, index: number) => {
-        localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
-        localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/summary"));
+        localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/summary"]));
         window.location.href = `/console/inventory/summary?text=${record.item_code}`
     };
 
     const handleViewInventoryItem = (value: unknown, record: IHCInventoryBox, index: number) => {
-        localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
-        localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/items"));
-        window.location.href = `/console/inventory/items?text=${record.item_code}&boxCode=${record.box_code}`
+        localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
+        window.location.href = `/console/inventory/items?text=${record.item_code}`
     };
 
     return <>

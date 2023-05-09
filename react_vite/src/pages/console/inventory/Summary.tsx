@@ -42,14 +42,14 @@ export default function InventorySummary() {
     };
 
     const handleViewInventoryBox = (value: unknown, record: IHCInventorySummary, index: number) => {
-        localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
-        localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/boxes"));
+        localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/boxes"]));
         window.location.href = `/console/inventory/boxes?text=${record.item_code}`
     };
 
     const handleViewInventoryItem = (value: unknown, record: IHCInventorySummary, index: number) => {
-        localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
-        localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/items"));
+        localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
         window.location.href = `/console/inventory/items?text=${record.item_code}`
     };
 
@@ -63,7 +63,7 @@ export default function InventorySummary() {
                 onChange={(e) => setText(e.target.value)}
             />
         </div>
-        <div style={{ width: '85vw', height: '90vh', overflow: 'auto' }}>
+        <div style={{ width: '90vw', height: '90vh', overflow: 'auto' }}>
             <Table<IHCInventorySummary>
                 sticky
                 scroll={{ x: '100%', y: '100%' }}
