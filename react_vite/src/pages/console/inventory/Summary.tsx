@@ -13,7 +13,7 @@ export default function InventorySummary() {
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [text, setText] = useState<string>("")
+    const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("text") || "")
 
     useEffect(() => {
         getInventorySummaryList();
@@ -44,13 +44,13 @@ export default function InventorySummary() {
     const handleViewInventoryBox = (value: unknown, record: IHCInventorySummary, index: number) => {
         localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
         localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/boxes"));
-        window.location.href = `/console/inventory/boxes?text=${text}`
+        window.location.href = `/console/inventory/boxes?text=${record.item_code}`
     };
 
     const handleViewInventoryItem = (value: unknown, record: IHCInventorySummary, index: number) => {
         localStorage.setItem("openKeys", JSON.stringify("/console/inventory"));
         localStorage.setItem("selectedKeys", JSON.stringify("/console/inventory/items"));
-        window.location.href = `/console/inventory/items?text=${text}`
+        window.location.href = `/console/inventory/items?text=${record.item_code}`
     };
 
     return <>
