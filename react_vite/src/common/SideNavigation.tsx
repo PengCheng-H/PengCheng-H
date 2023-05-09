@@ -7,17 +7,17 @@ import config from 'src/config/Index';
 
 
 const items_nav_left: MenuProps['items'] = [
-    {
-        key: '/console',
-        icon: React.createElement(LaptopOutlined),
-        label: '首页',
-    },
+    // {
+    //     key: '/console',
+    //     icon: React.createElement(LaptopOutlined),
+    //     label: '首页',
+    // },
     {
         key: '/console/basic',
         icon: React.createElement(LaptopOutlined),
         label: '基础数据',
         children: [
-            { key: '/console/basic/dashboard', icon: React.createElement(LaptopOutlined), label: '基础看板', },
+            // { key: '/console/basic/dashboard', icon: React.createElement(LaptopOutlined), label: '基础看板', },
             { key: '/console/basic/boxes', icon: React.createElement(LaptopOutlined), label: '料箱管理', },
             { key: '/console/basic/cells', icon: React.createElement(LaptopOutlined), label: '货位管理', },
             { key: '/console/basic/items', icon: React.createElement(LaptopOutlined), label: '物品管理', },
@@ -29,7 +29,7 @@ const items_nav_left: MenuProps['items'] = [
         icon: React.createElement(LaptopOutlined),
         label: '库存管理',
         children: [
-            { key: '/console/inventory/dashboard', icon: React.createElement(LaptopOutlined), label: '库存看板', },
+            // { key: '/console/inventory/dashboard', icon: React.createElement(LaptopOutlined), label: '库存看板', },
             { key: '/console/inventory/boxes', icon: React.createElement(LaptopOutlined), label: '料箱库存表', },
             { key: '/console/inventory/items', icon: React.createElement(LaptopOutlined), label: '物品库存表', },
             { key: '/console/inventory/summary', icon: React.createElement(LaptopOutlined), label: '库存汇总表', },
@@ -40,16 +40,16 @@ const items_nav_left: MenuProps['items'] = [
         icon: React.createElement(LaptopOutlined),
         label: '任务管理',
         children: [
-            { key: '/console/tasks/dashboard', icon: React.createElement(LaptopOutlined), label: '任务看板', },
+            // { key: '/console/tasks/dashboard', icon: React.createElement(LaptopOutlined), label: '任务看板', },
             { key: '/console/tasks/wcs', icon: React.createElement(LaptopOutlined), label: 'WCS任务表', },
             { key: '/console/tasks/wms', icon: React.createElement(LaptopOutlined), label: 'WMS任务表', },
         ]
     },
-    {
-        key: '/console/users',
-        icon: React.createElement(LaptopOutlined),
-        label: '用户管理',
-    },
+    // {
+    //     key: '/console/users',
+    //     icon: React.createElement(LaptopOutlined),
+    //     label: '用户管理',
+    // },
 ];
 
 const SideNavigation: React.FC<any> = () => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Button, Input, Modal, Select, Table, message } from "antd";
+import { Button, Input, Table, message } from "antd";
 
 import api from "src/utils/api"
 import { IHCInventorySummary } from "src/interfaces/interface";
@@ -8,7 +8,6 @@ import utils from "src/utils/Index";
 
 
 export default function InventorySummary() {
-    const [timestamp, setTimestamp] = useState<number>(0)
     const [inventorySummaryList, setInventorySummaryList] = useState<IHCInventorySummary[]>([])
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
@@ -17,7 +16,7 @@ export default function InventorySummary() {
 
     useEffect(() => {
         getInventorySummaryList();
-    }, [text, currentPage, pageSize, timestamp]);
+    }, [text, currentPage, pageSize]);
 
 
     async function getInventorySummaryList() {
@@ -63,7 +62,7 @@ export default function InventorySummary() {
                 onChange={(e) => setText(e.target.value)}
             />
         </div>
-        <div style={{ width: '90vw', height: '90vh', overflow: 'auto' }}>
+        <div style={{ width: '85vw', height: '90vh', overflow: 'auto' }}>
             <Table<IHCInventorySummary>
                 sticky
                 scroll={{ x: '100%', y: '100%' }}
@@ -74,8 +73,8 @@ export default function InventorySummary() {
                     { title: '物品码', dataIndex: 'item_code', key: 'item_code', width: '120px', fixed: 'left', },
                     { title: '库存数量', dataIndex: 'quantity', key: 'quantity', width: '120px', },
                     { title: '包装单位', dataIndex: 'package_unit', key: 'package_unit', width: '120px', },
-                    { title: '分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '120px', },
-                    { title: '分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '120px', },
+                    { title: '已分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '125px', },
+                    { title: '已分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '125px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
                     // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
@@ -83,7 +82,7 @@ export default function InventorySummary() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }}>查看箱库存记录</Button>
+                                <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }}>查看料箱库存记录</Button>
                                 <Button onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存记录</Button>
                             </>
                         }

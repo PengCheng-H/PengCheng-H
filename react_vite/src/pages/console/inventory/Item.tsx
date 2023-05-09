@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Button, Input, Modal, Select, Table, message } from "antd";
+import { Button, Input, Table, message } from "antd";
 
 import api from "src/utils/api"
 import { IHCInventoryItem } from "src/interfaces/interface";
@@ -8,7 +8,6 @@ import utils from "src/utils/Index";
 
 
 export default function InventoryItem() {
-    const [timestamp, setTimestamp] = useState<number>(0)
     const [inventoryBoxList, setInventoryItemList] = useState<IHCInventoryItem[]>([])
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
@@ -18,7 +17,7 @@ export default function InventoryItem() {
 
     useEffect(() => {
         getInventoryItemList();
-    }, [text, boxCode, currentPage, pageSize, timestamp]);
+    }, [text, boxCode, currentPage, pageSize]);
 
 
     async function getInventoryItemList() {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Button, Input, Modal, Select, Table, message } from "antd";
+import { Button, Input, Table, message } from "antd";
 
 import api from "src/utils/api"
 import { IHCInventoryBox } from "src/interfaces/interface";
@@ -8,7 +8,6 @@ import utils from "src/utils/Index";
 
 
 export default function InventoryBox() {
-    const [timestamp, setTimestamp] = useState<number>(0)
     const [inventoryBoxList, setInventoryBoxList] = useState<IHCInventoryBox[]>([])
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
@@ -18,7 +17,7 @@ export default function InventoryBox() {
 
     useEffect(() => {
         getInventoryBoxList();
-    }, [text, boxCode, currentPage, pageSize, timestamp]);
+    }, [text, boxCode, currentPage, pageSize]);
 
 
     async function getInventoryBoxList() {
@@ -85,8 +84,8 @@ export default function InventoryBox() {
                     { title: '料箱库存编号', dataIndex: 'box_inventory_id', key: 'box_inventory_id', width: '120px', },
                     { title: '料箱分区编号', dataIndex: 'box_region_id', key: 'box_region_id', width: '120px', },
                     { title: '包装单位', dataIndex: 'package_unit', key: 'package_unit', width: '120px', },
-                    { title: '已分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '120px', },
-                    { title: '已分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '120px', },
+                    { title: '已分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '125px', },
+                    { title: '已分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '125px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
                     // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
