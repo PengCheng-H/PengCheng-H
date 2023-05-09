@@ -4,6 +4,7 @@ import { Button, Input, Modal, Select, Table, message } from "antd";
 import api from "src/utils/api"
 import { IHCInventorySummary } from "src/interfaces/interface";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
+import utils from "src/utils/Index";
 
 
 export default function InventorySummary() {
@@ -88,7 +89,7 @@ export default function InventorySummary() {
                         }
                     },
                 ]}
-                rowKey={(record) => record.inventory_summary_id.toString()}
+                rowKey={(record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,

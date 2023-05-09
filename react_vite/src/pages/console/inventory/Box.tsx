@@ -4,6 +4,7 @@ import { Button, Input, Modal, Select, Table, message } from "antd";
 import api from "src/utils/api"
 import { IHCInventoryBox } from "src/interfaces/interface";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
+import utils from "src/utils/Index";
 
 
 export default function InventoryBox() {
@@ -99,7 +100,7 @@ export default function InventoryBox() {
                         }
                     },
                 ]}
-                // rowKey={(record) => record.inventory_box_id.toString()}
+                rowKey={(record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
