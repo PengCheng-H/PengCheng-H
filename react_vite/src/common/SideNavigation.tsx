@@ -35,16 +35,16 @@ const items_nav_left: MenuProps['items'] = [
             { key: '/console/inventory/summary', icon: React.createElement(LaptopOutlined), label: '库存汇总表', },
         ]
     },
-    {
-        key: '/console/tasks',
-        icon: React.createElement(LaptopOutlined),
-        label: '任务管理',
-        children: [
-            // { key: '/console/tasks/dashboard', icon: React.createElement(LaptopOutlined), label: '任务看板', },
-            { key: '/console/tasks/wcs', icon: React.createElement(LaptopOutlined), label: 'WCS任务表', },
-            { key: '/console/tasks/wms', icon: React.createElement(LaptopOutlined), label: 'WMS任务表', },
-        ]
-    },
+    // {
+    //     key: '/console/tasks',
+    //     icon: React.createElement(LaptopOutlined),
+    //     label: '任务管理',
+    //     children: [
+    //         // { key: '/console/tasks/dashboard', icon: React.createElement(LaptopOutlined), label: '任务看板', },
+    //         { key: '/console/tasks/wcs', icon: React.createElement(LaptopOutlined), label: 'WCS任务表', },
+    //         { key: '/console/tasks/wms', icon: React.createElement(LaptopOutlined), label: 'WMS任务表', },
+    //     ]
+    // },
     // {
     //     key: '/console/users',
     //     icon: React.createElement(LaptopOutlined),

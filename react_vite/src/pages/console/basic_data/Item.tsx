@@ -16,7 +16,7 @@ export default function BasicItem() {
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [text, setText] = useState<string>("")
+    const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("itemCode") || "")
     const [itemStatus, setItemStatus] = useState<ItemStatus[]>([])
     const statusOptions = [
         { label: "禁用", value: ItemStatus.DISABLED },
@@ -76,6 +76,12 @@ export default function BasicItem() {
 
     const handleModifyCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
         setShowDetailModal(false);
+    };
+
+    const handleViewInventoryItem = (value: unknown, record: IHCItem, index: number) => {
+        localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
+        window.location.href = `/console/inventory/items?itemCode=${record.item_code}`
     };
 
     return <>
@@ -143,7 +149,10 @@ export default function BasicItem() {
                     // { title: '更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
-                            return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                            return <>
+                                <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                                <Button onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
+                            </>
                         }
                     },
                 ]}

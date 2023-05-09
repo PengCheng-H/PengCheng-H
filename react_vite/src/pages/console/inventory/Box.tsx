@@ -12,7 +12,7 @@ export default function InventoryBox() {
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("text") || "")
+    const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("itemCode") || "")
     const [boxCode, setBoxCode] = useState<string>(new URLSearchParams(window.location.search).get("boxCode") || "")
 
     useEffect(() => {
@@ -44,13 +44,25 @@ export default function InventoryBox() {
     const handleViewInventorySummary = (value: unknown, record: IHCInventoryBox, index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/summary"]));
-        window.location.href = `/console/inventory/summary?text=${record.item_code}`
+        window.location.href = `/console/inventory/summary?itemCode=${record.item_code}`
     };
 
     const handleViewInventoryItem = (value: unknown, record: IHCInventoryBox, index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
-        window.location.href = `/console/inventory/items?text=${record.item_code}`
+        window.location.href = `/console/inventory/items?itemCode=${record.item_code}`
+    };
+
+    const handleViewItemDetail = (value: unknown, record: IHCInventoryBox, index: number) => {
+        localStorage.setItem("openKeys", JSON.stringify(["/console/basic"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/basic/items"]));
+        window.location.href = `/console/basic/items?itemCode=${record.item_code}`
+    };
+
+    const handleViewBoxDetail = (value: unknown, record: IHCInventoryBox, index: number) => {
+        localStorage.setItem("openKeys", JSON.stringify(["/console/basic"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/basic/boxes"]));
+        window.location.href = `/console/basic/boxes?boxCode=${record.box_code}`
     };
 
     return <>
@@ -93,8 +105,10 @@ export default function InventoryBox() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button onClick={(e) => { handleViewInventorySummary(value, record, index) }}>查看汇总库存记录</Button>
-                                <Button onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存记录</Button>
+                                <Button onClick={(e) => { handleViewInventorySummary(value, record, index) }}>查看汇总库存</Button>
+                                <Button onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
+                                <Button onClick={(e) => { handleViewItemDetail(value, record, index) }} style={{ marginTop: 5 }}>查看物品详情</Button>
+                                <Button onClick={(e) => { handleViewBoxDetail(value, record, index) }} style={{ marginTop: 5 }}>查看料箱详情</Button>
                             </>
                         }
                     },

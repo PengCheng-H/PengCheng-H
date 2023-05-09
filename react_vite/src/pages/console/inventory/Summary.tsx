@@ -12,7 +12,7 @@ export default function InventorySummary() {
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("text") || "")
+    const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("itemCode") || "")
 
     useEffect(() => {
         getInventorySummaryList();

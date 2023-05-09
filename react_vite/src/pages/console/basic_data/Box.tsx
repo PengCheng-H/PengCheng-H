@@ -16,7 +16,7 @@ export default function BasicBox() {
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [text, setText] = useState<string>("")
+    const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("boxCode") || "")
     const [boxStatus, setBoxStatus] = useState<BoxStatus[]>([])
     const statusOptions = [
         { label: "禁用", value: BoxStatus.DISABLED },
@@ -78,6 +78,11 @@ export default function BasicBox() {
         setShowDetailModal(false);
     };
 
+    const handleViewInventoryBox = (value: unknown, record: IHCBox, index: number) => {
+        localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
+        localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/boxes"]));
+        window.location.href = `/console/inventory/boxes?boxCode=${record.box_code}`
+    };
 
     return <>
         <div style={{ marginBottom: 10, marginLeft: 10 }}>
@@ -123,7 +128,11 @@ export default function BasicBox() {
                     // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
-                            return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                            return <>
+                                <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                                <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button>
+                            </>
+
                         }
                     },
                 ]}
