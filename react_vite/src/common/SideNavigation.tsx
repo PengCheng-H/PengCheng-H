@@ -35,6 +35,16 @@ const items_nav_left: MenuProps['items'] = [
             { key: '/console/inventory/summary', icon: React.createElement(LaptopOutlined), label: '库存汇总表', },
         ]
     },
+    {
+        key: '/console/order',
+        icon: React.createElement(LaptopOutlined),
+        label: '订单管理',
+        children: [
+            // { key: '/console/order/dashboard', icon: React.createElement(LaptopOutlined), label: '订单看板', },
+            { key: '/console/order/inbound', icon: React.createElement(LaptopOutlined), label: '入库单管理', },
+            { key: '/console/order/outbound', icon: React.createElement(LaptopOutlined), label: '出库单管理', },
+        ]
+    },
     // {
     //     key: '/console/tasks',
     //     icon: React.createElement(LaptopOutlined),

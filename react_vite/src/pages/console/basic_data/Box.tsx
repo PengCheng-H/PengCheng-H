@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Button, Input, Modal, Select, Table, message } from "antd";
 
-import api from "src/utils/api"
+import api from "src/utils/api";
 import BoxDetail from "./BoxDetail";
 import { IHCBox } from "src/interfaces/interface";
 import { BoxStatus } from "src/types/enum";
@@ -121,7 +121,7 @@ export default function BasicBox() {
                     { title: '宽度', dataIndex: 'box_width', key: 'box_width', width: '120px', },
                     { title: '高度', dataIndex: 'box_height', key: 'box_height', width: '120px', },
                     { title: '料箱分区数量', dataIndex: 'box_region_count', key: 'box_region_count', width: '120px', },
-                    { title: '料箱额定数量', dataIndex: 'box_rated_capacity', key: 'box_rated_capacity', width: '120px', },
+                    { title: '默认满箱数量', dataIndex: 'box_rated_capacity', key: 'box_rated_capacity', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
                     // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
                     { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
