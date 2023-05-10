@@ -103,7 +103,7 @@ export default function BasicBox() {
                 onChange={(value) => { setBoxStatus(value) }}
             />
         </div>
-        <div style={{ width: '85vw', height: '90vh', overflow: 'auto' }}>
+        <div style={{ width: '85vw', height: '90vh' }}>
             <Table<IHCBox>
                 sticky
                 scroll={{ x: '100%', y: '100%' }}

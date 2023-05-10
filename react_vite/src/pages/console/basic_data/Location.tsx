@@ -97,7 +97,7 @@ export default function BasicLocation() {
                 onChange={(value) => { setLocationStatus(value) }}
             />
         </div>
-        <div style={{ width: '85vw', height: '90vh', overflow: 'auto' }}>
+        <div style={{ width: '85vw', height: '90vh' }}>
             <Table<IHCLocation>
                 sticky
                 scroll={{ x: '100%', y: '100%' }}

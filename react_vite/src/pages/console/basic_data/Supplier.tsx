@@ -95,7 +95,7 @@ export default function BasicSupplier() {
                 onChange={(value) => { setSupplierStatus(value) }}
             />
         </div>
-        <div style={{ width: '85vw', height: '90vh', overflow: 'auto' }}>
+        <div style={{ width: '85vw', height: '90vh' }}>
             <Table<IHCSupplier>
                 sticky
                 scroll={{ x: '100%', y: '100%' }}
