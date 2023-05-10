@@ -1,5 +1,5 @@
 export const DEFAULT_PAGE_NO = 1
-export const DEFAULT_PAGE_SIZE = 20
+export const DEFAULT_PAGE_SIZE = 10
 
 export const em_order_status: { [s: string]: string } = {
     "0": "已创建",

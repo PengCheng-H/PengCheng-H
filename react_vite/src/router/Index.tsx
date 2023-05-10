@@ -10,8 +10,8 @@ import UserLogin from '../pages/user/Login';
 import UserRegiste from '../pages/user/Registe';
 // 工作站路由
 import WorkbenchIndex from '../pages/workbench/Index';
-import InboundOrder from '../pages/workbench/order/Inbound';
-import OutboundOrder from '../pages/workbench/order/Outbound';
+import InboundOrder from '../pages/console/order/Inbound';
+import OutboundOrder from '../pages/console/order/Outbound';
 // 控制台路由
 import ConsoleIndex from '../pages/console/Index';
 import BasicIndex from '../pages/console/basic_data/Index';
@@ -29,6 +29,7 @@ import TaskWms from '../pages/console/task/WmsTask';
 import UserManagement from '../pages/console/user/Index';
 // 其它路由
 import NoPageIndex from "src/pages/no_page/Index";
+import OrderIndex from "src/pages/console/order/Index";
 
 // 全局路由器
 export default function GlobalRouter() {
@@ -53,10 +54,6 @@ export default function GlobalRouter() {
 
                 {/* 工作站路由 */}
                 <Route path='workbench' element={<WorkbenchIndex />}>
-                    <Route path='order'>
-                        <Route path='inbound' element={<InboundOrder />} />
-                        <Route path='outbound' element={<OutboundOrder />} />
-                    </Route>
                 </Route>
 
                 {/* 控制台路由 */}
@@ -78,6 +75,11 @@ export default function GlobalRouter() {
                         <Route path='dashboard' element={<TaskIndex />} />
                         <Route path='wcs' element={<TaskWcs />} />
                         <Route path='wms' element={<TaskWms />} />
+                    </Route>
+                    <Route path='order'>
+                        <Route path='dashboard' element={<OrderIndex />} />
+                        <Route path='inbound' element={<InboundOrder />} />
+                        <Route path='outbound' element={<OutboundOrder />} />
                     </Route>
                     <Route path='users'>
                         <Route path='dashboard' element={<UserManagement />} />

@@ -1,5 +1,7 @@
+import PickStation from "./pickstation/Index";
+
 export default function WorkbenchIndex() {
     return <>
-        <h1>WorkbenchIndex</h1>
+        <PickStation />
     </>
 }

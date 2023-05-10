@@ -1,3 +1,5 @@
+import { OrderStatus } from "src/types/enum";
+
 export interface IHCInboundOrderDetailLotProps {
     production_date: string;
     supplier_code: string;
@@ -10,52 +12,50 @@ export interface IHCInboundOrderDetailLotProps {
 
 export interface IHCInboundOrderDetail {
     [key: string]: any;
-    item_name?: string;
-    item_extend_code1?: string;
-    line_no: number;
-    order_code: string;
-    item_code: string;
-    supplier_code: string;
-    order_qty: number;
-    order_finished_qty: number;
-    order_allocated_qty: number;
-    order_cur_allocate_qty: number;
-    allocate_box_code?: string;
-    order_status: string;
-    order_detail_id: number;
-    created_operator: string;
-    created_time: string;
-    last_updated_operator: string;
-    last_updated_time: string;
-    production_date: string;
-    storage_date: string;
-    expiry_date: string;
-    lot_prop1: string;
-    lot_prop2: string;
-    lot_prop3: string;
-    lot_props?: IHCInboundOrderDetailLotProps;
+    order_code: string
+    line_no: number
+    order_detail_id: number
+    order_status: OrderStatus
+    item_code: string
+    supplier_code: string
+    package_unit: string
+    storage_date: string
+    production_date: string
+    order_qty: number
+    order_allocated_qty: number
+    order_finished_qty: number
+    created_time: string
+    created_operator: string
+    expiry_date: string
+    last_updated_time: string
+    last_updated_operator: string
+    extend_prop1: string
+    extend_prop2: string
+    lot_prop1: string
+    lot_prop2: string
+    lot_prop3: string
+    lot_props: IHCInboundOrderDetailLotProps[]
 }
 
 export interface IHCInboundOrder {
     [key: string]: any;
-    order_code: string;
-    external_order_code: string;
-    related_code1: string;
-    related_code2: string;
-    order_status: string;
-    order_type_code: string;
-    order_qty: number;
-    order_finished_qty: number;
-    order_allocated_qty: number;
-    order_cur_allocate_qty: number;
-    allocate_box_code?: string;
-    order_time: string;
-    order_details: IHCInboundOrderDetail[];
-    created_from: string;
-    created_operator: string;
-    created_time: string;
-    last_updated_operator: string;
-    last_updated_time: string;
+    order_code: string
+    order_status: OrderStatus
+    external_order_code: string
+    warehouse_code: string
+    order_qty: number
+    order_allocated_qty: number
+    order_finished_qty: number
+    order_time: string
+    order_type_code: string
+    related_code1: string
+    related_code2: string
+    created_from: string
+    created_time: string
+    created_operator: string
+    last_updated_time: string
+    last_updated_operator: string
+    order_details: IHCInboundOrderDetail[]
 }
 
 export interface IHCOutboundOrderDetailLotProps {

@@ -1,4 +1,5 @@
 import * as uuid from 'uuid';
+import { DefaultOptionType } from 'antd/es/select';
 
 class UtilsIndex {
     generateElementKey(str = "") {
@@ -12,6 +13,10 @@ class UtilsIndex {
             }
         }
         return undefined;
+    }
+
+    onOptionFilter(inputValue: string, path: DefaultOptionType[]): boolean {
+        return path.some((option) => (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1,);
     }
 }
 

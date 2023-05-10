@@ -60,6 +60,11 @@ export enum SequenceNoType {
     WCS_TASK_CODE = 4,
 }
 
+export enum OrderTypes {
+    INBOUND = '0',
+    OUTBOUNd = '1',
+}
+
 export enum OrderStatus {
     CREATED = '0',
     ACTIVATED = '1',

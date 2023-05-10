@@ -84,11 +84,11 @@ const SideNavigation: React.FC<any> = () => {
 
     return (
         <>
-            <div style={{ height: "30px", background: "rgba(255, 255, 255, .2)", margin: "16px" }} >
+            {/* <div style={{ height: "30px", background: "rgba(255, 255, 255, .2)", margin: "16px" }} >
                 <div className="verion-info" style={{ color: 'white', textAlign: "center", lineHeight: '30px' }}>
                     <p>当前版本: {config.version}</p>
                 </div>
-            </div>
+            </div> */}
             <Menu
                 theme='dark'
                 mode="inline"
