@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
-import { Button, Cascader, Input, Modal, Row, Select, Table, message } from "antd";
+import { Button, Cascader, Row, Select, Table, message } from "antd";
 
 import api from "src/utils/api";
 import utils from "src/utils/Index";
-import config from "src/config/Index";
-import { OrderStatus, OrderTypes } from "src/types/enum";
-import { IHCOutboundOrder, IHCItem, IHCSupplier } from "src/interfaces/interface";
-import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
+import OutboundDetail from "./OutboundDetail";
+import { IHCOutboundOrder } from "src/interfaces/interface";
 import { DefaultOptionType } from "antd/es/select";
+import { OrderStatus, OrderTypes } from "src/types/enum";
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
 import './index.css';
 
 export default function OrderOutbound() {
     const [timestamp, setTimestamp] = useState<number>(0)
     const [orderList, setOrderList] = useState<IHCOutboundOrder[]>([])
-    // const [showModal, setShowModal] = useState<boolean>(false)
-    // const [curOrder, setCurOrder] = useState<IHCOutboundOrder>({} as IHCOutboundOrder)
     const [total, setTotal] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(0)
@@ -107,10 +105,14 @@ export default function OrderOutbound() {
         setSupplierOptions(supplier_options);
     }
 
+    function expandedRowRender(record: IHCOutboundOrder) {
+        return <OutboundDetail orderDetailList={record.order_details} />
+    }
+
     return <>
         <div style={{ marginBottom: 10, marginLeft: 10 }}>
             <Row style={{ marginTop: '10px', lineHeight: "40px" }}>
-                <label>物品编码：</label>
+                <label>物品编号：</label>
                 <Cascader
                     className="search_text"
                     options={itemOptions}
@@ -145,44 +147,12 @@ export default function OrderOutbound() {
         <div style={{ width: '85vw', height: '90vh' }}>
             <Table<IHCOutboundOrder>
                 sticky
+                className="virtual-table"
                 scroll={{ x: '100%', y: '100%' }}
+                bordered
+                expandable={{ expandedRowRender }}
                 dataSource={orderList}
-                columns={[
-                    // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '订单号', dataIndex: 'order_code', key: 'order_code', width: '120px', fixed: 'left', },
-                    {
-                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', width: '120px', render: (value, record, index) => {
-                            return Object.keys(OrderStatus)[Object.values(OrderStatus).indexOf(value)]
-                        }
-                    },
-                    {
-                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', width: '120px', render: (value, record, index) => {
-                            return Object.keys(OrderTypes)[Object.values(OrderTypes).indexOf(value)] || "OUTBOUND";
-                        }
-                    },
-                    { title: '订单扩展码', dataIndex: 'external_order_code', key: 'external_order_code', width: '120px', },
-                    // { title: '仓库码', dataIndex: 'warehouse_code', key: 'warehouse_code', width: '120px', },
-                    { title: '物品总数', dataIndex: 'order_qty', key: 'order_qty', width: '120px', },
-                    { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', width: '120px', },
-                    { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', width: '120px', },
-                    { title: '订单时间', dataIndex: 'order_time', key: 'order_time', width: '120px', },
-                    // { title: '关联编码1', dataIndex: 'related_code1', key: 'related_code1', width: '120px', },
-                    // { title: '关联编码2', dataIndex: 'related_code2', key: 'related_code2', width: '120px', },
-                    // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', width: '120px', },
-                    // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
-                    // { title: '更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    // { title: '更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
-                    {
-                        title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
-                            return <>
-                                {/* <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button> */}
-                                {/* <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button> */}
-                            </>
-                        }
-                    },
-                ]}
-                rowKey={(record) => utils.generateElementKey()}
+                rowKey={(record) => record.order_code}
                 pagination={{
                     total,
                     pageSize,
@@ -191,6 +161,33 @@ export default function OrderOutbound() {
                     showTotal: (total, range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
+                columns={[
+                    // { title: 'key', dataIndex: 'key', key: 'key', },
+                    { title: '订单编号', dataIndex: 'order_code', key: 'order_code', width: '120px', },
+                    {
+                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', width: '120px', render: (value, record, index) => {
+                            return Object.keys(OrderTypes)[Object.values(OrderTypes).indexOf(value)] || "出库单";
+                        }
+                    },
+                    {
+                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', width: '120px', render: (value, record, index) => {
+                            return Object.keys(OrderStatus)[Object.values(OrderStatus).indexOf(value)]
+                        }
+                    },
+                    // { title: '仓库编号', dataIndex: 'warehouse_code', key: 'warehouse_code', width: '120px', },
+                    { title: '扩展编号', dataIndex: 'external_order_code', key: 'external_order_code', width: '120px', },
+                    { title: '出库总数', dataIndex: 'order_qty', key: 'order_qty', width: '120px', },
+                    { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', width: '120px', },
+                    { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', width: '120px', },
+                    { title: '订单时间', dataIndex: 'order_time', key: 'order_time', width: '120px', },
+                    // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', width: '120px', },
+                    // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
+                    // { title: '更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
+                    // { title: '更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    // { title: '关联编号1', dataIndex: 'related_code1', key: 'related_code1', width: '120px', },
+                    // { title: '关联编号2', dataIndex: 'related_code2', key: 'related_code2', width: '120px', },
+                ]}
             />
         </div>
     </>

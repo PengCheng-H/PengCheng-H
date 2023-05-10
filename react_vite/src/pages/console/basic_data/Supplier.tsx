@@ -81,7 +81,7 @@ export default function BasicSupplier() {
         <div style={{ marginBottom: 10, marginLeft: 10 }}>
             <label>供应商属性：</label>
             <Input
-                placeholder="请输入供应商编码/名称/别名等"
+                placeholder="请输入供应商编号/名称/别名等"
                 style={{ width: 200, margin: 10 }}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -103,7 +103,7 @@ export default function BasicSupplier() {
                 dataSource={supplierList}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '编码', dataIndex: 'supplier_code', key: 'supplier_code', width: '120px', fixed: 'left', },
+                    { title: '编号', dataIndex: 'supplier_code', key: 'supplier_code', width: '120px', fixed: 'left', },
                     { title: '名称', dataIndex: 'supplier_name', key: 'supplier_name', width: '120px', fixed: 'left', },
                     { title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', width: '120px', },
                     { title: '别名', dataIndex: 'supplier_alias_name', key: 'supplier_alias_name', width: '120px', },

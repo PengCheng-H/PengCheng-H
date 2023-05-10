@@ -1,13 +1,13 @@
 import { Table } from "antd";
 
 import utils from "src/utils/Index";
-import { IHCInboundOrderDetail } from "src/interfaces/interface";
+import { IHCOutboundOrderDetail } from "src/interfaces/interface";
 
-interface InboundDetailProps {
-    orderDetailList: IHCInboundOrderDetail[]
+interface OutboundDetailProps {
+    orderDetailList: IHCOutboundOrderDetail[]
 }
 
-export default function InboundDetail(props: InboundDetailProps) {
+export default function OutboundDetail(props: OutboundDetailProps) {
     console.log(props);
     return <Table
         className="virtual-table"
@@ -19,9 +19,8 @@ export default function InboundDetail(props: InboundDetailProps) {
         style={{ marginLeft: "65px" }}
         columns={[
             // { title: 'key', dataIndex: '[key', key: '[key', width: '120px', },
-            // { title: 'order_code', dataIndex: 'order_code', key: 'order_code', width: '120px', },
             { title: '行号', dataIndex: 'line_no', key: 'line_no', width: '120px', fixed: 'left', },
-            { title: '明细号', dataIndex: 'order_detail_id', key: 'order_detail_id', width: '120px', },
+            // { title: 'order_code', dataIndex: 'order_code', key: 'order_code', width: '120px', },
             // { title: 'order_status', dataIndex: 'order_status', key: 'order_status', width: '120px', },
             { title: '物品码', dataIndex: 'item_code', key: 'item_code', width: '120px', },
             { title: '供应商码', dataIndex: 'supplier_code', key: 'supplier_code', width: '120px', },
@@ -36,8 +35,6 @@ export default function InboundDetail(props: InboundDetailProps) {
             // { title: '有效日期', dataIndex: 'expiry_date', key: 'expiry_date', width: '120px', },
             { title: '更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
             // { title: '更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
-            // { title: '扩展属性1', dataIndex: 'extend_prop1', key: 'extend_prop1', width: '120px', },
-            // { title: '扩展属性2', dataIndex: 'extend_prop2', key: 'extend_prop2', width: '120px', },
             // { title: '属性插槽1', dataIndex: 'lot_prop1', key: 'lot_prop1', width: '120px', },
             // { title: '属性插槽2', dataIndex: 'lot_prop2', key: 'lot_prop2', width: '120px', },
             // { title: '属性插槽3', dataIndex: 'lot_prop3', key: 'lot_prop3', width: '120px', },

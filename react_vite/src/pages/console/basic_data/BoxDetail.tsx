@@ -10,7 +10,7 @@ interface BoxDetailProps {
 
 export default function BoxDetail(props: BoxDetailProps) {
     return <div className="modal-detail">
-        <Row><label>料箱编码：</label><span>{props.box.box_code}</span></Row>
+        <Row><label>料箱编号：</label><span>{props.box.box_code}</span></Row>
         <Row><label>料箱状态：</label><Input value={props.box.box_status} onChange={(e) => props.setBox({ ...props.box, box_status: e.target.value })} /></Row>
         <Row><label>长度：</label><Input value={props.box.box_length} onChange={(e) => props.setBox({ ...props.box, box_length: parseInt(e.target.value) })} /></Row>
         <Row><label>宽度：</label><Input value={props.box.box_width} onChange={(e) => props.setBox({ ...props.box, box_width: parseInt(e.target.value) })} /></Row>

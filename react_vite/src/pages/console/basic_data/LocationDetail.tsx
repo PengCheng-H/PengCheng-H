@@ -10,7 +10,7 @@ interface CellDetailProps {
 
 export default function LocationDetail(props: CellDetailProps) {
     return <div className="modal-detail">
-        <Row><label>料箱编码：</label><span>{props.location.location_code}</span></Row>
+        <Row><label>料箱编号：</label><span>{props.location.location_code}</span></Row>
         <Row><label>料箱状态：</label><Input value={props.location.location_status} onChange={(e) => props.setLocation({ ...props.location, location_status: e.target.value })} /></Row>
         <Row><label>长度：</label><Input value={props.location.location_row} onChange={(e) => props.setLocation({ ...props.location, location_row: parseInt(e.target.value) })} /></Row>
         <Row><label>宽度：</label><Input value={props.location.location_column} onChange={(e) => props.setLocation({ ...props.location, location_column: parseInt(e.target.value) })} /></Row>
