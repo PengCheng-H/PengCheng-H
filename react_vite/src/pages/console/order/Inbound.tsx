@@ -20,7 +20,7 @@ export default function OrderInbound() {
     const [itemOptions, setItemOptions] = useState<DefaultOptionType[]>([]);
     const [supplierCode, setSupplierCode] = useState<string>(new URLSearchParams(window.location.search).get("supplierCode") || "")
     const [supplierOptions, setSupplierOptions] = useState<DefaultOptionType[]>([]);
-    const [orderStatus, setOrderStatusList] = useState<OrderStatus[]>([])
+    const [orderStatus, setOrderStatusList] = useState<OrderStatus[]>([OrderStatus.CREATED, OrderStatus.ACTIVATED, OrderStatus.PAUSED, OrderStatus.WORKING])
     const orderStatusOptions = [
         { label: "已创建", value: OrderStatus.CREATED },
         { label: "已激活", value: OrderStatus.ACTIVATED },
@@ -141,7 +141,7 @@ export default function OrderInbound() {
                     value={orderStatus}
                     onChange={(value) => { setOrderStatusList(value) }}
                 />
-                <Button onClick={() => { setTimestamp(Date.now()); }} style={{ width: "200px", background: "#ea6", marginLeft: '15px' }}>搜索</Button>
+                <Button onClick={() => { setTimestamp(Date.now()); }} style={{ width: "200px", background: "#ea6", marginLeft: '15px' }}>查询订单</Button>
             </Row >
         </div >
         <div style={{ width: '85vw', height: '90vh' }}>
@@ -163,32 +163,32 @@ export default function OrderInbound() {
                 }}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '订单编号', dataIndex: 'order_code', key: 'order_code', width: '120px', fixed: 'left', },
+                    { title: '订单编号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', fixed: 'left', },
                     {
-                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', width: '120px', render: (value, record, index) => {
+                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: '120px', render: (value, record, index) => {
                             return Object.keys(OrderTypes)[Object.values(OrderTypes).indexOf(value)] || "入库单";
                         }
                     },
                     {
-                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', width: '120px', render: (value, record, index) => {
+                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, record, index) => {
                             return Object.keys(OrderStatus)[Object.values(OrderStatus).indexOf(value)]
                         }
                     },
-                    { title: '扩展编号', dataIndex: 'external_order_code', key: 'external_order_code', width: '120px', },
-                    // { title: '仓库码', dataIndex: 'warehouse_code', key: 'warehouse_code', width: '120px', },
-                    { title: '入库总数', dataIndex: 'order_qty', key: 'order_qty', width: '120px', },
-                    { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', width: '120px', },
-                    { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', width: '120px', },
-                    { title: '订单时间', dataIndex: 'order_time', key: 'order_time', width: '120px', },
-                    // { title: '关联编号1', dataIndex: 'related_code1', key: 'related_code1', width: '120px', },
-                    // { title: '关联编号2', dataIndex: 'related_code2', key: 'related_code2', width: '120px', },
-                    // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', width: '120px', },
-                    // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
-                    // { title: '更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    // { title: '更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    { title: '扩展编号', dataIndex: 'external_order_code', key: 'external_order_code', align: 'center', width: '120px', },
+                    // { title: '仓库码', dataIndex: 'warehouse_code', key: 'warehouse_code', align: 'center', width: '120px', },
+                    { title: '入库总数', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: '120px', },
+                    { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '120px', },
+                    { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: '120px', },
+                    { title: '订单时间', dataIndex: 'order_time', key: 'order_time', align: 'center', width: '120px', },
+                    // { title: '关联编号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: '120px', },
+                    // { title: '关联编号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: '120px', },
+                    // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', align: 'center', width: '120px', },
+                    // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '120px', },
+                    // { title: '更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: '120px', },
+                    // { title: '更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     // {
-                    //     title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
+                    //     title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                     //         return <>
                     //             {/* <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button> */}
                     //             {/* <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button> */}

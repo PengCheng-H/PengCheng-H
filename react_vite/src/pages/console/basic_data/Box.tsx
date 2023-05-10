@@ -111,24 +111,24 @@ export default function BasicBox() {
                 dataSource={boxList}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '箱号', dataIndex: 'box_code', key: 'box_code', width: '120px', fixed: 'left', },
-                    { title: '货位号', dataIndex: 'location_code', key: 'location_code', width: '120px', fixed: 'left', },
+                    { title: '箱号', dataIndex: 'box_code', key: 'box_code', align: 'center', width: '120px', fixed: 'left', },
+                    { title: '货位号', dataIndex: 'location_code', key: 'location_code', align: 'center', width: '120px', fixed: 'left', },
                     {
-                        title: '状态', dataIndex: 'box_status', key: 'box_status', width: '120px', render: (value, record, index) => {
+                        title: '状态', dataIndex: 'box_status', key: 'box_status', align: 'center', width: '120px', render: (value, record, index) => {
                             return Object.keys(BoxStatus)[Object.values(BoxStatus).indexOf(value)]
                         }
                     },
-                    { title: '长度', dataIndex: 'box_length', key: 'box_length', width: '120px', },
-                    { title: '宽度', dataIndex: 'box_width', key: 'box_width', width: '120px', },
-                    { title: '高度', dataIndex: 'box_height', key: 'box_height', width: '120px', },
-                    { title: '料箱分区数量', dataIndex: 'box_region_count', key: 'box_region_count', width: '120px', },
-                    { title: '默认满箱数量', dataIndex: 'box_rated_capacity', key: 'box_rated_capacity', width: '120px', },
-                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
-                    { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    { title: '长度', dataIndex: 'box_length', key: 'box_length', align: 'center', width: '120px', },
+                    { title: '宽度', dataIndex: 'box_width', key: 'box_width', align: 'center', width: '120px', },
+                    { title: '高度', dataIndex: 'box_height', key: 'box_height', align: 'center', width: '120px', },
+                    { title: '料箱分区数量', dataIndex: 'box_region_count', key: 'box_region_count', align: 'center', width: '120px', },
+                    { title: '默认满箱数量', dataIndex: 'box_rated_capacity', key: 'box_rated_capacity', align: 'center', width: '120px', },
+                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '120px', },
+                    { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     {
-                        title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
+                        title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
                                 <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
                                 <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button>

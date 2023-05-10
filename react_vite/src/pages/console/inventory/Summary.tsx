@@ -43,13 +43,13 @@ export default function InventorySummary() {
     const handleViewInventoryBox = (value: unknown, record: IHCInventorySummary, index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/boxes"]));
-        window.location.href = `/console/inventory/boxes?text=${record.item_code}`
+        window.location.href = `/console/inventory/boxes?itemCode=${record.item_code}`
     };
 
     const handleViewInventoryItem = (value: unknown, record: IHCInventorySummary, index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
-        window.location.href = `/console/inventory/items?text=${record.item_code}`
+        window.location.href = `/console/inventory/items?itemCode=${record.item_code}`
     };
 
     return <>
@@ -69,18 +69,18 @@ export default function InventorySummary() {
                 dataSource={inventorySummaryList}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '库存编号', dataIndex: 'inventory_summary_id', key: 'inventory_summary_id', width: '120px', fixed: 'left', },
-                    { title: '物品码', dataIndex: 'item_code', key: 'item_code', width: '120px', fixed: 'left', },
-                    { title: '库存数量', dataIndex: 'quantity', key: 'quantity', width: '120px', },
-                    { title: '包装单位', dataIndex: 'package_unit', key: 'package_unit', width: '120px', },
+                    { title: '库存编号', dataIndex: 'inventory_summary_id', key: 'inventory_summary_id', align: 'center', width: '120px', fixed: 'left', },
+                    { title: '物品码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '120px', fixed: 'left', },
+                    { title: '库存数量', dataIndex: 'quantity', key: 'quantity', align: 'center', width: '120px', },
+                    { title: '包装单位', dataIndex: 'package_unit', key: 'package_unit', align: 'center', width: '120px', },
                     { title: '已分配出库数量', dataIndex: 'pick_allocated_qty', key: 'pick_allocated_qty', width: '125px', },
                     { title: '已分配入库数量', dataIndex: 'storage_allocated_qty', key: 'storage_allocated_qty', width: '125px', },
-                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
-                    { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '120px', },
+                    { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     {
-                        title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
+                        title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
                                 <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }}>查看料箱库存记录</Button>
                                 <Button onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存记录</Button>

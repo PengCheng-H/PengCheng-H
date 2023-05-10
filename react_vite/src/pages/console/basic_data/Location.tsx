@@ -104,23 +104,23 @@ export default function BasicLocation() {
                 dataSource={locationList}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '货位码', dataIndex: 'location_code', key: 'location_code', width: '120px', fixed: 'left' },
+                    { title: '货位码', dataIndex: 'location_code', key: 'location_code', align: 'center', width: '120px', fixed: 'left' },
                     {
-                        title: '状态', dataIndex: 'item_status', key: 'item_status', width: '120px', render: (value, record, index) => {
+                        title: '状态', dataIndex: 'location_status', key: 'location_status', align: 'center', width: '120px', render: (value, record, index) => {
                             return Object.keys(LocationStatus)[Object.values(LocationStatus).indexOf(value)]
                         }
                     },
-                    { title: '排号', dataIndex: 'location_row', key: 'location_row', width: '120px', },
-                    { title: '列号', dataIndex: 'location_column', key: 'location_column', width: '120px', },
-                    { title: '层号', dataIndex: 'location_layer', key: 'location_layer', width: '120px', },
-                    { title: '深度', dataIndex: 'location_depth', key: 'location_depth', width: '120px', },
-                    { title: 'abc类型', dataIndex: 'abc_type', key: 'abc_type', width: '120px', },
-                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
-                    { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    { title: '排号', dataIndex: 'location_row', key: 'location_row', align: 'center', width: '120px', },
+                    { title: '列号', dataIndex: 'location_column', key: 'location_column', align: 'center', width: '120px', },
+                    { title: '层号', dataIndex: 'location_layer', key: 'location_layer', align: 'center', width: '120px', },
+                    { title: '深度', dataIndex: 'location_depth', key: 'location_depth', align: 'center', width: '120px', },
+                    { title: 'abc类型', dataIndex: 'abc_type', key: 'abc_type', align: 'center', width: '120px', },
+                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '120px', },
+                    { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     {
-                        title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
+                        title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
                         }
                     },

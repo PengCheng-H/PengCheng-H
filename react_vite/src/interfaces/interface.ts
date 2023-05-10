@@ -71,6 +71,7 @@ export interface IHCOutboundOrderDetailLotProps {
 export interface IHCOutboundOrderDetail {
     key?: string | number;
     line_no: number;
+    order_detail_id: number;
     order_code: string;
     order_status: string;
     supplier_code: string;
@@ -111,6 +112,12 @@ export interface IHCOutboundOrder {
     related_code1: string;
     related_code2: string;
     order_details: IHCOutboundOrderDetail[];
+}
+
+export interface IHCOutboundOrderQuickAddItem {
+    item_code: string;
+    supplier_code: string;
+    quantity: number;
 }
 
 export interface IHCWcsTask {

@@ -103,17 +103,17 @@ export default function BasicSupplier() {
                 dataSource={supplierList}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '编号', dataIndex: 'supplier_code', key: 'supplier_code', width: '120px', fixed: 'left', },
-                    { title: '名称', dataIndex: 'supplier_name', key: 'supplier_name', width: '120px', fixed: 'left', },
-                    { title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', width: '120px', },
-                    { title: '别名', dataIndex: 'supplier_alias_name', key: 'supplier_alias_name', width: '120px', },
-                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', width: '120px', },
-                    // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', width: '120px', },
-                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', width: '120px', },
-                    // { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', width: '120px', },
-                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', width: '120px', },
+                    { title: '编号', dataIndex: 'supplier_code', key: 'supplier_code', align: 'center', width: '120px', fixed: 'left', },
+                    { title: '名称', dataIndex: 'supplier_name', key: 'supplier_name', align: 'center', width: '120px', fixed: 'left', },
+                    { title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', align: 'center', width: '120px', },
+                    { title: '别名', dataIndex: 'supplier_alias_name', key: 'supplier_alias_name', align: 'center', width: '120px', },
+                    { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '120px', },
+                    // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', align: 'center', width: '120px', },
+                    // { title: '创建人员', dataIndex: 'created_operator', key: 'created_operator', align: 'center', width: '120px', },
+                    // { title: '最近更新时间', dataIndex: 'last_updated_time', key: 'last_updated_time', align: 'center', width: '120px', },
+                    // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     {
-                        title: '操作', dataIndex: 'oper', key: 'oper', width: '120px', fixed: 'right', render: (value, record, index) => {
+                        title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
                         }
                     },
