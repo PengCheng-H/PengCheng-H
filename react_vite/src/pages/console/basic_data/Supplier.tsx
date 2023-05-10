@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Button, Input, Modal, Select, Table, message } from "antd";
 
 import api from "src/utils/api"
+import utils from "src/utils/Index";
 import SupplierDetail from "./SupplierDetail";
 import { IHCSupplier } from "src/interfaces/interface";
 import { SupplierStatus } from "src/types/enum";
@@ -117,7 +118,7 @@ export default function BasicSupplier() {
                         }
                     },
                 ]}
-                rowKey={(record) => record.supplier_code.toString()}
+                rowKey={(record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,

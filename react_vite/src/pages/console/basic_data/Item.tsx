@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Button, Input, Modal, Select, Table, message } from "antd";
 
 import api from "src/utils/api"
+import utils from "src/utils/Index";
 import ItemDetail from "./ItemDetail";
 import { IHCItem } from "src/interfaces/interface";
 import { ItemStatus } from "src/types/enum";
@@ -156,7 +157,7 @@ export default function BasicItem() {
                         }
                     },
                 ]}
-                rowKey={(record) => record.item_code.toString()}
+                rowKey={(record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react"
 import { Button, Input, Modal, Select, Table, message } from "antd";
 
 import api from "src/utils/api"
+import utils from "src/utils/Index";
 import LocationDetail from "./LocationDetail";
 import { IHCLocation } from "src/interfaces/interface";
 import { LocationStatus } from "src/types/enum";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
-
 
 export default function BasicLocation() {
     const [timestamp, setTimestamp] = useState<number>(0)
@@ -125,7 +125,7 @@ export default function BasicLocation() {
                         }
                     },
                 ]}
-                rowKey={(record) => record.location_code.toString()}
+                rowKey={(record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,

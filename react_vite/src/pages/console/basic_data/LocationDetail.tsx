@@ -1,4 +1,5 @@
 import { Input, Row } from "antd";
+
 import { IHCLocation } from "src/interfaces/interface";
 import './index.css';
 

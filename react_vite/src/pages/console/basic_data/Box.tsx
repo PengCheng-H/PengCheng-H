@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Button, Input, Modal, Select, Table, message } from "antd";
 
 import api from "src/utils/api";
+import utils from "src/utils/Index";
 import BoxDetail from "./BoxDetail";
 import { IHCBox } from "src/interfaces/interface";
 import { BoxStatus } from "src/types/enum";
@@ -136,7 +137,7 @@ export default function BasicBox() {
                         }
                     },
                 ]}
-                rowKey={(record) => record.box_code.toString()}
+                rowKey={(record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
