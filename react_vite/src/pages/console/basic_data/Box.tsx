@@ -6,7 +6,7 @@ import utils from "src/utils/Index";
 import BoxDetail from "./BoxDetail";
 import { IHCBox } from "src/interfaces/interface";
 import { BoxStatus } from "src/types/enum";
-import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE, em_box_status } from "src/types/Constants";
 
 
 export default function BasicBox() {
@@ -20,8 +20,8 @@ export default function BasicBox() {
     const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("boxCode") || "")
     const [boxStatus, setBoxStatus] = useState<BoxStatus[]>([])
     const statusOptions = [
-        { label: "禁用", value: BoxStatus.DISABLED },
-        { label: "启用", value: BoxStatus.ENABLED },
+        { label: em_box_status[BoxStatus.DISABLED], value: BoxStatus.DISABLED },
+        { label: em_box_status[BoxStatus.ENABLED], value: BoxStatus.ENABLED },
     ];
 
     useEffect(() => {
@@ -115,7 +115,7 @@ export default function BasicBox() {
                     { title: '货位号', dataIndex: 'location_code', key: 'location_code', align: 'center', width: '120px', fixed: 'left', },
                     {
                         title: '状态', dataIndex: 'box_status', key: 'box_status', align: 'center', width: '120px', render: (value, record, index) => {
-                            return Object.keys(BoxStatus)[Object.values(BoxStatus).indexOf(value)]
+                            return em_box_status[value];
                         }
                     },
                     { title: '长度', dataIndex: 'box_length', key: 'box_length', align: 'center', width: '120px', },

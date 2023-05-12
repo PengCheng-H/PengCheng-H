@@ -6,7 +6,7 @@ import utils from "src/utils/Index";
 import LocationDetail from "./LocationDetail";
 import { IHCLocation } from "src/interfaces/interface";
 import { LocationStatus } from "src/types/enum";
-import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE, em_location_status } from "src/types/Constants";
 
 export default function BasicLocation() {
     const [timestamp, setTimestamp] = useState<number>(0)
@@ -19,8 +19,8 @@ export default function BasicLocation() {
     const [text, setText] = useState<string>("")
     const [locationStatus, setLocationStatus] = useState<LocationStatus[]>([])
     const statusOptions = [
-        { label: "禁用", value: LocationStatus.DISABLED },
-        { label: "启用", value: LocationStatus.ENABLED },
+        { label: em_location_status[LocationStatus.DISABLED], value: LocationStatus.DISABLED },
+        { label: em_location_status[LocationStatus.ENABLED], value: LocationStatus.ENABLED },
     ];
 
     useEffect(() => {
@@ -107,7 +107,7 @@ export default function BasicLocation() {
                     { title: '货位码', dataIndex: 'location_code', key: 'location_code', align: 'center', width: '120px', fixed: 'left' },
                     {
                         title: '状态', dataIndex: 'location_status', key: 'location_status', align: 'center', width: '120px', render: (value, record, index) => {
-                            return Object.keys(LocationStatus)[Object.values(LocationStatus).indexOf(value)]
+                            return em_location_status[value];
                         }
                     },
                     { title: '排号', dataIndex: 'location_row', key: 'location_row', align: 'center', width: '120px', },

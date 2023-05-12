@@ -6,7 +6,7 @@ import utils from "src/utils/Index";
 import ItemDetail from "./ItemDetail";
 import { IHCItem } from "src/interfaces/interface";
 import { ItemStatus } from "src/types/enum";
-import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE, em_item_status } from "src/types/Constants";
 
 
 export default function BasicItem() {
@@ -20,9 +20,9 @@ export default function BasicItem() {
     const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("itemCode") || "")
     const [itemStatus, setItemStatus] = useState<ItemStatus[]>([])
     const statusOptions = [
-        { label: "禁用", value: ItemStatus.DISABLED },
-        { label: "启用", value: ItemStatus.ENABLED },
-        { label: "忽略", value: ItemStatus.IGNORED },
+        { label: em_item_status[ItemStatus.DISABLED ], value: ItemStatus.DISABLED },
+        { label: em_item_status[ItemStatus.ENABLED ], value: ItemStatus.ENABLED },
+        { label: em_item_status[ItemStatus.IGNORED ], value: ItemStatus.IGNORED },
     ];
 
     useEffect(() => {
@@ -115,7 +115,7 @@ export default function BasicItem() {
                     { title: '名称', dataIndex: 'item_name', key: 'item_name', fixed: 'left', align: 'center', width: '120px', },
                     {
                         title: '状态', dataIndex: 'item_status', key: 'item_status', align: 'center', width: '120px', render: (value, record, index) => {
-                            return Object.keys(ItemStatus)[Object.values(ItemStatus).indexOf(value)]
+                            return em_item_status[value];
                         }
                     },
                     { title: '别名', dataIndex: 'item_alias_name', key: 'item_alias_name', align: 'center', width: '120px', },

@@ -32,3 +32,25 @@ export const em_wcs_task_types: { [s: string]: string } = {
     "0": "入库单任务",
     "1": "出库单任务",
 }
+
+
+export const em_box_status: { [s: string]: string } = {
+    "0": "已禁用",
+    "1": "已启用",
+}
+
+export const em_location_status: { [s: string]: string } = {
+    "0": "已禁用",
+    "1": "已启用",
+}
+
+export const em_item_status: { [s: string]: string } = {
+    "0": "已禁用",
+    "1": "已启用",
+    "2": "已忽略",
+}
+
+export const em_supplier_status: { [s: string]: string } = {
+    "0": "已禁用",
+    "1": "已启用",
+}

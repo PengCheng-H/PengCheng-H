@@ -6,7 +6,7 @@ import utils from "src/utils/Index";
 import SupplierDetail from "./SupplierDetail";
 import { IHCSupplier } from "src/interfaces/interface";
 import { SupplierStatus } from "src/types/enum";
-import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE, em_supplier_status } from "src/types/Constants";
 
 export default function BasicSupplier() {
     const [timestamp, setTimestamp] = useState<number>(0)
@@ -19,8 +19,8 @@ export default function BasicSupplier() {
     const [text, setText] = useState<string>("")
     const [supplierStatus, setSupplierStatus] = useState<SupplierStatus[]>([])
     const statusOptions = [
-        { label: "禁用", value: SupplierStatus.DISABLED },
-        { label: "启用", value: SupplierStatus.ENABLED },
+        { label: em_supplier_status[SupplierStatus.DISABLED], value: SupplierStatus.DISABLED },
+        { label: em_supplier_status[SupplierStatus.ENABLED], value: SupplierStatus.ENABLED },
     ];
 
     useEffect(() => {
@@ -105,7 +105,11 @@ export default function BasicSupplier() {
                     // { title: 'key', dataIndex: 'key', key: 'key', },
                     { title: '编号', dataIndex: 'supplier_code', key: 'supplier_code', align: 'center', width: '120px', fixed: 'left', },
                     { title: '名称', dataIndex: 'supplier_name', key: 'supplier_name', align: 'center', width: '120px', fixed: 'left', },
-                    { title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', align: 'center', width: '120px', },
+                    {
+                        title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', align: 'center', width: '120px', render: (value: any, record: IHCSupplier, index: number) => {
+                            return em_supplier_status[value];
+                        }
+                    },
                     { title: '别名', dataIndex: 'supplier_alias_name', key: 'supplier_alias_name', align: 'center', width: '120px', },
                     { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '120px', },
                     // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', align: 'center', width: '120px', },
