@@ -24,6 +24,7 @@ export interface IHCInboundOrderDetail {
     order_qty: number;
     order_allocated_qty: number;
     order_finished_qty: number;
+    cur_order_allocated_qty: number;
     created_time: string;
     created_operator: string;
     expiry_date: string;
@@ -56,6 +57,11 @@ export interface IHCInboundOrder {
     last_updated_time: string;
     last_updated_operator: string;
     order_details: IHCInboundOrderDetail[];
+}
+
+export interface IHCInboundOrderQuickAddItem {
+    supplier_code: string;
+    items: { item_code: string; quantity: number; }[]
 }
 
 export interface IHCOutboundOrderDetailLotProps {

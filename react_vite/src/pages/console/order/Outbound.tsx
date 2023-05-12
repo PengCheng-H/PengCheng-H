@@ -4,13 +4,13 @@ import { Button, Cascader, Modal, Popconfirm, Row, Select, Table, message } from
 import api from "src/utils/api";
 import utils from "src/utils/Index";
 import OutboundDetail from "./OutboundDetail";
-import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCOutboundOrderQuickAddItem } from "src/interfaces/interface";
+import OutboundQuickAdd from "./OutboundQuickAdd";
 import { DefaultOptionType } from "antd/es/select";
 import { OrderStatus, OrderTypes } from "src/types/enum";
-import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
-import './index.css';
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE, em_order_status } from "src/types/Constants";
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined } from "@ant-design/icons";
-import OutboundQuickAdd from "./OutboundQuickAdd";
+import { IHCOutboundOrder, IHCOutboundOrderDetail, IHCOutboundOrderQuickAddItem } from "src/interfaces/interface";
+import './index.css';
 
 export default function OrderOutbound() {
     const [timestamp, setTimestamp] = useState<number>(0);
@@ -28,14 +28,14 @@ export default function OrderOutbound() {
     const [supplierOptions, setSupplierOptions] = useState<DefaultOptionType[]>([]);
     const [orderStatus, setOrderStatusList] = useState<OrderStatus[]>([OrderStatus.CREATED, OrderStatus.ACTIVATED, OrderStatus.PAUSED, OrderStatus.WORKING]);
     const orderStatusOptions = [
-        { label: "已创建", value: OrderStatus.CREATED },
-        { label: "已激活", value: OrderStatus.ACTIVATED },
-        { label: "已暂停", value: OrderStatus.PAUSED },
-        { label: "工作中", value: OrderStatus.WORKING },
-        { label: "已完成", value: OrderStatus.DONE },
-        { label: "已关闭", value: OrderStatus.CLOSED },
-        { label: "已忽略", value: OrderStatus.IGNORED },
-        { label: "已删除", value: OrderStatus.DELETED },
+        { label: em_order_status[OrderStatus.CREATED], value: OrderStatus.CREATED },
+        { label: em_order_status[OrderStatus.ACTIVATED], value: OrderStatus.ACTIVATED },
+        { label: em_order_status[OrderStatus.PAUSED], value: OrderStatus.PAUSED },
+        { label: em_order_status[OrderStatus.WORKING], value: OrderStatus.WORKING },
+        { label: em_order_status[OrderStatus.DONE], value: OrderStatus.DONE },
+        { label: em_order_status[OrderStatus.CLOSED], value: OrderStatus.CLOSED },
+        { label: em_order_status[OrderStatus.IGNORED], value: OrderStatus.IGNORED },
+        { label: em_order_status[OrderStatus.DELETED], value: OrderStatus.DELETED },
     ];
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export default function OrderOutbound() {
 
         const result = await api.OrderOutboundFind(itemCode, supplierCode, orderStatus, __current_page_no || DEFAULT_PAGE_NO, pageSize || DEFAULT_PAGE_SIZE);
         if (!result || result.result_code !== 0) {
-            message.error(`获取订单列表失败！error_msg: ${result.result_msg}`);
+            message.error(`获取出库单列表失败！error_msg: ${result.result_msg}`);
             return;
         }
 
@@ -57,6 +57,7 @@ export default function OrderOutbound() {
         setPageSize(result.data.page_size);
         setCurrentPage(result.data.page_no);
         setOrderList(result.data.data_list.sort((a, b) => { return a.order_code < b.order_code ? -1 : 1 }));
+        message.info(`获取出库单列表成功。 当担数量：${result.data.data_list.length}`);
     }
 
     const handlePaginationChange = (page: number, pageSize?: number) => {
@@ -264,7 +265,7 @@ export default function OrderOutbound() {
                     },
                     {
                         title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, record, index) => {
-                            return Object.keys(OrderStatus)[Object.values(OrderStatus).indexOf(value)]
+                            return em_order_status[value];
                         }
                     },
                     // { title: '仓库编号', dataIndex: 'warehouse_code', key: 'warehouse_code', align: 'center', width: '120px', },

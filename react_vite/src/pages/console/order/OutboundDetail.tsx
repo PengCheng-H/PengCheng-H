@@ -1,7 +1,7 @@
 import { Button, Popconfirm, Table } from "antd";
 
 import utils from "src/utils/Index";
-import { OrderStatus } from "src/types/enum";
+import { em_order_status } from "src/types/Constants";
 import { IHCOutboundOrderDetail } from "src/interfaces/interface";
 import { CloseCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
@@ -33,7 +33,7 @@ export default function OutboundDetail(props: OutboundDetailProps) {
             // { title: 'order_code', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', },
             {
                 title: '订单行状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, record, index) => {
-                    return Object.keys(OrderStatus)[Object.values(OrderStatus).indexOf(value)]
+                    return em_order_status[value];
                 }
             },
             { title: '物品码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '120px', },
