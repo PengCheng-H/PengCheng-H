@@ -26,6 +26,7 @@ export default function InventorySummary() {
             return;
         }
 
+        message.info(`获取汇总库记录存成功。库存记录数量: ${result.data.data_list.length}`);
         setTotal(result.data.total_count);
         setInventorySummaryList(result.data.data_list);
 

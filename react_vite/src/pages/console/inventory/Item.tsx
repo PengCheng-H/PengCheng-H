@@ -27,6 +27,7 @@ export default function InventoryItem() {
             return;
         }
 
+        message.info(`获取物品库存记录成功。库存记录数量: ${result.data.data_list.length}`);
         setTotal(result.data.total_count);
         setInventoryItemList(result.data.data_list);
 
