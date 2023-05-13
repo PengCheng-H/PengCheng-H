@@ -6,6 +6,8 @@ import utils from "src/utils/Index";
 import InboundDetail from "./InboundDetail";
 import InboundQuickAdd from "./InboundQuickAdd";
 import { DefaultOptionType } from "antd/es/select";
+import InboundAllocateOrderBox from "./InboundAllocateOrderBox";
+import InboundAllocateDetailBox from "./InboundAllocateDetailBox";
 import { OrderStatus, OrderTypes } from "src/types/enum";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE, em_order_status } from "src/types/Constants";
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -14,8 +16,11 @@ import './index.css';
 
 export default function OrderInbound() {
     const [timestamp, setTimestamp] = useState<number>(0);
-    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showCreateOrderModal, setShowCreateOrderModal] = useState<boolean>(false);
+    const [showAllocateOrderModal, setShowAllocateOrderModal] = useState<boolean>(false);
+    const [showAllocateDetailModal, setShowAllocateDetailModal] = useState<boolean>(false);
     const [quickAddInboundItem, setQuickAddInboundItem] = useState<IHCInboundOrderQuickAddItem>();
+    const [curOrder, setCurOrder] = useState<IHCInboundOrder>();
     const [orderList, setOrderList] = useState<IHCInboundOrder[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(0);
@@ -138,7 +143,7 @@ export default function OrderInbound() {
         }
 
         message.success(`创建入库单成功. 订单编号: ${result.data.order_code}`);
-        setShowModal(false);
+        setShowCreateOrderModal(false);
         setTimestamp(Date.now());
     }
 
@@ -147,13 +152,49 @@ export default function OrderInbound() {
             message.error('未找到订单信息，无法分配！');
             return;
         }
+
+        const _allocate_order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[] = orderList.map((_order, index, arr) => {
+            return {
+                order_code: _order.order_code,
+                order_details: _order.order_details.map((_order_detail => {
+                    return {
+                        order_detail_id: _order_detail.order_detail_id,
+                        allocate_quantity: _order_detail.cur_order_allocated_qty
+                    }
+                }))
+            };
+        });
+
+        const result = await api.OrderInboundAutoAllocateList(_allocate_order_list);
+        if (!result || result.result_code !== 0) {
+            message.error(`自动分配订单失败！error_msg: ${result.result_msg}`);
+            return;
+        }
+
+        message.info("自动分配订单成功。");
     }
 
-    const HandleManualAllocateOrderBox = async (record: IHCInboundOrder) => {
-        return;
+    const HandleManualAllocateOrderBox = async () => {
+        if (!curOrder?.cur_allocate_box || !curOrder.cur_allocate_box.box_code) {
+            message.error(`未分配料箱，请先选择料箱!`);
+            return;
+        }
+
+        message.info(`请求手工整单分配. 订单号: ${curOrder.order_code}, 料箱号: ${curOrder.cur_allocate_box.box_code}`);
+        const allocate_result = await api.OrderInboundManualAllocateFull(curOrder.order_code, curOrder.cur_allocate_box.box_code);
+
+        if (allocate_result.result_code !== 0) {
+            message.error(`手工整单分配失败！result_code: ${allocate_result.result_code} 提示: ${allocate_result.result_msg}`);
+            setShowAllocateOrderModal(false);
+            return
+        }
+
+        message.success(`手工整单分配成功。订单号: ${curOrder.order_code}, 料箱号: ${curOrder.cur_allocate_box.box_code}`);
+        setTimestamp(Date.now());
+        setShowAllocateOrderModal(false);
     }
 
-    const HandleManualAllocateOrderDetailsBox = async (record: IHCInboundOrder) => {
+    const HandleManualAllocateOrderDetailsBox = async () => {
         return;
     }
 
@@ -232,7 +273,7 @@ export default function OrderInbound() {
                     onChange={(value) => { setOrderStatusList(value) }}
                 />
                 <Button type="primary" onClick={() => { setTimestamp(Date.now()); }} style={{ width: "150px", marginLeft: '15px' }}>搜索订单</Button>
-                <Button type="primary" shape="round" onClick={() => { setShowModal(true); }} style={{ width: "150px", marginLeft: '15px' }}>创建订单</Button>
+                <Button type="primary" shape="round" onClick={() => { setShowCreateOrderModal(true); }} style={{ width: "150px", marginLeft: '15px' }}>创建订单</Button>
                 <Popconfirm title="确定分配吗?" onConfirm={() => HandleAutoAllocateOrdersQty()}>
                     <Button icon={<CheckCircleOutlined />} type='primary' shape="round" style={{ width: '150px', marginLeft: "15px" }}>自动分配料箱</Button>
                 </Popconfirm>
@@ -257,7 +298,7 @@ export default function OrderInbound() {
                 }}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
-                    { title: '订单编号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', },
+                    { title: '订单编号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', fixed: 'left', },
                     {
                         title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: '120px', render: (value, record, index) => {
                             return Object.keys(OrderTypes)[Object.values(OrderTypes).indexOf(value)] || "入库单";
@@ -273,6 +314,8 @@ export default function OrderInbound() {
                     { title: '入库总数', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: '120px', },
                     { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '120px', },
                     { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: '120px', },
+                    // { title: '当前分配料箱', dataIndex: ['cur_allocate_box', 'box_code'], key: 'box_code', align: 'center', width: '120px', },
+                    // { title: '当前分配货位', dataIndex: ['cur_allocate_box', 'location_code'], key: 'location_code', align: 'center', width: '120px', },
                     { title: '订单时间', dataIndex: 'order_time', key: 'order_time', align: 'center', width: '120px', },
                     // { title: '创建来源', dataIndex: 'created_from', key: 'created_from', align: 'center', width: '120px', },
                     // { title: '创建时间', dataIndex: 'created_time', key: 'created_time', align: 'center', width: '120px', },
@@ -284,12 +327,8 @@ export default function OrderInbound() {
                     {
                         title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (value: any, record: IHCInboundOrder, index: number) => {
                             return <>
-                                <Popconfirm title="确定分配吗?" onConfirm={() => HandleManualAllocateOrderBox(record)}>
-                                    <Button icon={<CheckCircleOutlined />} type='primary' style={{ width: '170px' }}>分配整单料箱</Button>
-                                </Popconfirm>
-                                <Popconfirm title="确定分配吗?" onConfirm={() => HandleManualAllocateOrderDetailsBox(record)}>
-                                    <Button icon={<CheckCircleOutlined />} type='primary' style={{ width: '170px', marginTop: '5px' }}>分配明细料箱</Button>
-                                </Popconfirm>
+                                <Button icon={<CheckCircleOutlined />} type='primary' onClick={() => { setCurOrder(record); setShowAllocateOrderModal(true); }} style={{ width: '170px' }}>分配整单料箱</Button>
+                                <Button icon={<CheckCircleOutlined />} type='primary' onClick={() => { setCurOrder(record); setShowAllocateDetailModal(true); }} style={{ width: '170px', marginTop: '5px' }}>分配明细料箱</Button>
                                 <Popconfirm title="确定关闭吗?" onConfirm={() => HandleOrderClose(record)}>
                                     <Button icon={<CloseCircleOutlined />} style={{ width: '80px', marginTop: "5px", marginLeft: '5px' }} type='primary' danger>关闭</Button>
                                 </Popconfirm>
@@ -301,10 +340,20 @@ export default function OrderInbound() {
                     },
                 ]}
             />
+        </div >
+        <div>
+            <Modal title="创建入库单" open={showCreateOrderModal} onOk={onCreateOrder} onCancel={() => { setShowCreateOrderModal(false); }} okText="创建订单" cancelText="取消创建">
+                <InboundQuickAdd quickAddInboundItem={quickAddInboundItem} setQuickAddInboundItem={setQuickAddInboundItem} />
+            </Modal>
         </div>
         <div>
-            <Modal title="创建入库单" open={showModal} onOk={onCreateOrder} onCancel={() => { setShowModal(false); }} okText="创建订单" cancelText="取消创建">
-                <InboundQuickAdd quickAddInboundItem={quickAddInboundItem} setQuickAddInboundItem={setQuickAddInboundItem} />
+            <Modal title="分配整单料箱" open={showAllocateOrderModal} onOk={() => HandleManualAllocateOrderBox()} onCancel={() => { setShowAllocateOrderModal(false); }} okText="确认分配" cancelText="取消分配">
+                <InboundAllocateOrderBox curOrder={curOrder as IHCInboundOrder} setCurOrder={setCurOrder} orderList={orderList} setOrderList={setOrderList} />
+            </Modal>
+        </div>
+        <div>
+            <Modal title="分配单品料箱" open={showAllocateDetailModal} onOk={() => HandleManualAllocateOrderDetailsBox()} onCancel={() => { setShowAllocateDetailModal(false); }} okText="确认分配" cancelText="取消分配">
+                <InboundAllocateDetailBox curOrder={curOrder as IHCInboundOrder} orderList={orderList} setOrderList={setOrderList} />
             </Modal>
         </div>
     </>

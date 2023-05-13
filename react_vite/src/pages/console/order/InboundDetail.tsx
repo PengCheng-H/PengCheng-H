@@ -50,10 +50,10 @@ export default function InboundDetail(props: InboundDetailProps) {
             setCurAllocateQty(0);
             return;
         }
-        else if (curAllocateQty + props.order.order_allocated_qty > props.order.order_qty) {
+
+        if (curAllocateQty + props.order.order_allocated_qty > props.order.order_qty) {
             message.warning('本次分配的数量加上已分配的数量已超过订单数量，已自动分配最大可分配数量！');
             setCurAllocateQty(props.order.order_qty - props.order.order_allocated_qty);
-            return;
         }
 
         setCurInboundOrderDetail({ ...curInboundOrderDetail, cur_order_allocated_qty: curAllocateQty } as IHCInboundOrderDetail);

@@ -25,6 +25,7 @@ export interface IHCInboundOrderDetail {
     order_allocated_qty: number;
     order_finished_qty: number;
     cur_order_allocated_qty: number;
+    cur_allocate_box: IHCAllocatedBox;
     created_time: string;
     created_operator: string;
     expiry_date: string;
@@ -47,6 +48,7 @@ export interface IHCInboundOrder {
     order_qty: number;
     order_allocated_qty: number;
     order_finished_qty: number;
+    cur_allocate_box: IHCAllocatedBox;
     order_time: string;
     order_type_code: string;
     related_code1: string;
@@ -221,6 +223,11 @@ export interface IHCBox {
     created_operator: string;
     last_updated_time: string;
     last_updated_operator: string;
+}
+
+export interface IHCAllocatedBox {
+    box_code: string;
+    location_code: string;
 }
 
 export interface IHCBoxDetail {
