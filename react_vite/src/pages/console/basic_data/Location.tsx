@@ -121,7 +121,7 @@ export default function BasicLocation() {
                     // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
-                            return <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                            return <Button type='primary' onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
                         }
                     },
                 ]}

@@ -275,7 +275,7 @@ export default function OrderInbound() {
                 <Button type="primary" onClick={() => { setTimestamp(Date.now()); }} style={{ width: "150px", marginLeft: '15px' }}>搜索订单</Button>
                 <Button type="primary" shape="round" onClick={() => { setShowCreateOrderModal(true); }} style={{ width: "150px", marginLeft: '15px' }}>创建订单</Button>
                 <Popconfirm title="确定分配吗?" onConfirm={() => HandleAutoAllocateOrdersQty()}>
-                    <Button icon={<CheckCircleOutlined />} type='primary' shape="round" style={{ width: '150px', marginLeft: "15px" }}>自动分配料箱</Button>
+                    <Button type='primary' icon={<CheckCircleOutlined />} shape="round" style={{ width: '150px', marginLeft: "15px" }}>自动分配料箱</Button>
                 </Popconfirm>
             </Row >
         </div >
@@ -327,13 +327,13 @@ export default function OrderInbound() {
                     {
                         title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (value: any, record: IHCInboundOrder, index: number) => {
                             return <>
-                                <Button icon={<CheckCircleOutlined />} type='primary' onClick={() => { setCurOrder(record); setShowAllocateOrderModal(true); }} style={{ width: '170px' }}>分配整单料箱</Button>
-                                <Button icon={<CheckCircleOutlined />} type='primary' onClick={() => { setCurOrder(record); setShowAllocateDetailModal(true); }} style={{ width: '170px', marginTop: '5px' }}>分配明细料箱</Button>
+                                <Button type='primary' icon={<CheckCircleOutlined />} onClick={() => { setCurOrder(record); setShowAllocateOrderModal(true); }} style={{ width: '170px' }}>分配整单料箱</Button>
+                                <Button type='primary' icon={<CheckCircleOutlined />} onClick={() => { setCurOrder(record); setShowAllocateDetailModal(true); }} style={{ width: '170px', marginTop: '5px' }}>分配明细料箱</Button>
                                 <Popconfirm title="确定关闭吗?" onConfirm={() => HandleOrderClose(record)}>
-                                    <Button icon={<CloseCircleOutlined />} style={{ width: '80px', marginTop: "5px", marginLeft: '5px' }} type='primary' danger>关闭</Button>
+                                    <Button type='primary' icon={<CloseCircleOutlined />} style={{ width: '80px', marginTop: "5px", marginLeft: '5px' }} danger>关闭</Button>
                                 </Popconfirm>
                                 <Popconfirm title="确定移除吗?" onConfirm={() => HandleOrderRemove(record)}>
-                                    <Button icon={<DeleteOutlined />} style={{ width: '80px', marginTop: "5px", marginLeft: '5px' }} danger>移除</Button>
+                                    <Button type='default' icon={<DeleteOutlined />} style={{ width: '80px', marginTop: "5px", marginLeft: '5px' }} danger>移除</Button>
                                 </Popconfirm>
                             </>
                         }

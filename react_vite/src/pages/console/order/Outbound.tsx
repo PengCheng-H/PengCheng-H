@@ -285,13 +285,13 @@ export default function OrderOutbound() {
                         title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '120px', fixed: 'right', render: (value: any, record: IHCOutboundOrder, index: number) => {
                             return <>
                                 <Popconfirm title="确定分配吗?" onConfirm={() => HandleAutoAllocateQty(record)}>
-                                    <Button icon={<CheckCircleOutlined />} type='primary' style={{ marginLeft: "-7px" }}>自动分配</Button>
+                                    <Button type='primary' icon={<CheckCircleOutlined />} style={{ marginLeft: "-7px" }}>自动分配</Button>
                                 </Popconfirm>
                                 <Popconfirm title="确定关闭吗?" onConfirm={() => HandleOrderClose(record)}>
-                                    <Button icon={<CloseCircleOutlined />} style={{ marginTop: "5px" }} type='primary' danger>关闭</Button>
+                                    <Button type='primary' icon={<CloseCircleOutlined />} style={{ marginTop: "5px" }} danger>关闭</Button>
                                 </Popconfirm>
                                 <Popconfirm title="确定移除吗?" onConfirm={() => HandleOrderRemove(record)}>
-                                    <Button icon={<DeleteOutlined />} style={{ marginTop: "5px" }} danger>移除</Button>
+                                    <Button type='default' icon={<DeleteOutlined />} style={{ marginTop: "5px" }} danger>移除</Button>
                                 </Popconfirm>
                             </>
                         }

@@ -115,12 +115,12 @@ export default function InboundDetail(props: InboundDetailProps) {
                     title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (value: any, record: IHCInboundOrderDetail, number) => {
                         return <>
                             <Button type='primary' disabled={onFilterDisabledStatus(record)} style={{ width: '170px' }} onClick={() => { ShowSetCurAllocateQtyModal(record); }}>设置本次分配数量</Button>
-                            <Button icon={<CloseCircleOutlined />} type='primary' style={{ width: '170px', marginTop: '5px' }} onClick={() => { HandleViewInventoryItem(record); }}>查看库存</Button>
+                            <Button type='primary' icon={<CloseCircleOutlined />} style={{ width: '170px', marginTop: '5px' }} onClick={() => { HandleViewInventoryItem(record); }}>查看库存</Button>
                             <Popconfirm title="确定关闭吗?" onConfirm={() => props.HandleOrderDetailClose(record)}>
-                                <Button icon={<CloseCircleOutlined />} type='primary' danger style={{ marginTop: '5px', marginBottom: '5px' }} >关闭</Button>
+                                <Button type='primary' icon={<CloseCircleOutlined />} danger style={{ marginTop: '5px', marginBottom: '5px' }} >关闭</Button>
                             </Popconfirm>
                             <Popconfirm title="确定移除吗?" onConfirm={() => props.HandleOrderDetailRemove(record)}>
-                                <Button icon={<DeleteOutlined />} danger style={{ marginLeft: '5px' }}>移除</Button>
+                                <Button type='default' icon={<DeleteOutlined />} danger style={{ marginLeft: '5px' }}>移除</Button>
                             </Popconfirm>
                         </>
                     }

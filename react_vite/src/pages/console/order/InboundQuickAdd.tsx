@@ -195,7 +195,7 @@ export default function InboundQuickAdd(props: InboundQuickAddProps) {
                     render: (value: any, record: IHCNewItem, index: number) => {
                         return <>
                             <Popconfirm title="确定移除吗?" onConfirm={() => { onRemoveNewItem(record); }}>
-                                <Button icon={<DeleteOutlined />} style={{ marginTop: "5px" }} danger>移除</Button>
+                                <Button type='primary' icon={<DeleteOutlined />} style={{ marginTop: "5px" }} danger>移除</Button>
                             </Popconfirm>
                         </>
                     },

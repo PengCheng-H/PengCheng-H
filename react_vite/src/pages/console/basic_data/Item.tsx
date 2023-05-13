@@ -20,9 +20,9 @@ export default function BasicItem() {
     const [text, setText] = useState<string>(new URLSearchParams(window.location.search).get("itemCode") || "")
     const [itemStatus, setItemStatus] = useState<ItemStatus[]>([])
     const statusOptions = [
-        { label: em_item_status[ItemStatus.DISABLED ], value: ItemStatus.DISABLED },
-        { label: em_item_status[ItemStatus.ENABLED ], value: ItemStatus.ENABLED },
-        { label: em_item_status[ItemStatus.IGNORED ], value: ItemStatus.IGNORED },
+        { label: em_item_status[ItemStatus.DISABLED], value: ItemStatus.DISABLED },
+        { label: em_item_status[ItemStatus.ENABLED], value: ItemStatus.ENABLED },
+        { label: em_item_status[ItemStatus.IGNORED], value: ItemStatus.IGNORED },
     ];
 
     useEffect(() => {
@@ -151,8 +151,8 @@ export default function BasicItem() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
-                                <Button onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
+                                <Button type='primary' onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                                <Button type='primary' onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
                             </>
                         }
                     },

@@ -106,10 +106,10 @@ export default function InventoryBox() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button onClick={(e) => { handleViewInventorySummary(value, record, index) }}>查看汇总库存</Button>
-                                <Button onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
-                                <Button onClick={(e) => { handleViewItemDetail(value, record, index) }} style={{ marginTop: 5 }}>查看物品详情</Button>
-                                <Button onClick={(e) => { handleViewBoxDetail(value, record, index) }} style={{ marginTop: 5 }}>查看料箱详情</Button>
+                                <Button type='primary' onClick={(e) => { handleViewInventorySummary(value, record, index) }}>查看汇总库存</Button>
+                                <Button type='primary' onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
+                                <Button type='primary' onClick={(e) => { handleViewItemDetail(value, record, index) }} style={{ marginTop: 5 }}>查看物品详情</Button>
+                                <Button type='primary' onClick={(e) => { handleViewBoxDetail(value, record, index) }} style={{ marginTop: 5 }}>查看料箱详情</Button>
                             </>
                         }
                     },

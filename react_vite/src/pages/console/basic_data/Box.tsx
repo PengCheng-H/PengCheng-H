@@ -130,8 +130,8 @@ export default function BasicBox() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
-                                <Button onClick={(e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button>
+                                <Button type='primary' onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                                <Button type='primary' onClick={(e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button>
                             </>
 
                         }
