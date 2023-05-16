@@ -60,12 +60,12 @@ export default function BasicItem() {
         }
     };
 
-    const handleModify = (value: unknown, record: IHCItem, index: number) => {
+    const handleModify = (_value: unknown, record: IHCItem, _index: number) => {
         setCurBeingModifedItem(record)
         setShowDetailModal(true);
     };
 
-    const handleModifyConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyConfirm = (_e: React.MouseEvent<HTMLButtonElement>) => {
         const new_list = itemList.map((_item) => {
             if (_item.item_code === curBeingModifedItem.item_code) { return curBeingModifedItem; }
             return _item;
@@ -75,11 +75,11 @@ export default function BasicItem() {
         updateItemDetail();
     };
 
-    const handleModifyCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyCancel = (_e: React.MouseEvent<HTMLButtonElement>) => {
         setShowDetailModal(false);
     };
 
-    const handleViewInventoryItem = (value: unknown, record: IHCItem, index: number) => {
+    const handleViewInventoryItem = (_value: unknown, record: IHCItem, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
         window.location.href = `/console/inventory/items?itemCode=${record.item_code}`
@@ -114,7 +114,7 @@ export default function BasicItem() {
                     { title: '货码', dataIndex: 'item_code', key: 'item_code', fixed: 'left', align: 'center', width: '120px', },
                     { title: '名称', dataIndex: 'item_name', key: 'item_name', fixed: 'left', align: 'center', width: '120px', },
                     {
-                        title: '状态', dataIndex: 'item_status', key: 'item_status', align: 'center', width: '120px', render: (value, record, index) => {
+                        title: '状态', dataIndex: 'item_status', key: 'item_status', align: 'center', width: '120px', render: (value, _record, _index) => {
                             return em_item_status[value];
                         }
                     },
@@ -151,19 +151,19 @@ export default function BasicItem() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button type='primary' onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
-                                <Button type='primary' onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
+                                <Button type='primary' onClick={(_e) => { handleModify(value, record, index) }}>修改</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
                             </>
                         }
                     },
                 ]}
-                rowKey={(record) => utils.generateElementKey()}
+                rowKey={(_record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
             />
@@ -175,6 +175,7 @@ export default function BasicItem() {
                 onOk={handleModifyConfirm}
                 onCancel={handleModifyCancel}
                 okButtonProps={{ style: { backgroundColor: '#f50' } }}
+                width={"60%"}
             >
                 <ItemDetail item={curBeingModifedItem} setItem={(item: IHCItem) => { setCurBeingModifedItem(item); }} />
             </Modal>

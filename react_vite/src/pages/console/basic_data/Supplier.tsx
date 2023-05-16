@@ -58,12 +58,12 @@ export default function BasicSupplier() {
         }
     };
 
-    const handleModify = (value: unknown, record: IHCSupplier, index: number) => {
+    const handleModify = (_value: unknown, record: IHCSupplier, _index: number) => {
         setCurBeingModifedSupplier(record)
         setShowDetailModal(true);
     };
 
-    const handleModifyConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyConfirm = (_e: React.MouseEvent<HTMLButtonElement>) => {
         const new_list = supplierList.map((_supplier) => {
             if (_supplier.supplier_code === curBeingModifedSupplier.supplier_code) { return curBeingModifedSupplier; }
             return _supplier;
@@ -73,7 +73,7 @@ export default function BasicSupplier() {
         updateSupplierDetail();
     };
 
-    const handleModifyCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyCancel = (_e: React.MouseEvent<HTMLButtonElement>) => {
         setShowDetailModal(false);
     };
 
@@ -106,7 +106,7 @@ export default function BasicSupplier() {
                     { title: '编号', dataIndex: 'supplier_code', key: 'supplier_code', align: 'center', width: '120px', fixed: 'left', },
                     { title: '名称', dataIndex: 'supplier_name', key: 'supplier_name', align: 'center', width: '120px', fixed: 'left', },
                     {
-                        title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', align: 'center', width: '120px', render: (value: any, record: IHCSupplier, index: number) => {
+                        title: '状态', dataIndex: 'supplier_status', key: 'supplier_status', align: 'center', width: '120px', render: (value: any, _record: IHCSupplier, _index: number) => {
                             return em_supplier_status[value];
                         }
                     },
@@ -118,17 +118,17 @@ export default function BasicSupplier() {
                     // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
-                            return <Button type='primary' onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                            return <Button type='primary' onClick={(_e) => { handleModify(value, record, index) }}>修改</Button>
                         }
                     },
                 ]}
-                rowKey={(record) => utils.generateElementKey()}
+                rowKey={(_record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
             />
@@ -140,6 +140,7 @@ export default function BasicSupplier() {
                 onOk={handleModifyConfirm}
                 onCancel={handleModifyCancel}
                 okButtonProps={{ style: { backgroundColor: '#f50' } }}
+                width={"60%"}
             >
                 <SupplierDetail supplier={curBeingModifedSupplier} setSupplier={(supplier: IHCSupplier) => { setCurBeingModifedSupplier(supplier); }} />
             </Modal>

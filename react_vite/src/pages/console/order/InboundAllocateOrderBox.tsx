@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, InputNumber, Row, Table, message } from "antd";
 
 import api from "src/utils/api";
+import * as IHttpReq from "../../../interfaces/http_request.interface";
 import { IHCAllocatedBox, IHCInboundOrder } from "src/interfaces/interface";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
 
@@ -13,6 +14,7 @@ interface InboundAllocateOrderBoxProps {
 }
 
 export default function InboundAllocateOrderBox(props: InboundAllocateOrderBoxProps) {
+    const [usedBoxList, setUsedBoxList] = useState<IHCAllocatedBox[]>([]);
     const [boxList, setBoxList] = useState<IHCAllocatedBox[]>([]);
     const [rowId, setRowId] = useState<number>(0);
     const [colId, setColId] = useState<number>(0);
@@ -28,23 +30,36 @@ export default function InboundAllocateOrderBox(props: InboundAllocateOrderBoxPr
 
 
     const getBoxList = async () => {
-        const result = await api.InventoryFindEmptyBoxes({
-            is_allocated: false,
+        const params: IHttpReq.IHCInventoryFindEmptyBoxesReq = {
             page_no: pageNo || DEFAULT_PAGE_NO,
-            page_size: pageSize || DEFAULT_PAGE_SIZE,
-        });
+            page_size: pageSize || 5 || DEFAULT_PAGE_SIZE
+        };
+
+        if (rowId > 0) { params.rows = [rowId]; }
+        if (colId > 0) { params.columns = [colId]; }
+        if (layerId > 0) { params.layers = [layerId]; }
+
+        const result = await api.InventoryFindEmptyBoxes(params);
 
         if (!result || result.result_code !== 0) {
             message.error(`获取料箱列表失败！error_msg: ${result.result_msg}`);
             return;
         }
 
-        setBoxList(result.data.data_list);
+        const _boxList: IHCAllocatedBox[] = [];
+        for (const _box of result.data.data_list) {
+            if (_box.box_code in usedBoxList.keys()) {
+                console.log(`this box be used. ${_box}`);
+                continue;
+            }
+            _boxList.push(_box);
+        }
+
+        setBoxList(_boxList);
         setTotal(result.data.total_count);
         setPageNo(result.data.page_no);
         setPageSize(result.data.page_size);
     }
-
 
     const handlePaginationChange = (page: number, pageSize?: number) => {
         setPageNo(page);
@@ -64,6 +79,8 @@ export default function InboundAllocateOrderBox(props: InboundAllocateOrderBoxPr
         });
         props.setCurOrder({ ...props.curOrder, cur_allocate_box: emptyBox });
         props.setOrderList(newOrders);
+        setUsedBoxList([...usedBoxList, emptyBox])
+        console.log(usedBoxList, emptyBox);
     };
 
     return <>
@@ -91,7 +108,7 @@ export default function InboundAllocateOrderBox(props: InboundAllocateOrderBoxPr
                 onChange={(value: number | null) => { setColId(value || 0) }}
                 precision={0}
                 min={0}
-                max={4}
+                max={38}
                 style={{ width: '50px' }}
             />
             <label htmlFor="" style={{ marginLeft: '10px' }}>层号：</label>
@@ -100,10 +117,10 @@ export default function InboundAllocateOrderBox(props: InboundAllocateOrderBoxPr
                 onChange={(value: number | null) => { setLayerId(value || 0) }}
                 precision={0}
                 min={0}
-                max={4}
+                max={6}
                 style={{ width: '50px' }}
             />
-            <Button type="primary" style={{ marginLeft: '20px' }}>搜索料箱</Button>
+            <Button type="primary" style={{ marginLeft: '20px' }} onClick={() => { setTimestamp(Date.now()) }}>搜索料箱</Button>
         </Row>
         <Row>
             <Table<IHCAllocatedBox>
@@ -117,14 +134,14 @@ export default function InboundAllocateOrderBox(props: InboundAllocateOrderBoxPr
                     pageSize,
                     current: pageNo,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
                 columns={[
                     { title: "料箱号", dataIndex: "box_code", key: "box_code", width: "120px", align: "center", },
                     { title: "货位号", dataIndex: "location_code", key: "location_code", width: "120px", align: "center", },
                     {
-                        title: "操作", dataIndex: "operation", key: "operation", width: "120px", align: "center", render: (value, record: IHCAllocatedBox, index) => {
+                        title: "操作", dataIndex: "operation", key: "operation", width: "120px", align: "center", render: (_value, record: IHCAllocatedBox, _index) => {
                             return <>
                                 <Button type="primary" onClick={() => { choseBox(record); }}>选择该料箱</Button>
                             </>

@@ -60,12 +60,12 @@ export default function BasicBox() {
         }
     };
 
-    const handleModify = (value: unknown, record: IHCBox, index: number) => {
+    const handleModify = (_value: unknown, record: IHCBox, _index: number) => {
         setCurBeingModifedBox(record)
         setShowDetailModal(true);
     };
 
-    const handleModifyConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyConfirm = (_e: React.MouseEvent<HTMLButtonElement>) => {
         const new_list = boxList.map((_box) => {
             if (_box.box_code === curBeingModifedBox.box_code) { return curBeingModifedBox; }
             return _box;
@@ -75,11 +75,11 @@ export default function BasicBox() {
         updateBoxDetail();
     };
 
-    const handleModifyCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyCancel = (_e: React.MouseEvent<HTMLButtonElement>) => {
         setShowDetailModal(false);
     };
 
-    const handleViewInventoryBox = (value: unknown, record: IHCBox, index: number) => {
+    const handleViewInventoryBox = (_value: unknown, record: IHCBox, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/boxes"]));
         window.location.href = `/console/inventory/boxes?boxCode=${record.box_code}`
@@ -114,7 +114,7 @@ export default function BasicBox() {
                     { title: '箱号', dataIndex: 'box_code', key: 'box_code', align: 'center', width: '120px', fixed: 'left', },
                     { title: '货位号', dataIndex: 'location_code', key: 'location_code', align: 'center', width: '120px', fixed: 'left', },
                     {
-                        title: '状态', dataIndex: 'box_status', key: 'box_status', align: 'center', width: '120px', render: (value, record, index) => {
+                        title: '状态', dataIndex: 'box_status', key: 'box_status', align: 'center', width: '120px', render: (value, _record, _index) => {
                             return em_box_status[value];
                         }
                     },
@@ -130,20 +130,20 @@ export default function BasicBox() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button type='primary' onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
-                                <Button type='primary' onClick={(e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button>
+                                <Button type='primary' onClick={(_e) => { handleModify(value, record, index) }}>修改</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewInventoryBox(value, record, index) }} style={{ marginTop: 5 }}>查看料箱库存</Button>
                             </>
 
                         }
                     },
                 ]}
-                rowKey={(record) => utils.generateElementKey()}
+                rowKey={(_record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
             />
@@ -155,6 +155,7 @@ export default function BasicBox() {
                 onOk={handleModifyConfirm}
                 onCancel={handleModifyCancel}
                 okButtonProps={{ style: { backgroundColor: '#f50' } }}
+                width={"60%"}
             >
                 <BoxDetail box={curBeingModifedBox} setBox={(box: IHCBox) => { setCurBeingModifedBox(box); }} />
             </Modal>

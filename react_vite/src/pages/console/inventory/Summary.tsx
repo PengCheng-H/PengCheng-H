@@ -41,13 +41,13 @@ export default function InventorySummary() {
         }
     };
 
-    const handleViewInventoryBox = (value: unknown, record: IHCInventorySummary, index: number) => {
+    const handleViewInventoryBox = (_value: unknown, record: IHCInventorySummary, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/boxes"]));
         window.location.href = `/console/inventory/boxes?itemCode=${record.item_code}`
     };
 
-    const handleViewInventoryItem = (value: unknown, record: IHCInventorySummary, index: number) => {
+    const handleViewInventoryItem = (_value: unknown, record: IHCInventorySummary, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
         window.location.href = `/console/inventory/items?itemCode=${record.item_code}`
@@ -83,19 +83,19 @@ export default function InventorySummary() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button type='primary' onClick={(e) => { handleViewInventoryBox(value, record, index) }}>查看料箱库存记录</Button>
-                                <Button type='primary' onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存记录</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewInventoryBox(value, record, index) }}>查看料箱库存记录</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存记录</Button>
                             </>
                         }
                     },
                 ]}
-                rowKey={(record) => utils.generateElementKey()}
+                rowKey={(_record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
             />

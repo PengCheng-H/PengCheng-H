@@ -1,4 +1,4 @@
-import { IHCBox, IHCBoxDetail, IHCInboundOrder, IHCInventoryBox, IHCInventoryItem, IHCInventorySummary, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
+import { IHCAllocatedBox, IHCBox, IHCBoxDetail, IHCInboundOrder, IHCInventoryBox, IHCInventoryItem, IHCInventorySummary, IHCItem, IHCLocation, IHCOrderType, IHCOutboundOrder, IHCPickStation, IHCSupplier, IHCWcsTask } from "./interface"
 
 export interface IHCResponse {
     result_code: number
@@ -113,7 +113,7 @@ export interface IHCInventoryFindEmptyBoxesRes extends IHCResponse {
         total_count: number
         page_no: number
         page_size: number
-        data_list: { box_code: string, location_code: string }[]
+        data_list: IHCAllocatedBox[]
     }
 }
 

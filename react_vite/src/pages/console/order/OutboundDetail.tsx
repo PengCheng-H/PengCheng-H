@@ -21,7 +21,7 @@ export default function OutboundDetail(props: OutboundDetailProps) {
     return <Table
         className="virtual-table"
         bordered
-        rowKey={(record) => utils.generateElementKey()}
+        rowKey={(_record) => utils.generateElementKey()}
         dataSource={props.orderDetailList}
         pagination={false}
         scroll={{ x: 960, y: 300 }}
@@ -32,7 +32,7 @@ export default function OutboundDetail(props: OutboundDetailProps) {
             { title: '明细号', dataIndex: 'order_detail_id', key: 'order_detail_id', align: 'center', width: '120px', },
             // { title: 'order_code', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', },
             {
-                title: '订单行状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, record, index) => {
+                title: '订单行状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, _record, _index) => {
                     return em_order_status[value];
                 }
             },
@@ -53,14 +53,14 @@ export default function OutboundDetail(props: OutboundDetailProps) {
             // { title: '属性插槽2', dataIndex: 'lot_prop2', key: 'lot_prop2', align: 'center', width: '120px', },
             // { title: '属性插槽3', dataIndex: 'lot_prop3', key: 'lot_prop3', align: 'center', width: '120px', },
             {
-                title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '120px', fixed: 'right', render: (value: any, record: IHCOutboundOrderDetail, number) => {
+                title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (_value: any, record: IHCOutboundOrderDetail, _number) => {
                     return <>
-                        <Button type='primary' icon={<CloseCircleOutlined />} style={{ marginLeft: '-10px' }} onClick={() => { handleViewInventorySummary(record); }}>查看库存</Button>
+                        <Button type='primary' icon={<CloseCircleOutlined />} style={{ width: '170px' }} onClick={() => { handleViewInventorySummary(record); }}>查看库存</Button>
                         <Popconfirm title="确定关闭吗?" onConfirm={() => props.HandleOrderDetailClose(record)}>
-                            <Button type='primary' icon={<CloseCircleOutlined />} danger style={{ marginTop: '5px', marginBottom: '5px' }} >关闭</Button>
+                            <Button type='primary' icon={<CloseCircleOutlined />} danger style={{ width: '80px', marginTop: "5px" }} >关闭</Button>
                         </Popconfirm>
                         <Popconfirm title="确定移除吗?" onConfirm={() => props.HandleOrderDetailRemove(record)}>
-                            <Button type='default' icon={<DeleteOutlined />} danger>移除</Button>
+                            <Button type='default' icon={<DeleteOutlined />} danger style={{ width: '80px', marginTop: "5px", marginLeft: '5px' }}>移除</Button>
                         </Popconfirm>
                     </>
                 }

@@ -1,13 +1,13 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 // 主页路由
-import HomeIndex from '../pages/home/Index';
-import HelpIndex from '../pages/help/Index';
-import UserManual from '../pages/help/manual/UserManual';
-import ExceptionManual from '../pages/help/manual/ExceptionManual';
-import UserIndex from '../pages/user/Index';
-import UserLogin from '../pages/user/Login';
-import UserRegiste from '../pages/user/Registe';
+// import HomeIndex from '../pages/home/Index';
+// import HelpIndex from '../pages/help/Index';
+// import UserManual from '../pages/help/manual/UserManual';
+// import ExceptionManual from '../pages/help/manual/ExceptionManual';
+// import UserIndex from '../pages/user/Index';
+// import UserLogin from '../pages/user/Login';
+// import UserRegiste from '../pages/user/Registe';
 // 工作站路由
 import WorkbenchIndex from '../pages/workbench/Index';
 import InboundOrder from '../pages/console/order/Inbound';

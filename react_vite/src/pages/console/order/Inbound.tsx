@@ -58,7 +58,7 @@ export default function OrderInbound() {
             return;
         }
 
-        const _orderList = result.data.data_list.map((_order, index, arr) => {
+        const _orderList = result.data.data_list.map((_order, _index, _arr) => {
             const _order_details: IHCInboundOrderDetail[] = _order.order_details.map((_detail, _detail_idx, _detail_arr) => {
                 _detail.cur_order_allocated_qty = _detail.order_qty - _detail.order_allocated_qty;
                 return _detail;
@@ -72,14 +72,14 @@ export default function OrderInbound() {
         setCurrentPage(result.data.page_no);
         setOrderList(_orderList.sort((a, b) => { return a.order_code < b.order_code ? -1 : 1 }));
         message.info(`获取入库单列表成功。 当担数量：${result.data.data_list.length}`);
-    }
+    };
 
     const handlePaginationChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         if (pageSize) {
             setPageSize(pageSize);
         }
-    };
+    }
 
     const onItemOptionSearch = async (item_code: string) => {
         if (!item_code) {
@@ -153,7 +153,7 @@ export default function OrderInbound() {
             return;
         }
 
-        const _allocate_order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[] = orderList.map((_order, index, arr) => {
+        const _allocate_order_list: { order_code: string, order_details: { order_detail_id: number, allocate_quantity: number }[] }[] = orderList.map((_order, _index, _arr) => {
             return {
                 order_code: _order.order_code,
                 order_details: _order.order_details.map((_order_detail => {
@@ -195,7 +195,7 @@ export default function OrderInbound() {
     }
 
     const HandleManualAllocateOrderDetailsBox = async () => {
-        return;
+        setShowAllocateDetailModal(false);
     }
 
     const HandleOrderClose = async (order: IHCInboundOrder) => {
@@ -222,7 +222,7 @@ export default function OrderInbound() {
         const new_order_details = new_order.order_details.filter(_detail => _detail.line_no !== orderDetail.line_no);
         new_order.order_details = new_order_details;
         setOrderList(new_orders);
-    };
+    }
 
     const HandleOrderDetailClose = async (orderDetail: IHCInboundOrderDetail) => {
         message.info(`请求关闭订单行. ${orderDetail.line_no}`);
@@ -293,19 +293,19 @@ export default function OrderInbound() {
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
                     { title: '订单编号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', fixed: 'left', },
                     {
-                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: '120px', render: (value, record, index) => {
+                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: '120px', render: (value, _record, _index) => {
                             return Object.keys(OrderTypes)[Object.values(OrderTypes).indexOf(value)] || "入库单";
                         }
                     },
                     {
-                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, record, index) => {
+                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, _record, _index) => {
                             return em_order_status[value];
                         }
                     },
@@ -325,7 +325,7 @@ export default function OrderInbound() {
                     // { title: '关联编号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: '120px', },
                     // { title: '关联编号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: '120px', },
                     {
-                        title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (value: any, record: IHCInboundOrder, index: number) => {
+                        title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (_value, record: IHCInboundOrder, _index: number) => {
                             return <>
                                 <Button type='primary' icon={<CheckCircleOutlined />} onClick={() => { setCurOrder(record); setShowAllocateOrderModal(true); }} style={{ width: '170px' }}>分配整单料箱</Button>
                                 <Button type='primary' icon={<CheckCircleOutlined />} onClick={() => { setCurOrder(record); setShowAllocateDetailModal(true); }} style={{ width: '170px', marginTop: '5px' }}>分配明细料箱</Button>
@@ -342,18 +342,18 @@ export default function OrderInbound() {
             />
         </div >
         <div>
-            <Modal title="创建入库单" open={showCreateOrderModal} onOk={onCreateOrder} onCancel={() => { setShowCreateOrderModal(false); }} okText="创建订单" cancelText="取消创建">
+            <Modal title="创建入库单" open={showCreateOrderModal} onOk={onCreateOrder} onCancel={() => { setShowCreateOrderModal(false); }} okText="创建订单" cancelText="取消创建" width={"60%"}>
                 <InboundQuickAdd quickAddInboundItem={quickAddInboundItem} setQuickAddInboundItem={setQuickAddInboundItem} />
             </Modal>
         </div>
         <div>
-            <Modal title="分配整单料箱" open={showAllocateOrderModal} onOk={() => HandleManualAllocateOrderBox()} onCancel={() => { setShowAllocateOrderModal(false); }} okText="确认分配" cancelText="取消分配">
+            <Modal title="分配整单料箱" open={showAllocateOrderModal} onOk={() => HandleManualAllocateOrderBox()} onCancel={() => { setShowAllocateOrderModal(false); }} okText="确认分配" cancelText="取消分配" width={"60%"}>
                 <InboundAllocateOrderBox curOrder={curOrder as IHCInboundOrder} setCurOrder={setCurOrder} orderList={orderList} setOrderList={setOrderList} />
             </Modal>
         </div>
         <div>
-            <Modal title="分配单品料箱" open={showAllocateDetailModal} onOk={() => HandleManualAllocateOrderDetailsBox()} onCancel={() => { setShowAllocateDetailModal(false); }} okText="确认分配" cancelText="取消分配">
-                <InboundAllocateDetailBox curOrder={curOrder as IHCInboundOrder} orderList={orderList} setOrderList={setOrderList} />
+            <Modal title="分配单品料箱" open={showAllocateDetailModal} onOk={() => HandleManualAllocateOrderDetailsBox()} onCancel={() => { setShowAllocateDetailModal(false); }} okText="确认分配" cancelText="取消分配" width={"60%"}>
+                <InboundAllocateDetailBox curOrder={curOrder as IHCInboundOrder} setCurOrder={setCurOrder} orderList={orderList} setOrderList={setOrderList} />
             </Modal>
         </div>
     </>

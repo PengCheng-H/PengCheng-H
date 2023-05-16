@@ -134,7 +134,7 @@ export default function InboundQuickAdd(props: InboundQuickAddProps) {
             <Button type="primary" onClick={() => { setShowModal(true); }} style={{ float: 'right' }}>添加物品</Button>
         </Row>
         <Table<IHCNewItem>
-            rowKey={(record: IHCNewItem) => { return utils.generateElementKey() }}
+            rowKey={(_record: IHCNewItem) => { return utils.generateElementKey() }}
             dataSource={newItemList}
             columns={[
                 {
@@ -192,7 +192,7 @@ export default function InboundQuickAdd(props: InboundQuickAddProps) {
                     // valueType: "option",
                     align: "center",
                     width: '120px',
-                    render: (value: any, record: IHCNewItem, index: number) => {
+                    render: (_value: any, record: IHCNewItem, _index: number) => {
                         return <>
                             <Popconfirm title="确定移除吗?" onConfirm={() => { onRemoveNewItem(record); }}>
                                 <Button type='primary' icon={<DeleteOutlined />} style={{ marginTop: "5px" }} danger>移除</Button>
@@ -209,6 +209,7 @@ export default function InboundQuickAdd(props: InboundQuickAddProps) {
             onCancel={onAddItemCancel}
             okText="添加物品"
             cancelText="取消添加"
+            width={"60%"}
         >
             <Row style={{ marginTop: "30px" }}>
                 <label>*物品编码：</label>

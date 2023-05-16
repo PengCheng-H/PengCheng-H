@@ -252,19 +252,19 @@ export default function OrderOutbound() {
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
                 columns={[
                     // { title: 'key', dataIndex: 'key', key: 'key', },
                     { title: '订单编号', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', },
                     {
-                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: '120px', render: (value, record, index) => {
+                        title: '订单类型', dataIndex: 'order_type_code', key: 'order_type_code', align: 'center', width: '120px', render: (value, _record, _index) => {
                             return Object.keys(OrderTypes)[Object.values(OrderTypes).indexOf(value)] || "出库单";
                         }
                     },
                     {
-                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, record, index) => {
+                        title: '订单状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, _record, _index) => {
                             return em_order_status[value];
                         }
                     },
@@ -282,16 +282,16 @@ export default function OrderOutbound() {
                     // { title: '关联编号1', dataIndex: 'related_code1', key: 'related_code1', align: 'center', width: '120px', },
                     // { title: '关联编号2', dataIndex: 'related_code2', key: 'related_code2', align: 'center', width: '120px', },
                     {
-                        title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '120px', fixed: 'right', render: (value: any, record: IHCOutboundOrder, index: number) => {
+                        title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (_value: any, record: IHCOutboundOrder, _index: number) => {
                             return <>
                                 <Popconfirm title="确定分配吗?" onConfirm={() => HandleAutoAllocateQty(record)}>
-                                    <Button type='primary' icon={<CheckCircleOutlined />} style={{ marginLeft: "-7px" }}>自动分配</Button>
+                                    <Button type='primary' icon={<CheckCircleOutlined />} style={{ width: '170px' }}>自动分配</Button>
                                 </Popconfirm>
                                 <Popconfirm title="确定关闭吗?" onConfirm={() => HandleOrderClose(record)}>
-                                    <Button type='primary' icon={<CloseCircleOutlined />} style={{ marginTop: "5px" }} danger>关闭</Button>
+                                    <Button type='primary' icon={<CloseCircleOutlined />} style={{ width: '80px', marginTop: "5px" }} danger>关闭</Button>
                                 </Popconfirm>
                                 <Popconfirm title="确定移除吗?" onConfirm={() => HandleOrderRemove(record)}>
-                                    <Button type='default' icon={<DeleteOutlined />} style={{ marginTop: "5px" }} danger>移除</Button>
+                                    <Button type='default' icon={<DeleteOutlined />} style={{ width: '80px', marginTop: "5px", marginLeft: '5px' }} danger>移除</Button>
                                 </Popconfirm>
                             </>
                         }
@@ -300,7 +300,7 @@ export default function OrderOutbound() {
             />
         </div>
         <div>
-            <Modal title="创建出库单" open={showModal} onOk={onCreateOrder} onCancel={() => { setShowModal(false); }} okText="创建订单" cancelText="取消创建">
+            <Modal title="创建出库单" open={showModal} onOk={onCreateOrder} onCancel={() => { setShowModal(false); }} okText="创建订单" cancelText="取消创建" width={"60%"}>
                 <OutboundQuickAdd setQuickAddOutboundItems={setQuickAddOutboundItems} />
             </Modal>
         </div>

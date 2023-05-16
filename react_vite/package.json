@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "debug": "node --inspect node_modules/vite/bin/vite.js",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -14,6 +15,7 @@
     "@types/uuid": "^9.0.1",
     "antd": "^5.4.6",
     "antd-mobile": "^5.29.1",
+    "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.1",

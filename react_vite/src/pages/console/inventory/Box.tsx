@@ -42,25 +42,25 @@ export default function InventoryBox() {
         }
     };
 
-    const handleViewInventorySummary = (value: unknown, record: IHCInventoryBox, index: number) => {
+    const handleViewInventorySummary = (_value: unknown, record: IHCInventoryBox, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/summary"]));
         window.location.href = `/console/inventory/summary?itemCode=${record.item_code}`
     };
 
-    const handleViewInventoryItem = (value: unknown, record: IHCInventoryBox, index: number) => {
+    const handleViewInventoryItem = (_value: unknown, record: IHCInventoryBox, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/inventory"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/inventory/items"]));
         window.location.href = `/console/inventory/items?itemCode=${record.item_code}`
     };
 
-    const handleViewItemDetail = (value: unknown, record: IHCInventoryBox, index: number) => {
+    const handleViewItemDetail = (_value: unknown, record: IHCInventoryBox, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/basic"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/basic/items"]));
         window.location.href = `/console/basic/items?itemCode=${record.item_code}`
     };
 
-    const handleViewBoxDetail = (value: unknown, record: IHCInventoryBox, index: number) => {
+    const handleViewBoxDetail = (_value: unknown, record: IHCInventoryBox, _index: number) => {
         localStorage.setItem("openKeys", JSON.stringify(["/console/basic"]));
         localStorage.setItem("selectedKeys", JSON.stringify(["/console/basic/boxes"]));
         window.location.href = `/console/basic/boxes?boxCode=${record.box_code}`
@@ -106,21 +106,21 @@ export default function InventoryBox() {
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
                             return <>
-                                <Button type='primary' onClick={(e) => { handleViewInventorySummary(value, record, index) }}>查看汇总库存</Button>
-                                <Button type='primary' onClick={(e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
-                                <Button type='primary' onClick={(e) => { handleViewItemDetail(value, record, index) }} style={{ marginTop: 5 }}>查看物品详情</Button>
-                                <Button type='primary' onClick={(e) => { handleViewBoxDetail(value, record, index) }} style={{ marginTop: 5 }}>查看料箱详情</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewInventorySummary(value, record, index) }}>查看汇总库存</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewInventoryItem(value, record, index) }} style={{ marginTop: 5 }}>查看物品库存</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewItemDetail(value, record, index) }} style={{ marginTop: 5 }}>查看物品详情</Button>
+                                <Button type='primary' onClick={(_e) => { handleViewBoxDetail(value, record, index) }} style={{ marginTop: 5 }}>查看料箱详情</Button>
                             </>
                         }
                     },
                 ]}
-                rowKey={(record) => utils.generateElementKey()}
+                rowKey={(_record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
             />

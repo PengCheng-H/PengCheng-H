@@ -298,14 +298,14 @@ class HCApi {
         let result = '';
 
         if (Array.isArray(params)) {
-            Object.entries(params).forEach(([key, val], index, arr) => {
+            Object.entries(params).forEach(([_key, val], _index, _arr) => {
                 const _value = Object(val);
-                Object.entries(_value).forEach((_val, _key, arr) => {
+                Object.entries(_value).forEach((_val, _key, _arr) => {
                     result += `${_val[0]}=${_val[1]}&`;
                 });
             });
         } else {
-            Object.entries(params).forEach(([key, val], index, arr) => {
+            Object.entries(params).forEach(([key, val], _index, _arr) => {
                 result += `${key}=${val}&`;
             });
         }

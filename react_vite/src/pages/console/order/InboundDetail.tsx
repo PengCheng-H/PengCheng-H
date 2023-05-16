@@ -57,13 +57,13 @@ export default function InboundDetail(props: InboundDetailProps) {
         }
 
         setCurInboundOrderDetail({ ...curInboundOrderDetail, cur_order_allocated_qty: curAllocateQty } as IHCInboundOrderDetail);
-        const _orderDetailList = props.order.order_details.map((value, index, arr) => {
+        const _orderDetailList = props.order.order_details.map((value, _index, _arr) => {
             if (value.line_no === curInboundOrderDetail?.line_no) {
                 value.cur_order_allocated_qty = curAllocateQty;
             }
             return value;
         });
-        const _orderList = props.orderList.map((value, index, arr) => {
+        const _orderList = props.orderList.map((value, _index, _arr) => {
             if (value.order_code === props.order.order_code) {
                 value.order_details = _orderDetailList;
             }
@@ -79,7 +79,7 @@ export default function InboundDetail(props: InboundDetailProps) {
         <Table
             className="virtual-table"
             bordered
-            rowKey={(record) => utils.generateElementKey()}
+            rowKey={(_record) => utils.generateElementKey()}
             dataSource={props.order.order_details}
             pagination={false}
             scroll={{ x: 960, y: 300 }}
@@ -90,7 +90,7 @@ export default function InboundDetail(props: InboundDetailProps) {
                 // { title: '明细号', dataIndex: 'order_detail_id', key: 'order_detail_id', align: 'center', width: '120px', },
                 // { title: 'order_code', dataIndex: 'order_code', key: 'order_code', align: 'center', width: '120px', },
                 {
-                    title: '订单行状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, record, index) => {
+                    title: '订单行状态', dataIndex: 'order_status', key: 'order_status', align: 'center', width: '120px', render: (value, _record, _index) => {
                         return em_order_status[value];
                     }
                 },
@@ -112,7 +112,7 @@ export default function InboundDetail(props: InboundDetailProps) {
                 // { title: '属性插槽2', dataIndex: 'lot_prop2', key: 'lot_prop2', align: 'center', width: '120px', },
                 // { title: '属性插槽3', dataIndex: 'lot_prop3', key: 'lot_prop3', align: 'center', width: '120px', },
                 {
-                    title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (value: any, record: IHCInboundOrderDetail, number) => {
+                    title: '操作', dataIndex: 'operation', key: 'operation', align: 'center', width: '210px', fixed: 'right', render: (_value: any, record: IHCInboundOrderDetail, _number) => {
                         return <>
                             <Button type='primary' disabled={onFilterDisabledStatus(record)} style={{ width: '170px' }} onClick={() => { ShowSetCurAllocateQtyModal(record); }}>设置本次分配数量</Button>
                             <Button type='primary' icon={<CloseCircleOutlined />} style={{ width: '170px', marginTop: '5px' }} onClick={() => { HandleViewInventoryItem(record); }}>查看库存</Button>
@@ -134,6 +134,7 @@ export default function InboundDetail(props: InboundDetailProps) {
             cancelText="取消设置"
             onOk={() => { SetOrderDetailCurrentAllocateQty() }}
             onCancel={() => { setShowSetCurAllocateQtyModal(false) }}
+            width={"60%"}
         >
             <label>请输入本次入库数量：</label>
             <InputNumber value={curAllocateQty} min={0} onChange={(value: number | null) => { setCurAllocateQty(value || 0); }} />

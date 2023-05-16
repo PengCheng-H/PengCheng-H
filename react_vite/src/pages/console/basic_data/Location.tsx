@@ -58,12 +58,12 @@ export default function BasicLocation() {
         }
     };
 
-    const handleModify = (value: unknown, record: IHCLocation, index: number) => {
+    const handleModify = (_value: unknown, record: IHCLocation, _index: number) => {
         setCurBeingModifedLocation(record)
         setShowDetailModal(true);
     };
 
-    const handleModifyConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyConfirm = (_e: React.MouseEvent<HTMLButtonElement>) => {
         const new_list = locationList.map((_location) => {
             if (_location.location_code === curBeingModifedLocation.location_code) { return curBeingModifedLocation; }
             return _location;
@@ -73,7 +73,7 @@ export default function BasicLocation() {
         updateLocationDetail();
     };
 
-    const handleModifyCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleModifyCancel = (_e: React.MouseEvent<HTMLButtonElement>) => {
         setShowDetailModal(false);
     };
 
@@ -106,7 +106,7 @@ export default function BasicLocation() {
                     // { title: 'key', dataIndex: 'key', key: 'key', },
                     { title: '货位码', dataIndex: 'location_code', key: 'location_code', align: 'center', width: '120px', fixed: 'left' },
                     {
-                        title: '状态', dataIndex: 'location_status', key: 'location_status', align: 'center', width: '120px', render: (value, record, index) => {
+                        title: '状态', dataIndex: 'location_status', key: 'location_status', align: 'center', width: '120px', render: (value, _record, _index) => {
                             return em_location_status[value];
                         }
                     },
@@ -121,17 +121,17 @@ export default function BasicLocation() {
                     // { title: '最近更新人员', dataIndex: 'last_updated_operator', key: 'last_updated_operator', align: 'center', width: '120px', },
                     {
                         title: '操作', dataIndex: 'oper', key: 'oper', align: 'center', width: '120px', fixed: 'right', render: (value, record, index) => {
-                            return <Button type='primary' onClick={(e) => { handleModify(value, record, index) }}>修改</Button>
+                            return <Button type='primary' onClick={(_e) => { handleModify(value, record, index) }}>修改</Button>
                         }
                     },
                 ]}
-                rowKey={(record) => utils.generateElementKey()}
+                rowKey={(_record) => utils.generateElementKey()}
                 pagination={{
                     total,
                     pageSize,
                     current: currentPage,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
             />
@@ -143,6 +143,7 @@ export default function BasicLocation() {
                 onOk={handleModifyConfirm}
                 onCancel={handleModifyCancel}
                 okButtonProps={{ style: { backgroundColor: '#f50' } }}
+                width={"60%"}
             >
                 <LocationDetail location={curBeingModifedLocation} setLocation={(location: IHCLocation) => { setCurBeingModifedLocation(location); }} />
             </Modal>
