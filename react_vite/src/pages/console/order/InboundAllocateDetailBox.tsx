@@ -3,59 +3,21 @@ import { Button, InputNumber, Row, Table, message } from "antd";
 
 import api from "src/utils/api";
 import * as IHttpReq from "../../../interfaces/http_request.interface";
-import { IHCAllocatedBox, IHCInboundOrder } from "src/interfaces/interface"
+import { IHCAllocatedBox, IHCInboundOrder, IHCInboundOrderDetail } from "src/interfaces/interface";
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from "src/types/Constants";
 
-interface InboundAllocateDetailBoxProps {
+interface InboundAllocateOrderBoxProps {
     curOrder: IHCInboundOrder;
     setCurOrder: (order: IHCInboundOrder) => void;
     orderList: IHCInboundOrder[];
     setOrderList: (orders: IHCInboundOrder[]) => void;
 }
 
-export default function InboundAllocateDetailBox(props: InboundAllocateDetailBoxProps) {
-    const [boxList, setBoxList] = useState<IHCAllocatedBox[]>([]);
-    const [rowId, setRowId] = useState<number>(0);
-    const [colId, setColId] = useState<number>(0);
-    const [layerId, setLayerId] = useState<number>(0);
-    const [pageNo, setPageNo] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
-    const [timestamp, setTimestamp] = useState<number>(0);
+export default function InboundAllocateOrderBox(props: InboundAllocateOrderBoxProps) {
+    const [usedBoxList, setUsedBoxList] = useState<IHCAllocatedBox[]>([]);
 
-    useEffect(() => {
-        getBoxList();
-    }, [pageNo, pageSize, timestamp]);
-
-
-    const getBoxList = async () => {
-        const params: IHttpReq.IHCInventoryFindEmptyBoxesReq = {
-            page_no: pageNo || DEFAULT_PAGE_NO,
-            page_size: pageSize || 5 || DEFAULT_PAGE_SIZE
-        };
-
-        if (rowId > 0) { params.rows = [rowId]; }
-        if (colId > 0) { params.columns = [colId]; }
-        if (layerId > 0) { params.layers = [layerId]; }
-
-        const result = await api.InventoryFindEmptyBoxes(params);
-
-        if (!result || result.result_code !== 0) {
-            message.error(`获取料箱列表失败！error_msg: ${result.result_msg}`);
-            return;
-        }
-
-        setBoxList(result.data.data_list);
-        setTotal(result.data.total_count);
-        setPageNo(result.data.page_no);
-        setPageSize(result.data.page_size);
-    }
-
-    const handlePaginationChange = (page: number, pageSize?: number) => {
-        setPageNo(page);
-        if (pageSize) {
-            setPageSize(pageSize);
-        }
+    const handlePaginationChange = (_page: number, _pageSize?: number) => {
+        return
     };
 
     const choseBox = (emptyBox: IHCAllocatedBox) => {
@@ -69,72 +31,41 @@ export default function InboundAllocateDetailBox(props: InboundAllocateDetailBox
         });
         props.setCurOrder({ ...props.curOrder, cur_allocate_box: emptyBox });
         props.setOrderList(newOrders);
+        setUsedBoxList([...usedBoxList, emptyBox])
+        console.log(usedBoxList, emptyBox);
     };
 
     return <>
         <Row>
-            <label htmlFor="">订单编号：</label>
-            <span>{props.curOrder.order_code}</span>
-        </Row>
-        <Row style={{ marginTop: '5px' }}>
-            <label htmlFor="">当前料箱：</label>
-            <span>{props.curOrder.cur_allocate_box ? props.curOrder.cur_allocate_box.box_code : "未分配"}</span>
-        </Row>
-        <Row style={{ lineHeight: '30px', marginBottom: '10px', marginTop: '5px' }}>
-            <label htmlFor="">排号：</label>
-            <InputNumber
-                value={rowId}
-                onChange={(value: number | null) => { setRowId(value || 0) }}
-                precision={0}
-                min={0}
-                max={4}
-                style={{ width: '50px' }}
-            />
-            <label htmlFor="" style={{ marginLeft: '10px' }}>列号：</label>
-            <InputNumber
-                value={colId}
-                onChange={(value: number | null) => { setColId(value || 0) }}
-                precision={0}
-                min={0}
-                max={38}
-                style={{ width: '50px' }}
-            />
-            <label htmlFor="" style={{ marginLeft: '10px' }}>层号：</label>
-            <InputNumber
-                value={layerId}
-                onChange={(value: number | null) => { setLayerId(value || 0) }}
-                precision={0}
-                min={0}
-                max={6}
-                style={{ width: '50px' }}
-            />
-            <Button type="primary" style={{ marginLeft: '20px' }} onClick={() => { setTimestamp(Date.now()) }}>搜索料箱</Button>
-        </Row>
-        <Row>
-            <Table<IHCAllocatedBox>
+            <Table<IHCInboundOrderDetail>
                 sticky
                 bordered
                 scroll={{ x: '100%', y: '100%' }}
-                dataSource={boxList}
-                rowKey={(record: IHCAllocatedBox) => { return record.box_code; }}
+                dataSource={props.curOrder.order_details}
+                rowKey={(record: IHCInboundOrderDetail) => { return record.order_detail_id; }}
                 pagination={{
-                    total,
-                    pageSize,
-                    current: pageNo,
+                    // total: props.curOrder.order_details.length,
+                    // pageSize: props.curOrder.order_details.length / 3,
+                    // current: 1,
                     onChange: handlePaginationChange,
-                    showTotal: (total, range) => `共 ${total} 条记录`,
+                    showTotal: (total, _range) => `共 ${total} 条记录`,
                     style: { float: 'left' },
                 }}
                 columns={[
-                    { title: "料箱号", dataIndex: "box_code", key: "box_code", width: "120px", align: "center", },
-                    { title: "货位号", dataIndex: "location_code", key: "location_code", width: "120px", align: "center", },
-                    {
-                        title: "操作", dataIndex: "operation", key: "operation", width: "120px", align: "center", render: (value, record: IHCAllocatedBox, index) => {
-                            return <>
-                                <Button type="primary" onClick={() => { choseBox(record); }}>选择该料箱</Button>
-                            </>
-                        }
-                    },
+                    { title: '订单行号', dataIndex: 'line_no', key: 'line_no', align: 'center', width: '120px', fixed: 'left', },
+                    { title: '物品码', dataIndex: 'item_code', key: 'item_code', align: 'center', width: '120px', },
+                    { title: '供应商码', dataIndex: 'supplier_code', key: 'supplier_code', align: 'center', width: '120px', },
+                    { title: '订单数量', dataIndex: 'order_qty', key: 'order_qty', align: 'center', width: '120px', },
+                    { title: '已分配数量', dataIndex: 'order_allocated_qty', key: 'order_allocated_qty', align: 'center', width: '120px', },
+                    { title: '已完成数量', dataIndex: 'order_finished_qty', key: 'order_finished_qty', align: 'center', width: '120px', },
+                    { title: '本次分配数量', dataIndex: 'cur_order_allocated_qty', key: 'cur_order_allocated_qty', align: 'center', width: '120px', },
+                    // {
+                    //     title: "操作", dataIndex: "operation", key: "operation", width: "120px", align: "center", render: (_value, record: IHCAllocatedBox, _index) => {
+                    //         return <>
+                    //             <Button type="primary" onClick={() => { choseBox(record); }}>选择该料箱</Button>
+                    //         </>
+                    //     }
+                    // },
                 ]}
             />
         </Row>

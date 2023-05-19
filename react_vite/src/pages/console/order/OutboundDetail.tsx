@@ -66,5 +66,5 @@ export default function OutboundDetail(props: OutboundDetailProps) {
                 }
             },
         ]}
-    />;
+    />
 }

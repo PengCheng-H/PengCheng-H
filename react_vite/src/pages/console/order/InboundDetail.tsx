@@ -126,7 +126,7 @@ export default function InboundDetail(props: InboundDetailProps) {
                     }
                 },
             ]}
-        />;
+        />
         <Modal
             title="设置本次入库数量"
             open={showSetCurAllocateQtyModal}

@@ -239,6 +239,12 @@ export interface IHCBoxDetail {
     orders: { order_code: string, quantity: number }[];
 }
 
+export interface IHCTaskDetail {
+    task_type: string
+    box_code: string
+    region_task_details: IHCBoxDetail[]
+}
+
 export interface IHCOrderType {
     order_type_name: string;
     work_type: string;
