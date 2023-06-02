@@ -19,5 +19,25 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, "/")
       }
     }
-  }
+  },
+  build: {
+    target: 'modules',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    assetsInlineLimit: 4096,
+    sourcemap: false,
+    manifest: false,
+    cssCodeSplit: true,
+    rollupOptions: {
+      input: 'src/Main.tsx',
+      output: {
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash][extname]',
+      },
+      plugins: [
+        // 自定义 Rollup 插件配置
+      ],
+    },
+  },
 });
