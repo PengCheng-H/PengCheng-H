@@ -16,10 +16,7 @@ RUN pnpm run build
 # ========= 【第二阶段：使用nginx镜像构建最终的生产镜像】 =========
 FROM nginx:1.23.1-alpine as builder-v2
 
-RUN mkdir /app2
-COPY --from=builder-v1 /app/* /app2
-
-COPY --from=builder-v1 /app/dist /usr/share/nginx/html
+COPY --from=builder-v1 /app/dist/. /usr/share/nginx/html
 
 COPY --from=builder-v1 /app/nginx.conf /etc/nginx/nginx.conf
 
@@ -30,4 +27,6 @@ LABEL Version=1.2.0 \
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+RUN touch /var/run/nginx.pid && chown nginx:nginx /var/run/nginx.pid && echo "1" > /var/run/nginx.pid
+
+RUN nginx -s reload

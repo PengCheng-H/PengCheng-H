@@ -4,9 +4,7 @@ TAG=v1.2.0
 
 # OS Specific Support.
 darwin=false
-
-#
-[["$(uname)" == Darwin*]] && darwin=true
+[[ "$(uname)" == Darwin* ]] && darwin=true
 
 # resolve links - $0 may be a softlink
 PRG="$0"
@@ -29,6 +27,23 @@ install() {
 
 pack() {
     pnpm run build
+}
+
+build() {
+    docker build -f Dockerfile -t $NAME:$TAG .
+}
+
+build_no_cache() {
+    docker build --no-cache -f Dockerfile -t $NAME:$TAG .
+}
+
+run() {
+    docker run -itd --name $NAME -p 3000:80 $NAME:$TAG
+}
+
+# TOOD：有问题，会闪退，需要修改
+exec() {
+    docker exec -it "$NAME" /bin/sh
 }
 
 usage() {
@@ -57,6 +72,15 @@ case $1 in
     ;;
 "build")
     build
+    ;;
+"build_no_cache")
+    build_no_cache
+    ;;
+"run")
+    run
+    ;;
+"exec")
+    exec
     ;;
 *)
     echo "Error, see usage below:"
