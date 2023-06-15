@@ -9,7 +9,6 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
-    // port: 3000,
     port: 3001,
     proxy: {
       "/api": {
@@ -31,9 +30,9 @@ export default defineConfig({
     rollupOptions: {
       input: 'src/Main.tsx',
       output: {
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]',
+        entryFileNames: 'assets/main.js',
+        chunkFileNames: 'assets/main.js',
+        assetFileNames: 'assets/main[extname]',
       },
       plugins: [
         // 自定义 Rollup 插件配置
