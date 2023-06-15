@@ -1,10 +1,8 @@
-#!/bin/bash
-
 NAME=wms_ui
 REPO=hcrobots/${NAME}
 TAG=v1.2.0
 
-# OS specific support.
+# OS Specific Support.
 darwin=false
 [[ "$(uname)" == Darwin* ]] && darwin=true
 
@@ -23,33 +21,21 @@ done
 PRGDIR=$(dirname "$PRG")
 cd $PRGDIR
 
-usage() {
-    cat <<EOF
-./build_tool.sh build
-./build_tool.sh rmi
-./build_tool.sh save
-./build_tool.sh load
-./build_tool.sh run [new container name, default: ${NAME}]
-./build_tool.sh start [new container name, default: ${NAME}]
-./build_tool.sh stop [new container name, default: ${NAME}]
-./build_tool.sh restart [new container name, default: ${NAME}]
-./build_tool.sh remove [new container name, default: ${NAME}]
-./build_tool.sh remove_force [new container name, default: ${NAME}]
-EOF
+install() {
+    npm install --registry https://registry.npm.taobao.org -g pnpm
+    pnpm install --registry https://registry.npm.taobao.org
+}
+
+pack() {
+    pnpm run build
 }
 
 build() {
-    [ -d ./wms_ui ] && rm -rf ./wms_ui
-    mkdir -p wms_ui
-
-    find .. -maxdepth 1 ! -name "node_modules" -a ! -name ".git" -a ! -name "dist" -a ! -name "dockerfile" -a ! -name ".." -exec cp -a "{}" wms_ui/ \;
-    docker build -f .Dockerfile -t ${REPO}:${TAG} .
-
-    [ -d ./wms_ui ] && rm -rf ./wms_ui
+    docker build -f Dockerfile -t $REPO:$TAG .
 }
 
-rmi() {
-    docker rmi ${REPO}:${TAG}
+build_no_cache() {
+    docker build --no-cache -f Dockerfile -t $REPO:$TAG .
 }
 
 save() {
@@ -61,55 +47,71 @@ load() {
 }
 
 run() {
-    if [ "$1" == "--tmp" ]; then
-        docker run -it --rm -e TZ=Asia/Shanghai \
-            -p 3000:3000 \
-            ${REPO}:${TAG} /bin/sh
-        return
-    fi
-
-    if ${darwin}; then
-        docker run -d --name $1 --restart=always -e TZ=Asia/Shanghai \
-            -p 3000:3000 \
-            ${REPO}:${TAG}
-        return
-    fi
-
-    docker run -d --name $1 --restart=always -e TZ=Asia/Shanghai \
-        --network host ${REPO}:${TAG}
+    docker run -itd --name $NAME -p 3000:80 $REPO:$TAG
 }
 
-start() {
-    docker start $1
+# TOOD：有问题，会闪退，需要修改
+exec() {
+    docker exec -it ${NAME} /bin/sh
 }
 
 stop() {
-    docker stop $1
+    docker stop $NAME
+}
+
+start() {
+    docker start $NAME
 }
 
 restart() {
-    docker restart $1
+    docker restart $NAME
 }
 
 remove() {
-    docker rm $1
+    docker rm $NAME
 }
 
-remove_force() {
-    docker stop $1
-    docker rm $1
+clear() {
+    stop
+    remove
 }
 
-container_name=$2
-[ -z ${container_name} ] && container_name=${NAME}
+rmi() {
+    docker rmi ${REPO}:${TAG}
+}
+
+usage() {
+    cat <<EOF
+./tools.sh install              在本地环境中使用pnpm和淘宝源安装项目依赖包。
+./tools.sh pack                 在本地环境中使用pnpm、tsc和vite将项目打包成静态资源。
+./tools.sh build                在本地/生产环境中，将向项目打成docker镜像。
+./tools.sh build_no_cache       在本地/生产环境中，将项目打成docker镜像，并且不使用缓存。
+./tools.sh save                 在本地/生产环境中，将本项目的docker镜像保存为压缩文件，方便存储、移动、部署。
+./tools.sh load                 在本地/生产环境中，通过本项目的docker镜像的压缩文件，加载为正常的docker镜像。
+./tools.sh run                  在本地/生产环境中，通过本项目的docker镜像，生成并运行1个docker容器。
+./tools.sh exec                 在本地/生产环境中，进入本项目的docker容器shell环境。 
+./tools.sh stop                 在本地/生产环境中，停止运行本项目的docker容器。 
+./tools.sh start                在本地/生产环境中，开始运行本项目的docker容器。 
+./tools.sh restart              在本地/生产环境中，重新运行本项目的docker容器。 
+./tools.sh remove               在本地/生产环境中，清除本项目的docker容器。 
+./tools.sh clear                在本地/生产环境中，停止并清除本项目的docker容器。 
+./tools.sh rmi                  在本地/生产环境中，删除本项目的docker镜像。  
+
+EOF
+}
 
 case $1 in
-
+"install")
+    install
+    ;;
+"pack")
+    pack
+    ;;
 "build")
     build
     ;;
-"rmi")
-    rmi
+"build_no_cache")
+    build_no_cache
     ;;
 "save")
     save
@@ -118,22 +120,25 @@ case $1 in
     load
     ;;
 "run")
-    run ${container_name}
+    run
     ;;
-"start")
-    start ${container_name}
+"exec")
+    exec
     ;;
 "stop")
-    stop ${container_name}
+    stop
     ;;
-"restart")
-    restart ${container_name}
+"start")
+    start
     ;;
 "remove")
-    remove ${container_name}
+    remove
     ;;
-"remove_force")
-    remove_force ${container_name}
+"clear")
+    clear
+    ;;
+"rmi")
+    rmi
     ;;
 *)
     echo "Error, see usage below:"
