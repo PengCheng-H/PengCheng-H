@@ -33,7 +33,6 @@ export const em_wcs_task_types: { [s: string]: string } = {
     "1": "出库单任务",
 }
 
-
 export const em_box_status: { [s: string]: string } = {
     "0": "已禁用",
     "1": "已启用",
