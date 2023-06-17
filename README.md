@@ -105,7 +105,6 @@ vim nginx.conf
     - tsconfig.json                         // 文件·TypeScript 的配置文件，用于指定 TypeScript 编译器的行为和编译选项
     - tsconfig.node.json                    // 文件·在某些情况下，你可能需要针对不同的运行环境或目标平台设置不同的编译选项。这时，你可以创建额外的配置文件，如 tsconfig.node.json，来覆盖或扩展默认的配置
     - vite.config.ts                        // 文件·Vite 项目的配置文件，用于配置和定制 Vite 构建工具的行为和特性
-    - README.md                             // 文件·项目说明文件
 
 ```
 
